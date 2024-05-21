@@ -3,8 +3,8 @@ import logging
 import os
 
 import gmailer
-import llama_helper
-from chat_client import get_response_message
+
+# import llama_helper
 from flask import Flask, current_app, jsonify, request
 from flask_cors import CORS
 
@@ -20,12 +20,13 @@ def init_llama(app):
         dir_paths = []
         storage_paths = get_storage_paths()
         url_json_paths = []
-        app.config["LLAMA"] = llama_helper.LlamaRag(
-            dir_paths=dir_paths,
-            storage_paths=storage_paths,
-            url_json_paths=url_json_paths,
-            dynamic_county_load=True,
-        )
+        app.config["LLAMA"] = None
+        # app.config["LLAMA"] = llama_helper.LlamaRag(
+        #     dir_paths=dir_paths,
+        #     storage_paths=storage_paths,
+        #     url_json_paths=url_json_paths,
+        #     dynamic_county_load=True,
+        # )
         print("Made LLAMA.")
         logging.info("Made LLAMA2.")
 
@@ -93,25 +94,26 @@ def change_county():
 
 @app.route("/get-response", methods=["GET"])
 def get_data():
-    app.config["SERVER_TIMEOUT"] = 120
-    current_app.config["LLAMA"].log_text(
-        "get_resposnse: " + str(request.args.get("message"))
-    )
+    return jsonify({"response": "Hello, World!", "sender": "bot"})
+    # app.config["SERVER_TIMEOUT"] = 120
+    # current_app.config["LLAMA"].log_text(
+    #     "get_resposnse: " + str(request.args.get("message"))
+    # )
 
-    county = request.args.get("county", "No county received")
-    # print("county:", county)
-    message = request.args.get("message", "No message received")
-    llama = current_app.config["LLAMA"]
-    try:
-        response_message = get_response_message(message, county, llama=llama)
-    except Exception as e:
-        logging.info(f"Failed to get response, {e}")
-        response_message = {"sender": "bot", "response": "Sorry, I couldn't find that."}
-    # Process the data (this example just echoes back the received message)
-    # print("resepos", response_message)
-    logging.info(f"Response: {response_message}")
-    # Return the processed data as JSON
-    return jsonify(response_message)
+    # county = request.args.get("county", "No county received")
+    # # print("county:", county)
+    # message = request.args.get("message", "No message received")
+    # llama = current_app.config["LLAMA"]
+    # try:
+    #     response_message = get_response_message(message, county, llama=llama)
+    # except Exception as e:
+    #     logging.info(f"Failed to get response, {e}")
+    #     response_message = {"sender": "bot", "response": "Sorry, I couldn't find that."}
+    # # Process the data (this example just echoes back the received message)
+    # # print("resepos", response_message)
+    # logging.info(f"Response: {response_message}")
+    # # Return the processed data as JSON
+    # return jsonify(response_message)
 
 
 if __name__ == "__main__":
