@@ -12,6 +12,6 @@ google-api-python-client == 2.127.0
 llama-index-embeddings-huggingface == 0.1.4
 # llama-index-llms-ollama == 0.1.2
 # llama-index-readers-web == 0.1.8
-webdriver-manager == 4.0.1
+# webdriver-manager == 4.0.1
 Flask-Cors == 4.0.0
 sentence-transformers == 2.7.0
