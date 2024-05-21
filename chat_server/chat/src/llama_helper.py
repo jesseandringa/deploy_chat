@@ -24,6 +24,7 @@ class LlamaRag:
         storage_paths=["storage"],
         url_json_paths=None,
         is_test=False,
+        dynamic_county_load=True,
     ):
         logging.basicConfig(filename="/app/llama.log", level=logging.INFO)
         if is_test:
@@ -40,12 +41,18 @@ class LlamaRag:
         self.muni_documents = []
         self.indices = []
         self.current_index = None
+        self.dynamic_county_load = dynamic_county_load
         self.one_bot = True if len(storage_paths) == 1 else False
+        if not self.dynamic_county_load:
+            if isinstance(url_json_paths, list):
+                self.load_data_to_index(dir_paths, url_json_paths, storage_paths)
+            else:
+                print("incorrect params")
 
-        if isinstance(url_json_paths, list):
-            self.load_data_to_index(dir_paths, url_json_paths, storage_paths)
-        else:
-            print("incorrect params")
+    def set_county(self, county):
+        for i in range(len(self.storage_paths)):
+            if county in self.storage_paths[i]:
+                self.load_index_from_storage(self.storage_paths[i])
 
     def load_data_to_index(self, dir_paths, url_json_paths, storage_paths):
         for i in range(len(storage_paths)):
@@ -184,56 +191,45 @@ class LlamaRag:
                 function_response = str(e)
         return function_response
 
-    def get_response(self, message, county):
-        print("getting query")
-        logging.info("getting query")
-
-        data = {"in": "get-get_response", "message": message, "county": county}
+    def log_text(self, text):
+        data = {"log": text}
         json_string = json.dumps(data)
         with open("logs.json", "a") as f:
             f.write(json_string)
 
+    def get_response(self, message, county):
+        self.log_text("getting query")
         for i, path in enumerate(self.storage_paths):
             if county in path:
                 index_index = i
                 print("using index path:", path)
                 break
+        try:
+            if self.dynamic_county_load:
+                self.current_index = self.indices[0][0]
+            elif self.one_bot:
+                self.current_index = self.indices[0][0]
+            else:
+                self.current_index = self.indices[index_index][0]
+        except Exception as e:
+            self.log_text("error in getting index" + str(e))
 
-        if self.one_bot:
-            self.current_index = self.indices[0][0]
-        else:
-            self.current_index = self.indices[index_index][0]
+        self.log_text(str(self.current_index))
 
-        data = {"in": "current_index set" + str(self.current_index)}
-        json_string = json.dumps(data)
-        with open("logs.json", "a") as f:
-            f.write(json_string)
         try:
             query_engine = self.current_index.as_query_engine()
         except Exception as e:
-            data = {"error": "error in query engine set" + str(e)}
-            json_string = json.dumps(data)
-            with open("logs.json", "a") as f:
-                f.write(json_string)
+            self.log_text("error in query engine" + str(e))
             raise (e)
 
-        data = {"in": "query engine set"}
-        json_string = json.dumps(data)
-        with open("logs.json", "a") as f:
-            f.write(json_string)
+        self.log_text("query engine created")
         try:
             response = query_engine.query(message)
         except Exception as e:
-            data = {"error": "error in query response" + str(e)}
-            json_string = json.dumps(data)
-            with open("logs.json", "a") as f:
-                f.write(json_string)
-            raise (e)
+            self.log_text("error in query" + str(e))
+            return "Looks like our LLM is down. Sorry.", "", ""
 
-        data = {"in": "response got"}
-        json_string = json.dumps(data)
-        with open("logs.json", "a") as f:
-            f.write(json_string)
+        self.log_text("query done")
 
         response_text = str(response)
         source_paths = response.get_formatted_sources()
