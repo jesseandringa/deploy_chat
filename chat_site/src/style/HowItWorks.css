@@ -1,0 +1,86 @@
+body{
+    background-color: #D4EAFF;
+  }
+.how-it-works{
+    margin: 0 auto;  
+    width: 50%;
+    padding: 50px;  
+    text-align: center; 
+}
+#chat-button{
+    background-color: #7db6ee;
+    margin-top: 5px;
+    height: 70px;
+    width: 200px;
+    font-weight: bold;
+    font-size: large;
+    border-radius: 7px;
+  }
+  #chat-button:hover{
+    background-color: #aedff7;
+    cursor: pointer;
+  }
+.how-it-works-steps{
+    /* text-align: left; */
+    /* width: 50%; */
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+  .container {
+    max-width: 90%; /* Changed to 90% of the viewport width */
+    margin: 0 auto; /* Center the container */
+    padding: 20px;
+    text-align: center; /* Center align text */
+  }
+  .plans-modal{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    /* z-index: 1000; */
+    border: 2px solid #141111;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+  
+  .input-field {
+    width: calc(100% - 40px); /* Adjusted width */
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  .message.user {
+    margin: 8px 0;
+    background-color: #007bff;
+    align-self: flex-end; /* Aligns user messages to the right */
+  }
+  
+  .submit-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .summary-container,
+  .sources-container {
+    margin-top: 20px;
+  }
+  
+  
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    margin-bottom: 5px;
+  }
+  

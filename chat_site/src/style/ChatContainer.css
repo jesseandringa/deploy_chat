@@ -1,0 +1,176 @@
+/* ImageWithOverlay.css */
+.image-container {
+    padding-top: 5px;
+    position: relative; /* Make the container position relative */
+    width: 100%; /* Ensure the image and overlay span the full width */
+  }
+
+.image-container img {
+    width: 100%; /* Make the image width 100% */
+    display: block; /* Remove any default inline spacing */
+    /* align-self: center; */
+}
+.content-separator{
+    border: none; /* Remove default border */
+    border-top: 1px solid #6f6e6e; /* Add top border to create separator line */
+    width: 80%; /* Set the width of the separator line */
+    margin: 0 auto;
+}
+
+.chat-box-container{
+    width: 75%; /* Set the container width to 75% of the viewport */
+    margin: 0 auto; /* Center the container horizontally */
+    /* Set the container height to full viewport height */
+    /* height: 100vh;  */
+    background-color: #e1f1ff;
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center the content horizontally */
+    border: 1px solid #6f6e6e;
+    border-radius: 7px;
+    padding: 10px;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
+    /* align-items: center; */
+    /* background-color: rgba(255, 255, 255, 0.9); */
+}
+.chat-box{
+    text-align: center;
+    /* background-color: #333; */
+}
+.question-container{
+    display: flex;
+    align-items: center;
+    /* background-color: #9a9797; */
+}
+/* .question-text{
+    padding: 10px; 
+} */
+.question-icon{
+    font-size: 24px; 
+}
+.bot-icon{
+    font-size: 24px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.bot-icon-answered{
+    font-size: 70px;
+    padding-right: 10px;
+    padding-left: 10px;
+
+}
+.bot-response{
+    /* background-color: rgba(255, 255, 255, 0.9);  */
+    /* align-items:center;
+    display: flex; */
+    padding: 10px;
+    /* border-color: black; */
+    /* border: 1px solid #ccc;
+    border-radius: 5px; */
+    /* border-width: 1px; */
+    
+}
+.bot-messages{
+    /* padding: 20px; 
+    border-radius: 10px; 
+    text-align: center;  */
+    align-items:center;
+    display: flex;
+}
+.bot-sources{
+    padding: 10px;
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center;
+    /* background-color: #333; */
+}
+.bot-message {
+    padding: 10px;
+}
+.source-container{
+    padding: 10px;
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; 
+}
+.source-name{
+    padding-top: 80px;
+}
+.source-item{
+    margin-bottom: 10px;
+    /* align-items: center; */
+
+}
+  
+.overlay-no-messages {
+    position: absolute; /* Position the overlay absolutely */
+    
+    top: 90%; /* Position the overlay vertically in the middle */
+    left: 50%; /* Position the overlay horizontally in the middle */
+    transform: translate(-50%, -50%); /* Adjust to center the overlay exactly */
+   
+     /* Semi-transparent black background */
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    color: white; /* Text color */
+    padding: 20px; /* Padding for the text box */
+  }
+  
+  .overlay-no-messages input {
+    width: 300px;
+    height: 30px;
+    margin-top: 0; /* Remove default margin */
+  }
+
+
+
+  .chat-input {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    /* background-color: #fff; */
+    /* border-top: 1px solid #ccc; */
+  }
+
+  .chat-input input[type="text"]::placeholder {
+    text-align: center;
+  }
+  .bot-thinking{
+    display: flex;
+    align-items: center;
+  }
+  .dot-container{
+    display: flex;
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    background-color: #333;
+    border-radius: 50%;
+    margin: 0 5px;
+    animation: dot-animation 1s infinite; /* Apply the animation */
+  }
+  @keyframes dot-animation {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  .chat-input input[type="text"] {
+    flex: 1; /* Allow the input to grow and fill the available space */
+    padding: 3px; /* Add padding to the input */
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 7px; /* Round the corners of the input */
+    outline: none; /* Remove the default focus outline */
+  }
+
+  #send-button{
+        /* Styles for the button */
+        background-color: #6096d4; /* Adjust as needed */
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: flex; /* Allow aligning icon and text */
+        align-items: center; /* Center icon and text vertically */
+      
+  }

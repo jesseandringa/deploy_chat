@@ -1,0 +1,30 @@
+# version: '3'
+
+services:
+  api:
+    build:
+      context: ./chat_server/chat  # Path to your Python server Dockerfile
+    ports:
+      - "5002:5002"  # Adjust port if needed
+    depends_on:
+      - react-webapp
+    volumes: 
+        - ./chat_server/chat/storage_resources:/app/storage_resources
+  
+  nginx:
+    depends_on:
+      - api
+      - react-webapp
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports:
+      - "3050:80"
+
+
+  react-webapp:
+    build:
+      context: ./chat_site  # Path to your React web app Dockerfile
+    ports:
+      - "3000:3000"  # Adjust port if needed

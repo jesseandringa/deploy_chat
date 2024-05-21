@@ -1,0 +1,40 @@
+/* BottomBar.css */
+  h1, h2 {
+    color: #333;
+}
+.bottom-bar {
+    display: flex;
+    justify-content: center; /* Center the buttons horizontally */
+    background-color: #D4EAFF;
+    padding: 10px 20px;
+  }
+  
+  .bottom-bar button {
+    margin: 0 15px; /* Adjust the margin around buttons */
+    margin-top: 15px;
+    padding: 8px 16px;
+    height: 80px;
+    width: 100px;
+    border-radius: 7px;
+    background-color: #c9e3fb;
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+    cursor: pointer;
+    border: 2px solid black;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  #plans-button{
+    background-color: #7db6ee;
+    margin-top: 5px;
+    height: 100px;
+    width: 120px;
+    font-weight: bold;
+  }
+  #plans-button:hover{
+    background-color: #aedff7;
+  }
+  
+  .bottom-bar button:hover {
+    background-color: #91a7bb;
+  }
+  
