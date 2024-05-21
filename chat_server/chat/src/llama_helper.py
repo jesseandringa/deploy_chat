@@ -5,16 +5,17 @@ import os
 from pathlib import Path
 
 # from llama_index.llm_predictor import HuggingFaceLLMPredictor
-from llama_index.core import Settings, SimpleDirectoryReader, VectorStoreIndex
+from llama_index.core import Settings  # , SimpleDirectoryReader, VectorStoreIndex
 from llama_index.core.indices import load_indices_from_storage
 from llama_index.core.storage import storage_context
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
 # from llama_index.llms.ollama import Ollama
 from llama_index.llms.openai import OpenAI
-from llama_index.readers.web import BeautifulSoupWebReader
+
+# from llama_index.readers.web import BeautifulSoupWebReader
 from openai_helper import OpenaiClient
-from website_scraper import convert_file_name_to_url, read_urls_from_json
+from website_scraper import convert_file_name_to_url  # , read_urls_from_json
 
 
 class LlamaRag:
@@ -54,53 +55,53 @@ class LlamaRag:
             if county in self.storage_paths[i]:
                 self.load_index_from_storage(self.storage_paths[i])
 
-    def load_data_to_index(self, dir_paths, url_json_paths, storage_paths):
-        for i in range(len(storage_paths)):
-            self.documents.append([])
+    # def load_data_to_index(self, dir_paths, url_json_paths, storage_paths):
+    #     for i in range(len(storage_paths)):
+    #         self.documents.append([])
 
-            # if vector store exists load it
-            logging.info("storage paths[i]", storage_paths[i])
-            print("storage paths[i]", storage_paths[i])
-            if os.path.exists(storage_paths[i]):
-                self.load_index_from_storage(storage_paths[i])
-            else:
-                print("loading...")
-                if self.one_bot:  # load all to one index
-                    print("loading all to one index")
-                    for path in dir_paths:
-                        self.load_data_from_dir_path(path, i)
-                    for path in url_json_paths:
-                        self.load_data_from_url_path(path, i)
-                else:
-                    self.load_data_from_dir_path(dir_paths[i], i)
-                    if url_json_paths[i] is not None:
-                        self.load_data_from_url_path(url_json_paths[i], i)
+    #         # if vector store exists load it
+    #         logging.info("storage paths[i]", storage_paths[i])
+    #         print("storage paths[i]", storage_paths[i])
+    #         if os.path.exists(storage_paths[i]):
+    #             self.load_index_from_storage(storage_paths[i])
+    #         else:
+    #             print("loading...")
+    #             if self.one_bot:  # load all to one index
+    #                 print("loading all to one index")
+    #                 for path in dir_paths:
+    #                     self.load_data_from_dir_path(path, i)
+    #                 for path in url_json_paths:
+    #                     self.load_data_from_url_path(path, i)
+    #             else:
+    #                 self.load_data_from_dir_path(dir_paths[i], i)
+    #                 if url_json_paths[i] is not None:
+    #                     self.load_data_from_url_path(url_json_paths[i], i)
 
-                print("creating vector store")
-                self.indices.append(VectorStoreIndex.from_documents(self.documents[i]))
-                self.indices[i].storage_context.persist(storage_paths[i])
+    #             print("creating vector store")
+    #             self.indices.append(VectorStoreIndex.from_documents(self.documents[i]))
+    #             self.indices[i].storage_context.persist(storage_paths[i])
 
-    def load_data_from_url_path(self, url_path, i):
-        print("\n loading web documents from  ", url_path, "\n")
-        web_loader = BeautifulSoupWebReader()
-        url_list = []
-        url_list.extend(read_urls_from_json(url_path))
-        web_documents = web_loader.load_data(urls=url_list)
-        self.documents[i].extend(web_documents)
+    # def load_data_from_url_path(self, url_path, i):
+    #     print("\n loading web documents from  ", url_path, "\n")
+    #     web_loader = BeautifulSoupWebReader()
+    #     url_list = []
+    #     url_list.extend(read_urls_from_json(url_path))
+    #     web_documents = web_loader.load_data(urls=url_list)
+    #     self.documents[i].extend(web_documents)
 
-    def load_data_from_dir_path(self, dir_path, i):
-        if self.check_folder_path(dir_path):
-            print("\n Loading files from ", dir_path, "\n")
-            docs = SimpleDirectoryReader(dir_path).load_data()
-            self.documents[i].extend(docs)
-        elif dir_path is not None:
-            folder_paths = self.get_all_folder_paths(dir_path)
-            if folder_paths:
-                for path in folder_paths:
-                    print("\n Loading file from ", path, "\n")
-                    if self.check_folder_path(path):
-                        docs = SimpleDirectoryReader(path).load_data()
-                        self.documents[i].extend(docs)
+    # def load_data_from_dir_path(self, dir_path, i):
+    #     if self.check_folder_path(dir_path):
+    #         print("\n Loading files from ", dir_path, "\n")
+    #         docs = SimpleDirectoryReader(dir_path).load_data()
+    #         self.documents[i].extend(docs)
+    #     elif dir_path is not None:
+    #         folder_paths = self.get_all_folder_paths(dir_path)
+    #         if folder_paths:
+    #             for path in folder_paths:
+    #                 print("\n Loading file from ", path, "\n")
+    #                 if self.check_folder_path(path):
+    #                     docs = SimpleDirectoryReader(path).load_data()
+    #                     self.documents[i].extend(docs)
 
     def load_index_from_storage(self, storage_path):
         print("loading from storage", storage_path)
@@ -108,14 +109,14 @@ class LlamaRag:
         index = load_indices_from_storage(storage_context=store)
         self.indices.append(index)
 
-    def get_all_folder_paths(self, root_dir):
-        folder_paths = []
-        for root, dirs, files in os.walk(root_dir):
-            for dir in dirs:
-                folder_path = os.path.join(root, dir)
-                folder_paths.append(folder_path)
-        print(folder_paths)
-        return folder_paths
+    # def get_all_folder_paths(self, root_dir):
+    #     folder_paths = []
+    #     for root, dirs, files in os.walk(root_dir):
+    #         for dir in dirs:
+    #             folder_path = os.path.join(root, dir)
+    #             folder_paths.append(folder_path)
+    #     print(folder_paths)
+    #     return folder_paths
 
     def check_folder_path(self, path):
         everything = os.listdir(path)
@@ -134,19 +135,19 @@ class LlamaRag:
         for path in file_paths:
             self.csv_file_paths.append(Path(path))
 
-    def load_csvs(self):
-        for file_path in self.csv_file_paths:
-            print("loading:", file_path)
-            loaded_csvs = self.csv_loader.load_data(file_path)
-            self.documents.extend(loaded_csvs)
-            print("loaded")
+    # def load_csvs(self):
+    #     for file_path in self.csv_file_paths:
+    #         print("loading:", file_path)
+    #         loaded_csvs = self.csv_loader.load_data(file_path)
+    #         self.documents.extend(loaded_csvs)
+    #         print("loaded")
 
-    def load_pdfs(self):
-        for file_path in self.pdf_file_paths:
-            print("loading: ", file_path)
-            loaded_csvs = self.pdf_loader.load_data(file_path)
-            self.documents.extend(loaded_csvs)
-            print("loaded")
+    # def load_pdfs(self):
+    #     for file_path in self.pdf_file_paths:
+    #         print("loading: ", file_path)
+    #         loaded_csvs = self.pdf_loader.load_data(file_path)
+    #         self.documents.extend(loaded_csvs)
+    #         print("loaded")
 
     def get_general_purpose_response(self, message):
         """
