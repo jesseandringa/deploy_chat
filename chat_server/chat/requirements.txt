@@ -1,4 +1,4 @@
-llama-index == 0.10.20
+# llama-index == 0.10.20
 google-auth == 2.29.0
 Flask == 3.0.0
 openai == 1.14.2
