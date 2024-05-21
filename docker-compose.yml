@@ -9,7 +9,7 @@ services:
     depends_on:
       - react-webapp
     volumes:
-      - -v /data:ro 
+      - v /data:ro 
         # - ./chat_server/chat/storage_resources:/app/storage_resources
   
   nginx:
