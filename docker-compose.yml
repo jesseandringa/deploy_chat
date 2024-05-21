@@ -8,7 +8,8 @@ services:
       - "5002:5002"  # Adjust port if needed
     depends_on:
       - react-webapp
-    # volumes: 
+    volumes: 
+      - my_volume:/app
         # - ./chat_server/chat/storage_resources:/app/storage_resources
   
   nginx:
@@ -28,3 +29,8 @@ services:
       context: ./chat_site  # Path to your React web app Dockerfile
     ports:
       - "3000:3000"  # Adjust port if needed
+
+volumes:
+  my_volume:
+    driver_opts:
+      size: "10G"
