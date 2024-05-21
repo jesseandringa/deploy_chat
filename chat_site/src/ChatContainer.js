@@ -5,8 +5,8 @@ import { useState } from 'react';
 import background_image from './assets/chat-image-background.png'; // Import the image file
 import {getBotResponse} from './BotClient';
 // import iconUrl from './assets/paper-plane.png';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faUser} from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faPaperPlane, faUser} from '@fortawesome/free-solid-svg-icons';
 import { FcSportsMode } from "react-icons/fc";
 import { FcBusinesswoman } from "react-icons/fc";
 import DropdownMenu from './DropdownMenu';
@@ -82,7 +82,8 @@ const ChatContainer = () => {
                     placeholder="Ask a Question"
                 />
                 <button id="send-button"  type="submit">
-                <FontAwesomeIcon icon={faPaperPlane} />
+                {/* <FontAwesomeIcon icon={faPaperPlane} /> */}
+                <FcSportsMode className="question-icon" />
                 </button>
           
             </form>
