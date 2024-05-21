@@ -8,8 +8,8 @@ services:
       - "5002:5002"  # Adjust port if needed
     depends_on:
       - react-webapp
-    volumes: 
-      - my_volume:/app
+    volumes:
+      - -v /data:ro 
         # - ./chat_server/chat/storage_resources:/app/storage_resources
   
   nginx:
@@ -30,7 +30,7 @@ services:
     ports:
       - "3000:3000"  # Adjust port if needed
 
-volumes:
-  my_volume:
-    driver_opts:
-      size: "10G"
+# volumes:
+#   my_volume:
+#     driver_opts:
+#       size: "10G"
