@@ -50,7 +50,6 @@ def create_app():
 
     # app.logger.addHandler(handler)
     init_llama(app)
-    app.config["SERVER_TIMEOUT"] = 320
 
     return app
 
@@ -85,6 +84,7 @@ def send_email():
 
 @app.route("/change-county", methods=["GET"])
 def change_county():
+    app.config["SERVER_TIMEOUT"] = 500
     county = request.args.get("county", "No county received")
     current_app.config["LLAMA"].set_county(county)
     current_app.config["LLAMA"].log_text("Changed county to " + county)
@@ -93,6 +93,7 @@ def change_county():
 
 @app.route("/get-response", methods=["GET"])
 def get_data():
+    app.config["SERVER_TIMEOUT"] = 120
     current_app.config["LLAMA"].log_text(
         "get_resposnse: " + str(request.args.get("message"))
     )
