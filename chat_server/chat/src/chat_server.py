@@ -24,6 +24,7 @@ def init_llama(app):
             dir_paths=dir_paths,
             storage_paths=storage_paths,
             url_json_paths=url_json_paths,
+            dynamic_county_load=True,
         )
         print("Made LLAMA.")
         logging.info("Made LLAMA2.")
@@ -37,7 +38,7 @@ def get_storage_paths():
         for entry in entries
         if os.path.isdir(os.path.join(resources_path, entry))
     ]
-    storage_paths = storage_paths[1:-2]
+    # storage_paths = [storage_paths[2]]
     print("storage_pathss:", storage_paths)
     return storage_paths
 
@@ -49,6 +50,7 @@ def create_app():
 
     # app.logger.addHandler(handler)
     init_llama(app)
+    app.config["SERVER_TIMEOUT"] = 320
 
     return app
 
@@ -81,21 +83,20 @@ def send_email():
     return json_response
 
 
+@app.route("/change-county", methods=["GET"])
+def change_county():
+    county = request.args.get("county", "No county received")
+    current_app.config["LLAMA"].set_county(county)
+    current_app.config["LLAMA"].log_text("Changed county to " + county)
+    return jsonify({"success": True})
+
+
 @app.route("/get-response", methods=["GET"])
 def get_data():
-    data = {"in": "get-response", "age": 25}
+    current_app.config["LLAMA"].log_text(
+        "get_resposnse: " + str(request.args.get("message"))
+    )
 
-    # Convert data to JSON string
-    json_string = json.dumps(data)
-
-    # Open the file in write mode
-    with open("logs.json", "a") as f:
-        # Write the JSON string to the file
-        f.write(json_string)
-    print("message:", request.get_json)
-    # app.logger.info("received a request.")
-    # print("message:", request.get_json)
-    # print("messageee", request.args.get("message", "No message received"))
     county = request.args.get("county", "No county received")
     # print("county:", county)
     message = request.args.get("message", "No message received")
