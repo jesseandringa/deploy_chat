@@ -2,10 +2,13 @@
 #storage
 /chat_server/chat/storage_resource/
 storage-all*
+openaikey.json
 # dependencies
 /node_modules
 /.pnp
 .pnp.js
+file_resources*
+/chat_server/chat/file_resources/
 
 # testing
 /coverage

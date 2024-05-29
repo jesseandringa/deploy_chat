@@ -5,8 +5,13 @@ import os
 import gmailer
 
 # import llama_helper
-from flask import Flask, current_app, jsonify, request
+# import llama_helper
+from flask import Flask, jsonify, request
 from flask_cors import CORS
+from llm_helper import openai_helper
+from util import convert_file_name_to_url, log_text
+
+from postgres import PGDB, create_database_and_data
 
 # LLAMA = None
 app = Flask(__name__)
@@ -20,15 +25,16 @@ def init_llama(app):
         dir_paths = []
         storage_paths = get_storage_paths()
         url_json_paths = []
+        # app.config["LLAMA"] = None
         app.config["LLAMA"] = None
-        # app.config["LLAMA"] = llama_helper.LlamaRag(
+        # llama_helper.LlamaRag(
         #     dir_paths=dir_paths,
         #     storage_paths=storage_paths,
         #     url_json_paths=url_json_paths,
         #     dynamic_county_load=True,
         # )
         print("Made LLAMA.")
-        logging.info("Made LLAMA2.")
+        # logging.info("Made LLAMA2.")
 
 
 def get_storage_paths():
@@ -40,7 +46,7 @@ def get_storage_paths():
         if os.path.isdir(os.path.join(resources_path, entry))
     ]
     # storage_paths = [storage_paths[2]]
-    print("storage_pathss:", storage_paths)
+    # print("storage_pathss:", storage_paths)
     return storage_paths
 
 
@@ -58,7 +64,7 @@ def create_app():
 @app.route("/")  # This route will match any unmatched URL
 def catch_all():
     print("catch_all")
-    logging.error("Received a request.")
+    # logging.error("Received a request.")
 
 
 @app.route("/send-email", methods=["POST"])
@@ -85,16 +91,48 @@ def send_email():
 
 @app.route("/change-county", methods=["GET"])
 def change_county():
-    app.config["SERVER_TIMEOUT"] = 500
+    app.config["SERVER_TIMEOUT"] = 50
     county = request.args.get("county", "No county received")
-    current_app.config["LLAMA"].set_county(county)
-    current_app.config["LLAMA"].log_text("Changed county to " + county)
+    # current_app.config["LLAMA"].set_county(county)
+    # current_app.config["LLAMA"].log_text("Changed county to " + county)
     return jsonify({"success": True})
 
 
 @app.route("/get-response", methods=["GET"])
 def get_data():
-    return jsonify({"response": "Hello, World!", "sender": "bot"})
+    user = os.getenv("PGUSER")
+    password = os.getenv("PGPASSWORD")
+    dbname = os.getenv("PGDATABASE")
+
+    county = request.args.get("county", "No county received")
+    db = PGDB(user, password, dbname, county)
+    # key_words = request.args.get("message").split(" ")
+
+    llm = openai_helper(county=county)
+    key_words_list = llm.get_key_words_from_message(request.args.get("message"))
+    db_resp = "No matching data found."
+    i = 0
+    while db_resp == "No matching data found." and i < len(key_words_list):
+        key_words = key_words_list[i][0].split(" ")
+        log_text("key_words: " + str(key_words))
+        db_resp = db.full_text_search_on_key_words(key_words)
+        log_text("db_resp: " + str(db_resp))
+        i += 1
+
+    # db_resp = db.full_text_search_on_key_words(key_words)
+    response = llm.create_response_message(request.args.get("message"), db_resp[2])
+
+    log_text("db_resp: " + str(db_resp))
+    # app.config["LLAMA"].log_text("get_resposnse: " + str(db_resp))
+    source = convert_file_name_to_url(db_resp[0])
+    return jsonify(
+        {
+            "response": response,
+            "sender": "bot",
+            "sources": source,
+            "pages": db_resp[1],
+        }
+    )
     # app.config["SERVER_TIMEOUT"] = 120
     # current_app.config["LLAMA"].log_text(
     #     "get_resposnse: " + str(request.args.get("message"))
@@ -117,5 +155,12 @@ def get_data():
 
 
 if __name__ == "__main__":
+    # create database then create server
+    create_database_and_data()
+    # user = os.getenv("PGUSER")
+    # password = os.getenv("PGPASSWORD")
+    # dbname = os.getenv("PGDATABASE")
+    # db = PGDB(user, password, dbname)
+
     app = create_app()
     app.run(debug=True, host="0.0.0.0", port=5002)

@@ -5,11 +5,11 @@ import os
 from pathlib import Path
 
 # from llama_index.llm_predictor import HuggingFaceLLMPredictor
-from llama_index.core import Settings  # , SimpleDirectoryReader, VectorStoreIndex
+# from llama_index.core import Settings  # , SimpleDirectoryReader, VectorStoreIndex
 from llama_index.core.indices import load_indices_from_storage
 from llama_index.core.storage import storage_context
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
+# from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 # from llama_index.llms.ollama import Ollama
 from llama_index.llms.openai import OpenAI
 
@@ -33,7 +33,7 @@ class LlamaRag:
         self.llmsherpa_api_url = "https://readers.llmsherpa.com/api/document/developer/parseDocument?renderFormat=all"
         self.documents = []
         self.storage_paths = storage_paths
-        Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
+        # Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
         # self.llm = Ollama(model="mistral", request_timeout=30.0)
         self.llm = OpenAI()
         self.main_index = None

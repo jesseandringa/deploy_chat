@@ -1,5 +1,6 @@
 # chat_website
 Website chatbot to be hosted for individual investor use
+ssh -i chatkeypair.pem ec2-user@3.143.142.137
 
 node dependencies
 "@fortawesome/free-solid-svg-icons": "^6.5.2",
