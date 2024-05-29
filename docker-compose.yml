@@ -17,7 +17,7 @@ services:
       - "5002:5002"  # Adjust port if needed
     depends_on:
       - react-webapp
-      - postgres
+      # - postgres
     environment:
       - PGUSER=postgres
       - PGPASSWORD=Winterpark5!
