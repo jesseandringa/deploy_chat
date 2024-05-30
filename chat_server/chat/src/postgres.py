@@ -148,7 +148,7 @@ class PGDB:
         return result
 
     def user_query_search(self, ip_address=None, username=None, password=None):
-        if ip_address and not username:
+        if ip_address:
             query = f"""
             SELECT * FROM basic_user_info WHERE ip_addr = '{ip_address}';
             """
@@ -164,7 +164,7 @@ class PGDB:
         try:
             result = self.execute(query)
         except Exception as e:
-            logging.info(f"Error searching data: {e}")
+            logging.error(f"Error searching data: {e}")
             result = None
 
         if not result:
@@ -178,7 +178,7 @@ class PGDB:
                 self.conn.cursor().execute(insert_query)
                 self.conn.commit()
             except Exception as e:
-                logging.info(f"Error inserting data: {e}")
+                logging.error(f"Error inserting data: {e}")
                 result = None
         if result:
             logging.info(f"User found: {result}")
