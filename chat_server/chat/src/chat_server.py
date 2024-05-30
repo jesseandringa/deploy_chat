@@ -98,6 +98,13 @@ def change_county():
     return jsonify({"success": True})
 
 
+@app.route("/user-data", methods=["GET"])
+def get_user_data():
+    logging.info("Hit 'user-data' endpoint")
+    logging.info("request: " + str(request.args))
+    return jsonify({"success": True})
+
+
 @app.route("/get-response", methods=["GET"])
 def get_data():
     # logging.debug("This is a debug message hit endpoing")

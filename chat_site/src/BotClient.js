@@ -34,6 +34,44 @@ return fetch(url)
   
 export {getBotResponse};
 
+const sendUserData = (longitude,latitude, userAgent) => {
+  // Convert the user input to lowercase for easier keyword matching
+// run locally
+// const baseURL = 'http://localhost:3050/api'; // Base URL
+// run on server
+console.log('longitude: ', longitude);
+console.log('latitude: ', latitude);
+console.log('userAgent: ', userAgent);
+const baseURL = 'http://18.191.103.216:3050/api'; // Base URL
+const endpoint = '/user-data'; // Endpoint
+const url = new URL(endpoint, baseURL);
+url.searchParams.append('longitude', longitude);
+url.searchParams.append('latitude', latitude);
+url.searchParams.append('userAgent', userAgent);
+console.log('url: ', url);
+
+
+// Use the fetch API to send a GET request
+return fetch(url)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json(); // Parse the JSON response body
+  })
+  .then(data => {
+    console.log('data: ', data);
+    return data; // Make sure to return the data here so it can be used by the caller
+  })
+  .catch(error => {
+    console.error('There has been a problem with your fetch operation:', error);
+    
+    throw error; // Rethrow the error so it can be caught by the caller
+  });
+};
+
+export {sendUserData};
+
 
 const changeCounty = (selectedCounty) => {
 // const baseURL = 'http://localhost:3050/api'; // Base URL

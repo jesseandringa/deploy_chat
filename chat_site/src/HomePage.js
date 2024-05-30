@@ -1,16 +1,45 @@
 // import logo from './logo.svg';
 import './style/HomePage.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TopBar from './TopBar';
 import BottomButtons from './BottomButtons';
 import ChatContainer from './ChatContainer';
 import PlansModal from './PlansModal';
+import {sendUserData} from './BotClient';
 const HomePage = () => {
   const [showModal, setShowModal] = useState(false);
-
+  
   const handlePlansClicked = () => {
       setShowModal(true);
     };
+  
+    useEffect(() => {
+      // Function to get user's geolocation
+      const getUserGeolocation = () => {
+          navigator.geolocation.getCurrentPosition(position => {
+              const { latitude, longitude } = position.coords;
+              const userAgent = navigator.userAgent;
+
+              setTimeout(async () => {
+                try {
+                  const response = await sendUserData(longitude, latitude, userAgent);
+                  try{
+                      console.log( 'response: ', response);
+                  }
+                  catch(error){
+                      console.log('error response printing', error);
+                  }
+      
+                } catch (error) {
+                  console.error('There was an error getting the bot response:', error);
+                }
+              }, 500);
+      });
+    }
+
+      // Call the function to get user's geolocation when component mounts
+      getUserGeolocation();
+  }, []);
   
 
   return (
