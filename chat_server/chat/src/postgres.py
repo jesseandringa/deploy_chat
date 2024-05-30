@@ -146,6 +146,40 @@ class PGDB:
 
         return result
 
+    def user_query_search(self, ip_address=None, username=None, password=None):
+        if ip_address and not username:
+            query = f"""
+            SELECT * FROM basic_user_info WHERE ip_addr = '{ip_address}';
+            """
+            username = ""
+            password = ""
+
+        elif username and password and not ip_address:
+            query = f"""
+            SELECT * FROM basic_user_info WHERE user_name = '{username}' AND password_hash = '{password}';
+            """
+            username = ""
+            password = ""
+        try:
+            result = self.execute(query)
+        except Exception as e:
+            logging.info(f"Error searching data: {e}")
+            result = None
+
+        if not result:
+            insert_query = f"""
+            INSERT INTO basic_user_info (ip_addr, user_name, password_hash)
+            VALUES ('{ip_address}', '{username}', '{password}');
+            """
+            try:
+                self.conn.cursor().execute(insert_query)
+                self.conn.commit()
+            except Exception as e:
+                logging.info(f"Error inserting data: {e}")
+                result = None
+
+        return result
+
     def execute(self, query):
         with self.conn.cursor() as cursor:
             cursor.execute(query)
