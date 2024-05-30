@@ -161,6 +161,6 @@ if __name__ == "__main__":
     # password = os.getenv("PGPASSWORD")
     # dbname = os.getenv("PGDATABASE")
     # db = PGDB(user, password, dbname)
-
+    log_text("Starting server...")
     app = create_app()
     app.run(debug=True, host="0.0.0.0", port=5002)

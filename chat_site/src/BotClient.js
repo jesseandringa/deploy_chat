@@ -45,7 +45,8 @@ export {getBotResponse};
 
 
 const changeCounty = (selectedCounty) => {
-const baseURL = 'http://localhost:3050/api'; // Base URL
+// const baseURL = 'http://localhost:3050/api'; // Base URL
+const baseURL = 'http://18.191.103.216:3050/api'; // Base URL
 const endpoint = '/change-county'; // Endpoint
 const url = new URL(endpoint, baseURL);
 url.searchParams.append('county', selectedCounty);// Construct the full URL manually
