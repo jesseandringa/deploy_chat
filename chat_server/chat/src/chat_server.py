@@ -9,7 +9,7 @@ import gmailer
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from llm_helper import openai_helper
-from util import convert_file_name_to_url, log_text
+from util import convert_file_name_to_url
 
 from postgres import PGDB
 
@@ -118,15 +118,15 @@ def get_data():
     i = 0
     while db_resp == "No matching data found." and i < len(key_words_list):
         key_words = key_words_list[i][0].split(" ")
-        log_text("key_words: " + str(key_words))
+        logging.info("key_words: " + str(key_words))
         db_resp = db.full_text_search_on_key_words(key_words, county)
-        log_text("db_resp: " + str(db_resp))
+        logging.info("db_resp: " + str(db_resp))
         i += 1
 
     # db_resp = db.full_text_search_on_key_words(key_words)
     response = llm.create_response_message(request.args.get("message"), db_resp[2])
-
-    log_text("db_resp: " + str(db_resp))
+    logging.info("response: " + str(response))
+    # log_text("db_resp: " + str(db_resp))
     # app.config["LLAMA"].log_text("get_resposnse: " + str(db_resp))
     source = convert_file_name_to_url(db_resp[0])
     return jsonify(
