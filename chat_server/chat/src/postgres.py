@@ -10,7 +10,7 @@ dbname = os.getenv("PGDATABASE")
 counties_table_names = {
     "gunnison-co": "gunnison_co_pdf_data",
     "sandy-ut": "sandy_ut_pdf_data",
-    "millcreek-ut, UT": "millcreek_ut_pdf_data",
+    "millcreek-ut": "millcreek_ut_pdf_data",
     "murray-ut": "murray_ut_pdf_data",
 }
 
