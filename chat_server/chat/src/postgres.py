@@ -8,10 +8,10 @@ dbname = os.getenv("PGDATABASE")
 # conn = psycopg2.connect(
 
 counties_table_names = {
-    "Gunnison, CO": "gunnison_co_pdf_data",
-    "Sandy, UT": "sandy_ut_pdf_data",
-    "Millcreek, UT": "millcreek_ut_pdf_data",
-    "Murray, UT": "murray_ut_pdf_data",
+    "gunnison-co": "gunnison_co_pdf_data",
+    "sandy-ut": "sandy_ut_pdf_data",
+    "millcreek-ut, UT": "millcreek_ut_pdf_data",
+    "murray-ut": "murray_ut_pdf_data",
 }
 
 
