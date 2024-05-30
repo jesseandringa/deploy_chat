@@ -23,7 +23,7 @@ services:
       - PGPASSWORD=Winterpark5!
       - PGHOST=database-1.cdcuami0ixkj.us-east-2.rds.amazonaws.com
       - PGPORT=5432
-      - PGDATABASE=database-1
+      - PGDATABASE=munidb
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/postgres
     # volumes:
       # - v /data:ro 
