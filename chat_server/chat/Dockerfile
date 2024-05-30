@@ -20,7 +20,8 @@ COPY requirements.txt /app
 # COPY ./file_resources/gunnison-resources /app/file_resources/gunnison-resources
 
 RUN pip install --no-cache-dir -r requirements.txt
-ENV OPENAI_API_KEY=sk-proj-twhtcJKHIZThNS2eK9WTT3BlbkFJO4YH7KhpaJIVC40x6xZZ
+# ENV OPENAI_API_KEY=sk-proj-twhtcJKHIZThNS2eK9WTT3BlbkFJO4YH7KhpaJIVC40x6xZZ
+ENV OPENAI_API_KEY=$OPENAI_API_KEY
 # Expose the port the app runs on
 # EXPOSE 5002
 # Run chat_server.py when the container launches
