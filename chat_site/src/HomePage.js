@@ -6,48 +6,47 @@ import BottomButtons from './BottomButtons';
 import ChatContainer from './ChatContainer';
 import PlansModal from './PlansModal';
 import {sendUserData} from './BotClient';
+import axios from 'axios';
+
 const HomePage = () => {
   const [showModal, setShowModal] = useState(false);
-  console.log('inside homepage')
+  const [IP, setIP] = useState('');
+
   const handlePlansClicked = () => {
       setShowModal(true);
     };
-    useEffect(() => {
-      console.log('homepage loaded');
-    }, []);
     
+    const getData = async () => {
+      const res = await axios.get("https://api.ipify.org/?format=json");
+      console.log('res: ');
+      console.log(res.data);
+      setIP(res.data.ip);
+    };
+
     useEffect(() => {
       console.log('inside useEffect')
-      // Function to get user's geolocation
-      const getUserGeolocation = () => {
-          navigator.geolocation.getCurrentPosition(position => {
-              console.log('inside getUserGeolocation')
-              const { latitude, longitude } = position.coords;
-              const userAgent = navigator.userAgent;
-              console.log('latitude: ', latitude)
-              console.log('longitude: ', longitude)
-              console.log('userAgent: ', userAgent)
+      getData();
 
-              setTimeout(async () => {
-                try {
+              // setTimeout(async () => {
+              //   try {
                  
-                  const response = await sendUserData(longitude, latitude, userAgent);
-                  try{
-                      console.log( 'response: ', response);
-                  }
-                  catch(error){
-                      console.log('error response printing', error);
-                  }
+              //     const response = await sendUserData(longitude, latitude, userAgent);
+              //     try{
+              //         console.log( 'response: ', response);
+              //     }
+              //     catch(error){
+              //         console.log('error response printing', error);
+              //     }
       
-                } catch (error) {
-                  console.error('There was an error getting the bot response:', error);
-                }
-              }, 500);
-      });
-    }
+              //   } catch (error) {
+              //     console.error('There was an error getting the bot response:', error);
+              //   }
+              // }, 500);
+      // });
+    // }
 
       // Call the function to get user's geolocation when component mounts
-      getUserGeolocation();
+      // getUserGeolocation();
   }, []);
   
 
