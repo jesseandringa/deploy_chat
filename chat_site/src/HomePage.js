@@ -22,6 +22,8 @@ const HomePage = () => {
       console.log('res: ');
       console.log(res.data);
       setIP(res.data['ip']);
+      console.log('IP: ', IP);
+      setGotIP(true);
     };
 
     useEffect(() => {
@@ -29,7 +31,7 @@ const HomePage = () => {
       if (!gotIP) {
         getData();
       }
-      if (!gotIP) {
+      if (gotIP) {
         
         setTimeout(async () => {
           try {
@@ -37,6 +39,7 @@ const HomePage = () => {
             const response = await sendUserData(IP);
             try{
                 console.log( 'response: ', response);
+                setGotIP(false);
             }
             catch(error){
                 console.log('error response printing', error);
