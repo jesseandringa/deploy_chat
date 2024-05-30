@@ -22,8 +22,25 @@ const HomePage = () => {
       console.log('res: ');
       console.log(res.data);
       setIP(res.data['ip']);
-      console.log('IP: ', IP);
       setGotIP(true);
+      console.log('IP: ', IP);
+
+      setTimeout(async () => {
+        try {
+          setGotIP(true);
+          const response = await sendUserData(res.data['ip']);
+          try{
+              console.log( 'response: ', response);
+              setGotIP(false);
+          }
+          catch(error){
+              console.log('error response printing', error);
+          }
+
+        } catch (error) {
+          console.error('There was an error getting the bot response:', error);
+        }
+            }, 500);
     };
 
     useEffect(() => {
@@ -31,25 +48,10 @@ const HomePage = () => {
       if (!gotIP) {
         getData();
       }
-      if (gotIP) {
+      // if (gotIP) {
         
-        setTimeout(async () => {
-          try {
-            setGotIP(true);
-            const response = await sendUserData(IP);
-            try{
-                console.log( 'response: ', response);
-                setGotIP(false);
-            }
-            catch(error){
-                console.log('error response printing', error);
-            }
-  
-          } catch (error) {
-            console.error('There was an error getting the bot response:', error);
-          }
-              }, 500);
-      }
+        
+      // }
       
       
 
