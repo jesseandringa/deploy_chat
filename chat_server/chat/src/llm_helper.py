@@ -8,7 +8,7 @@ from util import log_text
 class openai_helper:
     def __init__(self, county):
         # self.key = self.get_key_from_json_file("/app/openaikey.json")
-        self.key = os.environ.get("OPENAI_API_KEY")
+        self.key = os.getenv("OPENAI_API_KEY")
         self.client = OpenAI(api_key=self.key)
         self.county = county
 

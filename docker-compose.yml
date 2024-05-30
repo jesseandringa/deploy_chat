@@ -25,6 +25,7 @@ services:
       - PGPORT=5432
       - PGDATABASE=munidb
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/postgres
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
     # volumes:
       # - v /data:ro 
         # - ./chat_server/chat/storage_resources:/app/storage_resources
