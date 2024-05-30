@@ -102,6 +102,15 @@ def change_county():
 def get_user_data():
     logging.info("Hit 'user-data' endpoint")
     logging.info("request: " + str(request.args))
+    host = os.getenv("PGHOST")
+    user = os.getenv("PGUSER")
+    password = os.getenv("PGPASSWORD")
+    dbname = os.getenv("PGDATABASE")
+    db = PGDB(host, user, password, dbname, "")
+    result = db.user_query_search(request.args.get("ip"))
+    if result is None:
+        return jsonify({"success": False})
+
     return jsonify({"success": True})
 
 
