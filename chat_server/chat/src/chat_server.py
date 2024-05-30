@@ -11,7 +11,7 @@ from flask_cors import CORS
 from llm_helper import openai_helper
 from util import convert_file_name_to_url, log_text
 
-from postgres import PGDB, create_database_and_data
+from postgres import PGDB
 
 # LLAMA = None
 app = Flask(__name__)
@@ -100,12 +100,14 @@ def change_county():
 
 @app.route("/get-response", methods=["GET"])
 def get_data():
+    log_text("get_data hit")
+    host = os.getenv("PGHOST")
     user = os.getenv("PGUSER")
     password = os.getenv("PGPASSWORD")
     dbname = os.getenv("PGDATABASE")
 
     county = request.args.get("county", "No county received")
-    db = PGDB(user, password, dbname, county)
+    db = PGDB(host, user, password, dbname, county)
     # key_words = request.args.get("message").split(" ")
 
     llm = openai_helper(county=county)
@@ -156,7 +158,7 @@ def get_data():
 
 if __name__ == "__main__":
     # create database then create server
-    create_database_and_data()
+    # create_database_and_data()
     # user = os.getenv("PGUSER")
     # password = os.getenv("PGPASSWORD")
     # dbname = os.getenv("PGDATABASE")

@@ -9,8 +9,9 @@ dbname = os.getenv("PGDATABASE")
 
 
 class PGDB:
-    def __init__(self, user, password, dbname, county=None):
+    def __init__(self, host, user, password, dbname, county=None):
         self.conn = psycopg2.connect(
+            host=host,
             user=user,
             password=password,
             dbname=dbname,
