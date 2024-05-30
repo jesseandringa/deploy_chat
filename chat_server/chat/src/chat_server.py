@@ -19,35 +19,33 @@ logging.basicConfig(filename="/app/llama.log", level=logging.INFO)
 
 
 # CORS(app)
-def init_llama(app):
-    with app.app_context():
-        print("Making LLAMA...")
-        dir_paths = []
-        storage_paths = get_storage_paths()
-        url_json_paths = []
-        # app.config["LLAMA"] = None
-        app.config["LLAMA"] = None
-        # llama_helper.LlamaRag(
-        #     dir_paths=dir_paths,
-        #     storage_paths=storage_paths,
-        #     url_json_paths=url_json_paths,
-        #     dynamic_county_load=True,
-        # )
-        print("Made LLAMA.")
-        # logging.info("Made LLAMA2.")
+# def init_llama(app):
+#     with app.app_context():
+#         print("Making LLAMA...")
+#         dir_paths = []
+#         storage_paths = get_storage_paths()
+#         url_json_paths = []
+#         # app.config["LLAMA"] = None
+#         app.config["LLAMA"] = None
+#         # llama_helper.LlamaRag(
+#         #     dir_paths=dir_paths,
+#         #     storage_paths=storage_paths,
+#         #     url_json_paths=url_json_paths,
+#         #     dynamic_county_load=True,
+#         # )
+#         print("Made LLAMA.")
+# logging.info("Made LLAMA2.")
 
 
-def get_storage_paths():
-    resources_path = "/app/storage_resources"
-    entries = os.listdir(resources_path)
-    storage_paths = [
-        resources_path + "/" + entry
-        for entry in entries
-        if os.path.isdir(os.path.join(resources_path, entry))
-    ]
-    # storage_paths = [storage_paths[2]]
-    # print("storage_pathss:", storage_paths)
-    return storage_paths
+# def get_storage_paths():
+#     resources_path = "/app/storage_resources"
+#     entries = os.listdir(resources_path)
+#     storage_paths = [
+#         resources_path + "/" + entry
+#         for entry in entries
+#         if os.path.isdir(os.path.join(resources_path, entry))
+#     ]
+#     return storage_paths
 
 
 def create_app():
@@ -56,7 +54,7 @@ def create_app():
     # handler.setLevel(logging.DEBUG)  # Set the logging level for the handler
 
     # app.logger.addHandler(handler)
-    init_llama(app)
+    # init_llama(app)
 
     return app
 
