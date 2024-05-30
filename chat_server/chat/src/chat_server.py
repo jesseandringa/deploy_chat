@@ -101,7 +101,7 @@ def change_county():
 @app.route("/user-data", methods=["GET"])
 def get_user_data():
     logging.info("Hit 'user-data' endpoint")
-    logging.info("request: " + str(request.args))
+    logging.info("request: " + str(request.args.get("ip")))
     host = os.getenv("PGHOST")
     user = os.getenv("PGUSER")
     password = os.getenv("PGPASSWORD")

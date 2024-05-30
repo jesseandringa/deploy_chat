@@ -39,6 +39,7 @@ const sendUserData = (ip) => {
 // run locally
 // const baseURL = 'http://localhost:3050/api'; // Base URL
 // run on server
+console.log('ip in sendUserData: ', ip);
 const baseURL = 'http://3.143.1.57:3050/api'; // Base URL
 const endpoint = '/user-data'; // Endpoint
 const url = new URL(endpoint, baseURL);

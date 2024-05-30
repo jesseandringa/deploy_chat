@@ -1,5 +1,6 @@
 import logging
 import os
+from datetime import datetime
 
 import pdf_helper
 import psycopg2
@@ -167,9 +168,11 @@ class PGDB:
             result = None
 
         if not result:
+            questions_asked = 0
+            current_timestamp = datetime.now()
             insert_query = f"""
-            INSERT INTO basic_user_info (ip_addr, user_name, password_hash)
-            VALUES ('{ip_address}', '{username}', '{password}');
+            INSERT INTO basic_user_info (ip_addr, user_name, password_hash, questions_asked, last_visited)
+            VALUES ('{ip_address}', '{username}', '{password}', '{questions_asked}','{current_timestamp}');
             """
             try:
                 self.conn.cursor().execute(insert_query)
@@ -177,6 +180,8 @@ class PGDB:
             except Exception as e:
                 logging.info(f"Error inserting data: {e}")
                 result = None
+        if result:
+            logging.info(f"User found: {result}")
 
         return result
 
