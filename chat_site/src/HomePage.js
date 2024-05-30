@@ -14,17 +14,20 @@ const HomePage = () => {
     };
   
     useEffect(() => {
+      console.log('inside useEffect')
       // Function to get user's geolocation
       const getUserGeolocation = () => {
           navigator.geolocation.getCurrentPosition(position => {
+              console.log('inside getUserGeolocation')
               const { latitude, longitude } = position.coords;
               const userAgent = navigator.userAgent;
+              console.log('latitude: ', latitude)
+              console.log('longitude: ', longitude)
+              console.log('userAgent: ', userAgent)
 
               setTimeout(async () => {
                 try {
-                  console.log('latitude: ', latitude)
-                  console.log('longitude: ', longitude)
-                  console.log('userAgent: ', userAgent)
+                 
                   const response = await sendUserData(longitude, latitude, userAgent);
                   try{
                       console.log( 'response: ', response);
