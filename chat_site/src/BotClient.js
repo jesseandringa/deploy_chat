@@ -2,19 +2,8 @@
 // A simple function to simulate a more dynamic response based on user input
 const getBotResponse = (message, selectedCounty) => {
     // Convert the user input to lowercase for easier keyword matching
-// const baseURL = 'http://python-server:3001';
-// const baseURL = '/api';
-// The message you want to send
-// const baseURL = 'api';
-// const endpoint = '/get-response';
-// const url = `${baseURL}${endpoint}`;
-
-// Construct the full URL with query parameters
-// const url = new URL('/get-response', baseURL);
-// url.searchParams.append('message', message);
-// url.searchParams.append('county', selectedCounty);
-// const baseURL = '/api'; // Ensure baseURL starts with a slash
-const baseURL = 'http://localhost:3050/api'; // Base URL
+// const baseURL = 'http://localhost:3050/api'; // Base URL
+const baseURL = 'http://18.191.103.216:3050/api'; // Base URL
 const endpoint = '/get-response'; // Endpoint
 const url = new URL(endpoint, baseURL);
 url.searchParams.append('message', message);
