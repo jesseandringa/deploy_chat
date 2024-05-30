@@ -42,7 +42,7 @@ const sendUserData = (longitude,latitude, userAgent) => {
 console.log('longitude: ', longitude);
 console.log('latitude: ', latitude);
 console.log('userAgent: ', userAgent);
-const baseURL = 'http://18.191.103.216:3050/api'; // Base URL
+const baseURL = 'http://3.143.1.57:3050/api'; // Base URL
 const endpoint = '/user-data'; // Endpoint
 const url = new URL(endpoint, baseURL);
 url.searchParams.append('longitude', longitude);
