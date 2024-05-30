@@ -5,7 +5,7 @@ const getBotResponse = (message, selectedCounty) => {
 // run locally
 // const baseURL = 'http://localhost:3050/api'; // Base URL
 // run on server
-const baseURL = 'http://18.191.103.216:3050/api'; // Base URL
+const baseURL = 'http://3.143.1.57:3050/api'; // Base URL
 const endpoint = '/get-response'; // Endpoint
 const url = new URL(endpoint, baseURL);
 url.searchParams.append('message', message);

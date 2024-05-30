@@ -22,6 +22,9 @@ const HomePage = () => {
 
               setTimeout(async () => {
                 try {
+                  console.log('latitude: ', latitude)
+                  console.log('longitude: ', longitude)
+                  console.log('userAgent: ', userAgent)
                   const response = await sendUserData(longitude, latitude, userAgent);
                   try{
                       console.log( 'response: ', response);
