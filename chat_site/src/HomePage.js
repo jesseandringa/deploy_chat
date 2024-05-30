@@ -21,7 +21,7 @@ const HomePage = () => {
       const res = await axios.get("https://api.ipify.org/?format=json");
       console.log('res: ');
       console.log(res.data);
-      setIP(res.data.ip);
+      setIP(res.data['ip']);
     };
 
     useEffect(() => {
