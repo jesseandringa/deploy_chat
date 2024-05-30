@@ -119,7 +119,7 @@ def get_data():
     key_words_list = llm.get_key_words_from_message(message)
     db_resp = "No matching data found."
     i = 0
-    while db_resp == "No matching data found." and i < len(key_words_list):
+    while db_resp == "No matching data found." and i < 2:  # i < len(key_words_list):
         key_words = key_words_list[i][0].split(" ")
         logging.info("key_words: " + str(key_words))
         db_resp = db.full_text_search_on_key_words(key_words, county)
