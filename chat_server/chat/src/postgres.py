@@ -7,6 +7,13 @@ from util import log_text
 dbname = os.getenv("PGDATABASE")
 # conn = psycopg2.connect(
 
+counties_table_names = {
+    "Gunnison, CO": "gunnison_co_pdf_data",
+    "Sandy, UT": "sandy_ut_pdf_data",
+    "Millcreek, UT": "millcreek_ut_pdf_data",
+    "Murray, UT": "murray_ut_pdf_data",
+}
+
 
 class PGDB:
     def __init__(self, host, user, password, dbname, county=None):
@@ -72,21 +79,22 @@ class PGDB:
             """
             cursor.execute(insert_query)
             self.conn.commit()
-            log_text("Data inserted successfully.")
+            # log_text("Data inserted successfully.")
             # print("Data inserted successfully.")
-        except Exception as e:
+        except Exception:
             self.conn.rollback()
-            log_text(f"Error inserting data: {e}")
+            # log_text(f"Error inserting data: {e}")
         cursor.close()
         # self.conn.close()
 
-    def full_text_search_on_key_words(self, key_words):
+    def full_text_search_on_key_words(self, key_words, county):
         """
         Search for key words in the table
         key_words: [str]
         """
+        table_name = counties_table_names[county]
         try:
-            select_query = self.create_full_text_search_query(key_words)
+            select_query = self.create_full_text_search_query(key_words, table_name)
         except Exception as e:
             log_text(f"Error searching data: {e}")
             return "No matching data found."
@@ -109,18 +117,22 @@ class PGDB:
         # select_query[0][2] = query_result
         return first_result_tuple
 
-    def create_full_text_search_query(self, words):
+    def create_full_text_search_query(self, words, table_name):
         """
         words: [str]
         """
         if not words:
             return None  # Handle empty list case
-        query = """
+        query = (
+            """
             SELECT pdf_name, page_number,chunk_text,
                 ts_rank(to_tsvector('english', chunk_text), plainto_tsquery(%s)) AS match_count
-            FROM pdf_chunks
+            FROM """
+            + table_name
+            + """ 
             WHERE to_tsvector('english', chunk_text) @@ plainto_tsquery(%s);
         """
+        )
 
         search_query = " & ".join(words)
         cursor = self.conn.cursor()

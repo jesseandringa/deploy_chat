@@ -15,7 +15,9 @@ from postgres import PGDB
 
 # LLAMA = None
 app = Flask(__name__)
-logging.basicConfig(filename="/app/llama.log", level=logging.INFO)
+logging.basicConfig(
+    level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 # CORS(app)
@@ -74,8 +76,8 @@ def send_email():
     send_message = gmailer.gmail_send_message(
         message_txt=message, name=name, email=email
     )
-    logging.info(f"Message: {message}")
-    logging.info(f"Send Message: {send_message}")
+    # logging.info(f"Message: {message}")
+    # logging.info(f"Send Message: {send_message}")
     worked = json.loads(send_message)
     Sent = worked["labelIds"][1]
     print("Sent:", Sent)
@@ -98,7 +100,9 @@ def change_county():
 
 @app.route("/get-response", methods=["GET"])
 def get_data():
-    log_text("get_data hit")
+    logging.debug("This is a debug message hit endpoing")
+    logging.info("This is an info message hit endpoint")
+    # log_text("get_data hit")
     host = os.getenv("PGHOST")
     user = os.getenv("PGUSER")
     password = os.getenv("PGPASSWORD")
@@ -115,7 +119,7 @@ def get_data():
     while db_resp == "No matching data found." and i < len(key_words_list):
         key_words = key_words_list[i][0].split(" ")
         log_text("key_words: " + str(key_words))
-        db_resp = db.full_text_search_on_key_words(key_words)
+        db_resp = db.full_text_search_on_key_words(key_words, county)
         log_text("db_resp: " + str(db_resp))
         i += 1
 
@@ -161,6 +165,8 @@ if __name__ == "__main__":
     # password = os.getenv("PGPASSWORD")
     # dbname = os.getenv("PGDATABASE")
     # db = PGDB(user, password, dbname)
-    log_text("Starting server...")
+    # log_text("Starting server...")
+    logging.debug("This is a debug message")
+    logging.info("This is an info message")
     app = create_app()
     app.run(debug=True, host="0.0.0.0", port=5002)

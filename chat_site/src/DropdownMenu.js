@@ -1,31 +1,31 @@
 // DropdownMenu.js
 import React from 'react';
 import './style/DropdownMenu.css';
-import {changeCounty} from './BotClient';
+// import {changeCounty} from './BotClient';
 import { useState } from 'react';
 
 const DropdownMenu = ({ selectedOption, onOptionChange }) => {
-  const [countyChanged, setCountyChanged] = useState(false);
+  // const [countyChanged, setCountyChanged] = useState(false);
   // Function to handle option selection
   const handleOptionChange = (event) => {
     const selectedValue = event.target.value;
     onOptionChange(selectedValue); // Call the parent component's handler function
-    setTimeout(async () => {
-      try {
-        setCountyChanged(true);
-        const resp = await changeCounty(selectedValue);
-        try{
-           console.log('resp: ', resp);
-        }
-        catch(error){
-            console.log('timed out error: ', error)
-            setCountyChanged(false);
-        }
-      } catch (error) {
-        console.error('There was an error getting the county response:', error);
-        setCountyChanged(false);
-      }
-    }, 500);
+    // setTimeout(async () => {
+    //   try {
+    //     setCountyChanged(true);
+    //     const resp = await changeCounty(selectedValue);
+    //     try{
+    //        console.log('resp: ', resp);
+    //     }
+    //     catch(error){
+    //         console.log('timed out error: ', error)
+    //         setCountyChanged(false);
+    //     }
+    //   } catch (error) {
+    //     console.error('There was an error getting the county response:', error);
+    //     setCountyChanged(false);
+    //   }
+    // }, 500);
   };
   const isDefaultOptionSelected = () => {
     return selectedOption === '';
@@ -43,7 +43,7 @@ const DropdownMenu = ({ selectedOption, onOptionChange }) => {
         <option value="gunnison-co">Gunnison, CO</option>
         {/* Add more options as needed */}
       </select>
-      {countyChanged && <p>County changed, this might take a couple of minutes</p>}
+      {/* {countyChanged && <p>County changed, this might take a couple of minutes</p>} */}
     </div>
   );
 };
