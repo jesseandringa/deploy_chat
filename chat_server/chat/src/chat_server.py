@@ -109,11 +109,13 @@ def get_data():
     dbname = os.getenv("PGDATABASE")
 
     county = request.args.get("county", "No county received")
+    message = request.args.get("message")
     db = PGDB(host, user, password, dbname, county)
     # key_words = request.args.get("message").split(" ")
 
     llm = openai_helper(county=county)
-    key_words_list = llm.get_key_words_from_message(request.args.get("message"))
+    logging.info("message: " + str(request.args.get("message")))
+    key_words_list = llm.get_key_words_from_message(message)
     db_resp = "No matching data found."
     i = 0
     while db_resp == "No matching data found." and i < len(key_words_list):
