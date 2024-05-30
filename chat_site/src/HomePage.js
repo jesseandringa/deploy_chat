@@ -11,6 +11,7 @@ import axios from 'axios';
 const HomePage = () => {
   const [showModal, setShowModal] = useState(false);
   const [IP, setIP] = useState('');
+  const [gotIP, setGotIP] = useState(false);
 
   const handlePlansClicked = () => {
       setShowModal(true);
@@ -25,25 +26,30 @@ const HomePage = () => {
 
     useEffect(() => {
       console.log('inside useEffect')
-      getData();
-
-              // setTimeout(async () => {
-              //   try {
-                 
-              //     const response = await sendUserData(longitude, latitude, userAgent);
-              //     try{
-              //         console.log( 'response: ', response);
-              //     }
-              //     catch(error){
-              //         console.log('error response printing', error);
-              //     }
+      if (!gotIP) {
+        getData();
+      }
+      if (!gotIP) {
+        
+        setTimeout(async () => {
+          try {
+            setGotIP(true);
+            const response = await sendUserData(IP);
+            try{
+                console.log( 'response: ', response);
+            }
+            catch(error){
+                console.log('error response printing', error);
+            }
+  
+          } catch (error) {
+            console.error('There was an error getting the bot response:', error);
+          }
+              }, 500);
+      }
       
-              //   } catch (error) {
-              //     console.error('There was an error getting the bot response:', error);
-              //   }
-              // }, 500);
-      // });
-    // }
+      
+
 
       // Call the function to get user's geolocation when component mounts
       // getUserGeolocation();

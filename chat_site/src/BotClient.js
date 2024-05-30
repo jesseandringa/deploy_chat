@@ -34,20 +34,15 @@ return fetch(url)
   
 export {getBotResponse};
 
-const sendUserData = (longitude,latitude, userAgent) => {
+const sendUserData = (ip) => {
   // Convert the user input to lowercase for easier keyword matching
 // run locally
 // const baseURL = 'http://localhost:3050/api'; // Base URL
 // run on server
-console.log('longitude: ', longitude);
-console.log('latitude: ', latitude);
-console.log('userAgent: ', userAgent);
 const baseURL = 'http://3.143.1.57:3050/api'; // Base URL
 const endpoint = '/user-data'; // Endpoint
 const url = new URL(endpoint, baseURL);
-url.searchParams.append('longitude', longitude);
-url.searchParams.append('latitude', latitude);
-url.searchParams.append('userAgent', userAgent);
+url.searchParams.append('ip', ip);
 console.log('url: ', url);
 
 
