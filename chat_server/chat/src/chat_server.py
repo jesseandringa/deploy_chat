@@ -100,8 +100,8 @@ def change_county():
 
 @app.route("/get-response", methods=["GET"])
 def get_data():
-    logging.debug("This is a debug message hit endpoing")
-    logging.info("This is an info message hit endpoint")
+    # logging.debug("This is a debug message hit endpoing")
+    logging.info("Hit 'get-response' endpoint")
     # log_text("get_data hit")
     host = os.getenv("PGHOST")
     user = os.getenv("PGUSER")

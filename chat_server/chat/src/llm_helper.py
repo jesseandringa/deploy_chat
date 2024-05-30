@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 
 from openai import OpenAI
@@ -38,6 +39,8 @@ class openai_helper:
         """
         # log_text("key words to search " + resp)
         resp = resp.replace("\n", "")
+        logging.info("key words to search " + str(resp))
+
         json_resp = json.loads(resp)
         return json_resp
 
