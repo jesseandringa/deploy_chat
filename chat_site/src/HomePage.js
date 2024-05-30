@@ -8,11 +8,14 @@ import PlansModal from './PlansModal';
 import {sendUserData} from './BotClient';
 const HomePage = () => {
   const [showModal, setShowModal] = useState(false);
-  
+  console.log('inside homepage')
   const handlePlansClicked = () => {
       setShowModal(true);
     };
-  
+    useEffect(() => {
+      console.log('homepage loaded');
+    }, []);
+    
     useEffect(() => {
       console.log('inside useEffect')
       // Function to get user's geolocation
