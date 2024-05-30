@@ -1,3 +1,4 @@
+import logging
 import os
 
 import pdf_helper
@@ -130,7 +131,8 @@ class PGDB:
             FROM """
             + table_name
             + """ 
-            WHERE to_tsvector('english', chunk_text) @@ plainto_tsquery(%s);
+            WHERE to_tsvector('english', chunk_text) @@ plainto_tsquery(%s) 
+            LIMIT 2;
         """
         )
 
@@ -138,6 +140,7 @@ class PGDB:
         cursor = self.conn.cursor()
         cursor.execute(query, (search_query, search_query))
         result = cursor.fetchall()
+        logging.info("result: " + str(result))
         # for row in result:
         #     log_text("row: " + str(row))
 
