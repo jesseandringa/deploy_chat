@@ -10,14 +10,14 @@ COPY ./src /app/src
 COPY credentials.json /app
 COPY token.json /app
 COPY logs.json /app
-COPY openaikey.json /app
-RUN mkdir /app/storage_resources
+# COPY openaikey.json /app
+# RUN mkdir /app/storage_resources
 
 #commented out since trying to mount instead
 # COPY ./storage_resources /app/storage_resources
 # Install any needed dependencies specified in requirements.txt
 COPY requirements.txt /app
-COPY ./file_resources/gunnison-resources /app/file_resources/gunnison-resources
+# COPY ./file_resources/gunnison-resources /app/file_resources/gunnison-resources
 
 RUN pip install --no-cache-dir -r requirements.txt
 ENV OPENAI_API_KEY=sk-proj-twhtcJKHIZThNS2eK9WTT3BlbkFJO4YH7KhpaJIVC40x6xZZ
