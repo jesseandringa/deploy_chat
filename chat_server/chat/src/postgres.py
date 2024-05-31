@@ -155,7 +155,7 @@ class PGDB:
             update_query = f"""
             UPDATE basic_user_info
             SET questions_asked = questions_asked + 1,
-            last_quesiton_asked = '{timestamp}'
+            last_question_asked = '{timestamp}'
             WHERE ip_addr = '{ip_address}'
             RETURNING questions_asked;
             """
@@ -164,7 +164,7 @@ class PGDB:
             logging.info("User updated successfully.", questions_asked)
 
             self.conn.commit()
-            return questions_asked
+            return questions_asked[0]
         except Exception as e:
             self.conn.rollback()
             logging.error(f"Error updating data: {e}")
