@@ -84,6 +84,7 @@ def sign_up():
     lastname = data.get("lastname")
     email = data.get("email")
     password = data.get("password")
+    ip = data.get("ip")
 
     db = PGDB(
         os.getenv("PGHOST"),
@@ -92,7 +93,7 @@ def sign_up():
         os.getenv("PGDATABASE"),
         "",
     )
-    resp = db.sign_up_user(firstname, lastname, email, password)
+    resp = db.sign_up_user(firstname, lastname, email, password, ip)
     logging.info("resp: " + str(resp))
     if resp:
         json_response = json.dumps({"Success": "true"})

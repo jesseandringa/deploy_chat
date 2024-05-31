@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./style/SignUpLogin.css";
 import { SignUpUser } from "./UserClient";
+import axios from 'axios';
 function SignUp() {
   const [values, setValues] = useState({
     firstName: "",
@@ -9,9 +10,23 @@ function SignUp() {
     password: "",
     confirmPassword: ""
   });
+    const [IP, setIP] = useState('');
+    const [gotIP, setGotIP] = useState(false);
+
+    const getIpAddress = async () => {
+       
+        const res = await axios.get("https://api.ipify.org/?format=json");
+        console.log('res: ');
+        console.log(res.data);
+        setIP(res.data['ip']);
+        setGotIP(true);
+    }
 
   const handleInputChange = (event) => {
     /* event.persist(); NO LONGER USED IN v.17*/
+    if (gotIP === false){
+        getIpAddress();
+    }
     event.preventDefault();
 
     const { name, value } = event.target;
@@ -30,7 +45,7 @@ function SignUp() {
       
       setTimeout(async () => {
         try {
-          const resp = await SignUpUser(values.firstName, values.lastName, values.email, values.password);
+          const resp = await SignUpUser(values.firstName, values.lastName, values.email, values.password, IP);
           try{
               console.log('resp: ', resp);
               if (resp['Success'] === 'true'){

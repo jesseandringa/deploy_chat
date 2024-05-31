@@ -222,12 +222,12 @@ class PGDB:
         logging.info(f"User found: {result}")
         return result
 
-    def sign_up_user(self, firstname, lastname, email, password):
+    def sign_up_user(self, firstname, lastname, email, password, ip):
         questions_asked = 0
         current_timestamp = datetime.now()
         insert_query = f"""
-        INSERT INTO basic_user_info (first_name, last_name, email, password_hash, questions_asked, last_visited, created_at)
-        VALUES ('{firstname}', '{lastname}','{email}', '{password}', '{questions_asked}','{current_timestamp}','{current_timestamp}');
+        INSERT INTO basic_user_info (first_name, last_name, email, password_hash, ip_addr, questions_asked, last_visited, created_at)
+        VALUES ('{firstname}', '{lastname}','{email}', '{password}', '{ip}', '{questions_asked}','{current_timestamp}','{current_timestamp}');
         """
         try:
             self.conn.cursor().execute(insert_query)

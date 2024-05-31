@@ -1,4 +1,4 @@
-const SignUpUser = (firstName, lastName, email, password) => {
+const SignUpUser = (firstName, lastName, email, password, ip) => {
     const baseURL = 'http://3.143.1.57:3050/api';
     const endpoint = '/sign-up';
     const url = new URL(endpoint, baseURL);
@@ -8,7 +8,8 @@ const SignUpUser = (firstName, lastName, email, password) => {
         firstname: firstName,
         lastname: lastName,
         email: email,
-        password: password
+        password: password,
+        ip: ip
     };
 
     // Use the fetch API to send a POST request with JSON data
