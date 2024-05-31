@@ -133,7 +133,7 @@ def get_data():
 
     db = PGDB(host, user, password, dbname, county)
 
-    question_number = db.update_user_on_new_question(ip)
+    question_number = db.update_user_on_new_question(ip, None)
     logging.info("question_number: " + str(question_number))
 
     llm = openai_helper(county=county)
