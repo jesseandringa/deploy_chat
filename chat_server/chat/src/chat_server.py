@@ -74,7 +74,7 @@ def login():
     return json_response
 
 
-@app.route("/sign-up", methods=["GET"])
+@app.route("/sign-up", methods=["POST"])
 def sign_up():
     logging.info("in sign up")
     data = request.get_json()
