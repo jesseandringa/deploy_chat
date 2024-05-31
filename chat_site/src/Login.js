@@ -72,7 +72,7 @@ function Login() {
         )}
         {!valid && (
           <input
-            class="form-field"
+            className="form-field"
             type="text"
             placeholder="Email"
             name="email"
@@ -87,7 +87,7 @@ function Login() {
 
         {!valid && (
           <input
-            class="form-field"
+            className="form-field"
             type="password"
             placeholder="Password"
             name="password"
@@ -104,7 +104,7 @@ function Login() {
           <span id="email-error">Please enter an email address</span>
         )}
         {!valid && (
-          <button class="form-field" type="submit">
+          <button className="form-field" type="submit">
             Login
           </button>
         )}
