@@ -19,6 +19,7 @@ root.render(
         <Route path="/how-it-works" element={ <HowItWorks/> } />
         <Route path="/contact-us" element={ <ContactUs/> } />
         <Route path="/features" element={ <Features/> } />
+        <Route path="/sign-up-sign-in" element={ <SignUpSignIn/> } />
       </Routes>
     </Router>
 );

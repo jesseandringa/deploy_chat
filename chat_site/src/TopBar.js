@@ -9,6 +9,9 @@ const TopBar = () => {
   
     return (
         <div className="top-container">
+            <div className = "sign-in-up">
+                <button onClick={() => window.location.href = '/sign-up-sign-in'}>Sign Up/In</button>
+            </div>
             <div className="name-and-description">
                 <h1 id="website-name" onClick={() => window.location.href = '/'}>Muni</h1>
                 <h2 id="website-description">Your own personal municipal assistant</h2>
@@ -21,6 +24,7 @@ const TopBar = () => {
                 <button onClick={() => window.location.href = '/about-us'}>About Us</button>
                 {/* Add more buttons as needed */}
             </div>
+            
         </div>
     );
   };

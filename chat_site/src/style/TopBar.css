@@ -22,6 +22,24 @@
 .name-and-description{
     padding-bottom: 4px;
 }
+.sign-in-up {
+  display: flex; /* Make the buttons sit next to each other */
+  justify-content: flex-end; /* Align buttons to the right */
+}
+
+.sign-in-up button {
+    margin: 0 50px; 
+    padding: 8px 16px;
+    width: 50px;
+    border: none;
+    border-radius: 5px;
+    background-color: #c9e3fb;
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+    cursor: pointer;
+    border: 2px solid black;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
   
   h1, h2 {
     color: #333;
