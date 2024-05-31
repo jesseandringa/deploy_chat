@@ -160,13 +160,14 @@ class PGDB:
             RETURNING questions_asked;
             """
             cursor.execute(update_query)
-            questions_asked = cursor.fetchone()[0]
+            questions_asked = cursor.fetchone()
+            logging.info("User updated successfully.", questions_asked)
+
             self.conn.commit()
-            print("Data updated successfully.")
             return questions_asked
         except Exception as e:
             self.conn.rollback()
-            print(f"Error updating data: {e}")
+            logging.error(f"Error updating data: {e}")
         cursor.close()
         return None
 
