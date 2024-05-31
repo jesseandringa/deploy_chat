@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import "./style/SignUpLogin.css";
 import { LoginUser } from "./UserClient";
 import LoginContext from "./LoginContext";
-
+import TopBar from "./TopBar";
 function Login() {
   const [values, setValues] = useState({
     email: "",
@@ -53,6 +53,9 @@ function Login() {
   };
 
   return (
+    <>
+    <TopBar />
+    
     <div className="form-container">
       <form className="register-form" onSubmit={handleSubmit}>
         {submitted && valid && (
@@ -113,6 +116,7 @@ function Login() {
         </div>
       </form>
     </div>
+    </>
   );
 }
 export default Login;

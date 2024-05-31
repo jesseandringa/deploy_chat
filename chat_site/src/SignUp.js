@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import "./style/SignUpLogin.css";
 import { SignUpUser } from "./UserClient";
 import axios from 'axios';
+import TopBar from "./TopBar";
+import { useContext } from "react";
+import LoginContext from "./LoginContext";
+
 function SignUp() {
   const [values, setValues] = useState({
     firstName: "",
@@ -12,6 +16,7 @@ function SignUp() {
   });
     const [IP, setIP] = useState('');
     const [gotIP, setGotIP] = useState(false);
+    const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
 
     const getIpAddress = async () => {
        
@@ -50,6 +55,7 @@ function SignUp() {
               console.log('resp: ', resp);
               if (resp['Success'] === 'true'){
                 setValid(true);
+                setIsLoggedIn(true);
               }
           }
           catch(error){
@@ -66,6 +72,9 @@ function SignUp() {
   };
 
   return (
+    <>
+    <TopBar />
+    
     <div className="form-container">
       <form className="register-form" onSubmit={handleSubmit}>
         {submitted && valid && (
@@ -168,6 +177,7 @@ function SignUp() {
         </div>
       </form>
     </div>
+    </>
   );
 }
 export default SignUp;

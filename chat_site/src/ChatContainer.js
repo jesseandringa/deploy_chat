@@ -11,6 +11,8 @@ import { FcSportsMode } from "react-icons/fc";
 import { FcBusinesswoman } from "react-icons/fc";
 import DropdownMenu from './DropdownMenu';
 import axios from 'axios';
+import { useContext } from 'react';
+import LoginContext from './LoginContext';
 
 const ChatContainer = () => {
     // const [messages, setMessages] = useState([]);
@@ -26,6 +28,7 @@ const ChatContainer = () => {
     const [IP, setIP] = useState('');
     const [gotIP, setGotIP] = useState(false);
     const [questionsAsked, setQuestionsAsked] = useState(0);
+    const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
 
     const getIpAddress = async () => {
        
@@ -94,6 +97,10 @@ const ChatContainer = () => {
     <div className="chat-selector">
     {/* Render the DropdownMenu component and pass props */}
     <DropdownMenu selectedOption={selectedOption} onOptionChange={handleOptionChange} />
+    {isLoggedIn && (
+        
+    <p> HELLLO LOGED in user</p>)
+    }
     </div>
     <div className="image-container">
       <img src={background_image} alt="Placeholder" />
