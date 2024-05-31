@@ -9,12 +9,16 @@ import Features from './Features';
 import SignUp from './SignUp';
 import Login from './Login';
 import reportWebVitals from './reportWebVitals';
+import { createContext } from 'react';
+import LoginContext from './LoginContext';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Router>
+    <LoginContext.Provider>
       <Routes>
         <Route path="/" exact element={ <HomePage/> } />
         <Route path="/about-us" element={ <AboutUs/> } />
@@ -25,7 +29,8 @@ root.render(
         <Route path="/register" element={ <SignUp/> } />
 
       </Routes>
-    </Router>
+    </LoginContext.Provider>
+  </Router>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./style/SignUpLogin.css";
 import { LoginUser } from "./UserClient";
+import LoginContext from "./LoginContext";
 
 function Login() {
   const [values, setValues] = useState({
     email: "",
     password: ""
   });
+  const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
 
   const handleInputChange = (event) => {
     /* event.persist(); NO LONGER USED IN v.17*/
@@ -33,6 +35,7 @@ function Login() {
               console.log('resp: ', resp);
               if (resp['Success'] === 'true'){
                 setValid(true);
+                setIsLoggedIn(true);
               }
           }
           catch(error){
@@ -63,6 +66,9 @@ function Login() {
                 <button onClick={() => window.location.href = '/'}>Home</button>
             </div>
           </div>
+        )}
+        {isLoggedIn && (
+            <p> You are logged in</p>
         )}
         {!valid && (
           <input

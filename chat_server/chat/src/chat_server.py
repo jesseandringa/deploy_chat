@@ -51,11 +51,14 @@ def send_email():
     return json_response
 
 
-@app.route("/login", methods=["GET"])
+@app.route("/login", methods=["POST"])
 def login():
-    logging.info("message:", request.get_json)
-    email = request.get_json().get("email", "No email received")
-    password = request.get_json().get("password", "No password received")
+    logging.info("in sign up")
+    data = request.get_json()
+    logging.info("data: " + str(data))
+    # Extract data into variables
+    email = data.get("email")
+    password = data.get("password")
 
     db = PGDB(
         os.getenv("PGHOST"),
