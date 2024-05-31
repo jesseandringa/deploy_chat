@@ -6,6 +6,8 @@ import AboutUs from './AboutUs';
 import HowItWorks from './HowItWorks';
 import ContactUs from './ContactUs';
 import Features from './Features';
+import SignUp from './SignUp';
+import Login from './Login';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -19,7 +21,9 @@ root.render(
         <Route path="/how-it-works" element={ <HowItWorks/> } />
         <Route path="/contact-us" element={ <ContactUs/> } />
         <Route path="/features" element={ <Features/> } />
-        <Route path="/sign-up-sign-in" element={ <SignUpSignIn/> } />
+        <Route path="/login" element={ <Login/> } />
+        <Route path="/register" element={ <SignUp/> } />
+
       </Routes>
     </Router>
 );

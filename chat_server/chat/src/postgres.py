@@ -209,6 +209,34 @@ class PGDB:
 
         return result
 
+    def login_user(self, username, password):
+        current_timestamp = datetime.now()
+        query = f"""
+        SELECT * FROM basic_user_info WHERE user_name = '{username}' AND password_hash = '{password}';
+        """
+        try:
+            result = self.execute(query)
+        except Exception as e:
+            logging.error(f"Error searching data: {e}")
+            result = None
+        logging.info(f"User found: {result}")
+        return result
+
+    def sign_up_user(self, firstname, lastname, email, password):
+        questions_asked = 0
+        current_timestamp = datetime.now()
+        insert_query = f"""
+        INSERT INTO basic_user_info (first_name, last_name, email, password_hash, questions_asked, last_visited, created_at)
+        VALUES ('{firstname}', '{lastname}','{email}', '{password}', '{questions_asked}','{current_timestamp}','{current_timestamp}');
+        """
+        try:
+            self.conn.cursor().execute(insert_query)
+            self.conn.commit()
+        except Exception as e:
+            logging.error(f"Error inserting data: {e}")
+            return None
+        return True
+
     def execute(self, query):
         with self.conn.cursor() as cursor:
             cursor.execute(query)

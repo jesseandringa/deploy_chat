@@ -10,7 +10,7 @@ const TopBar = () => {
     return (
         <div className="top-container">
             <div className = "sign-in-up">
-                <button onClick={() => window.location.href = '/sign-up-sign-in'}>Sign Up/In</button>
+                <button onClick={() => window.location.href = '/login'}>Sign Up/Login</button>
             </div>
             <div className="name-and-description">
                 <h1 id="website-name" onClick={() => window.location.href = '/'}>Muni</h1>

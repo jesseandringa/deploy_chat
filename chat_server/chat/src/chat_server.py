@@ -20,43 +20,8 @@ logging.basicConfig(
 )
 
 
-# CORS(app)
-# def init_llama(app):
-#     with app.app_context():
-#         print("Making LLAMA...")
-#         dir_paths = []
-#         storage_paths = get_storage_paths()
-#         url_json_paths = []
-#         # app.config["LLAMA"] = None
-#         app.config["LLAMA"] = None
-#         # llama_helper.LlamaRag(
-#         #     dir_paths=dir_paths,
-#         #     storage_paths=storage_paths,
-#         #     url_json_paths=url_json_paths,
-#         #     dynamic_county_load=True,
-#         # )
-#         print("Made LLAMA.")
-# logging.info("Made LLAMA2.")
-
-
-# def get_storage_paths():
-#     resources_path = "/app/storage_resources"
-#     entries = os.listdir(resources_path)
-#     storage_paths = [
-#         resources_path + "/" + entry
-#         for entry in entries
-#         if os.path.isdir(os.path.join(resources_path, entry))
-#     ]
-#     return storage_paths
-
-
 def create_app():
     CORS(app)
-    # handler = logging.StreamHandler()  # Create a StreamHandler
-    # handler.setLevel(logging.DEBUG)  # Set the logging level for the handler
-
-    # app.logger.addHandler(handler)
-    # init_llama(app)
 
     return app
 
@@ -64,7 +29,6 @@ def create_app():
 @app.route("/")  # This route will match any unmatched URL
 def catch_all():
     print("catch_all")
-    # logging.error("Received a request.")
 
 
 @app.route("/send-email", methods=["POST"])
@@ -76,12 +40,58 @@ def send_email():
     send_message = gmailer.gmail_send_message(
         message_txt=message, name=name, email=email
     )
-    # logging.info(f"Message: {message}")
-    # logging.info(f"Send Message: {send_message}")
     worked = json.loads(send_message)
     Sent = worked["labelIds"][1]
     print("Sent:", Sent)
     if Sent == "SENT":
+        json_response = json.dumps({"Success": "true"})
+    else:
+        json_response = json.dumps({"Success": "false"})
+
+    return json_response
+
+
+@app.route("/login", methods=["POST"])
+def login():
+    logging.info("message:", request.get_json)
+    email = request.get_json().get("email", "No email received")
+    password = request.get_json().get("password", "No password received")
+
+    db = PGDB(
+        os.getenv("PGHOST"),
+        os.getenv("PGUSER"),
+        os.getenv("PGPASSWORD"),
+        os.getenv("PGDATABASE"),
+        "",
+    )
+    resp = db.login_user(email, password)
+
+    if resp:
+        json_response = json.dumps({"Success": "true"})
+    else:
+        json_response = json.dumps({"Success": "false"})
+
+    return json_response
+
+
+@app.route("/sign-up", methods=["POST"])
+def sign_up():
+    logging.info("message:", request.get_json)
+    firstname = request.get_json().get("firstname", "No name received")
+    lastname = request.get_json().get("lastname", "No email received")
+    email = request.get_json().get("email", "email")
+    password = request.get_json().get("password", "password")
+
+    db = PGDB(
+        os.getenv("PGHOST"),
+        os.getenv("PGUSER"),
+        os.getenv("PGPASSWORD"),
+        os.getenv("PGDATABASE"),
+        "",
+    )
+    resp = db.sign_up_user(firstname, lastname, email, password)
+
+    if resp:
         json_response = json.dumps({"Success": "true"})
     else:
         json_response = json.dumps({"Success": "false"})

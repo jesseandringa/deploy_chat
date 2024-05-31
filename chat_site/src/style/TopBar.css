@@ -29,11 +29,11 @@
 
 .sign-in-up button {
     margin: 0 50px; 
-    padding: 8px 16px;
-    width: 50px;
+    padding: 4px 8px;
+    width: 100px;
     border: none;
-    border-radius: 5px;
-    background-color: #c9e3fb;
+    border-radius: 3px;
+    background-color: #b3cde6;
     color: rgb(0, 0, 0);
     font-size: 16px;
     cursor: pointer;
