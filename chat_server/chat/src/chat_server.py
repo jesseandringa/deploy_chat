@@ -76,11 +76,14 @@ def login():
 
 @app.route("/sign-up", methods=["GET"])
 def sign_up():
-    logging.info("message:", request.get_json)
-    firstname = request.get_json().get("firstname", "No name received")
-    lastname = request.get_json().get("lastname", "No email received")
-    email = request.get_json().get("email", "email")
-    password = request.get_json().get("password", "password")
+    logging.info("in sign up")
+    data = request.get_json()
+    logging.info("data: " + str(data))
+    # Extract data into variables
+    firstname = data.get("firstname")
+    lastname = data.get("lastname")
+    email = data.get("email")
+    password = data.get("password")
 
     db = PGDB(
         os.getenv("PGHOST"),
@@ -90,7 +93,7 @@ def sign_up():
         "",
     )
     resp = db.sign_up_user(firstname, lastname, email, password)
-
+    logging.info("resp: " + str(resp))
     if resp:
         json_response = json.dumps({"Success": "true"})
     else:
