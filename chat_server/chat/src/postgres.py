@@ -212,7 +212,7 @@ class PGDB:
     def login_user(self, username, password):
         current_timestamp = datetime.now()
         query = f"""
-        SELECT * FROM basic_user_info WHERE user_name = '{username}' AND password_hash = '{password}';
+        SELECT * FROM basic_user_info WHERE email = '{username}' AND password_hash = '{password}';
         """
         try:
             result = self.execute(query)
