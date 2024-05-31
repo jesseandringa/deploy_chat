@@ -51,7 +51,7 @@ def send_email():
     return json_response
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/login", methods=["GET"])
 def login():
     logging.info("message:", request.get_json)
     email = request.get_json().get("email", "No email received")
@@ -74,7 +74,7 @@ def login():
     return json_response
 
 
-@app.route("/sign-up", methods=["POST"])
+@app.route("/sign-up", methods=["GET"])
 def sign_up():
     logging.info("message:", request.get_json)
     firstname = request.get_json().get("firstname", "No name received")
