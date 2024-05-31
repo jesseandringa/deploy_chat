@@ -18,7 +18,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Router>
-    <LoginContext.Provider>
+    <LoginContext.Provider value={false}>
       <Routes>
         <Route path="/" exact element={ <HomePage/> } />
         <Route path="/about-us" element={ <AboutUs/> } />
