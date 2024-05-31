@@ -147,6 +147,29 @@ class PGDB:
 
         return result
 
+    def update_user_on_new_question(self, ip_address, user):
+        cursor = self.conn.cursor()
+        timestamp = datetime.now()
+        try:
+            # Replace with your desired DELETE statement
+            update_query = f"""
+            UPDATE basic_user_info
+            SET questions_asked = questions_asked + 1,
+            last_quesiton_asked = '{timestamp}'
+            WHERE ip_addr = '{ip_address}'
+            RETURNING questions_asked;
+            """
+            cursor.execute(update_query)
+            questions_asked = cursor.fetchone()[0]
+            self.conn.commit()
+            print("Data updated successfully.")
+            return questions_asked
+        except Exception as e:
+            self.conn.rollback()
+            print(f"Error updating data: {e}")
+        cursor.close()
+        return None
+
     def user_query_search(self, ip_address=None, username=None, password=None):
         if ip_address:
             query = f"""

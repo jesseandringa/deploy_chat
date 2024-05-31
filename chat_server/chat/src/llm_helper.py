@@ -40,8 +40,17 @@ class openai_helper:
         # log_text("key words to search " + resp)
         resp = resp.replace("\n", "")
         logging.info("key words to search " + str(resp))
-
-        json_resp = json.loads(resp)
+        try:
+            json_resp = json.loads(resp)
+        except json.JSONDecodeError:
+            logging.error("Failed to parse key words from message")
+            try:
+                resp = resp.replace("{", "[")
+                resp = resp.replace("}", "]")
+                json_resp = json.loads(resp)
+            except json.JSONDecodeError as e:
+                logging.error("Failed to parse key words from message", resp, e)
+                return []
         return json_resp
 
     def create_response_message(self, question, context):

@@ -48,16 +48,6 @@ const HomePage = () => {
       if (!gotIP) {
         getData();
       }
-      // if (gotIP) {
-        
-        
-      // }
-      
-      
-
-
-      // Call the function to get user's geolocation when component mounts
-      // getUserGeolocation();
   }, []);
   
 

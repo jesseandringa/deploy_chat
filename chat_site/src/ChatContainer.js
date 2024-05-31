@@ -1,7 +1,7 @@
 // ImageWithOverlay.js
 import React from 'react';
 import './style/ChatContainer.css'; 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import background_image from './assets/chat-image-background.png'; // Import the image file
 import {getBotResponse} from './BotClient';
 // import iconUrl from './assets/paper-plane.png';
@@ -10,6 +10,7 @@ import {getBotResponse} from './BotClient';
 import { FcSportsMode } from "react-icons/fc";
 import { FcBusinesswoman } from "react-icons/fc";
 import DropdownMenu from './DropdownMenu';
+import axios from 'axios';
 
 const ChatContainer = () => {
     // const [messages, setMessages] = useState([]);
@@ -22,10 +23,29 @@ const ChatContainer = () => {
     const [botResponded, setBotResponded] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
     const [totalMessageCount, setTotalMessageCount] = useState(0);
+    const [IP, setIP] = useState('');
+    const [gotIP, setGotIP] = useState(false);
+    const [questionsAsked, setQuestionsAsked] = useState(0);
+
+    const getIpAddress = async () => {
+       
+        const res = await axios.get("https://api.ipify.org/?format=json");
+        console.log('res: ');
+        console.log(res.data);
+        setIP(res.data['ip']);
+        setGotIP(true);
+    }
 
     const handleOptionChange = (selectedValue) => {
         setSelectedOption(selectedValue);
-      };
+    };
+
+    useEffect(() => {
+        console.log('inside useEffect')
+        if (!gotIP) {
+          getIpAddress();
+        }
+    }, []);
 
     const sendMessage = (e) => {
         e.preventDefault();
@@ -37,10 +57,13 @@ const ChatContainer = () => {
         setBotSources([]);
         setBotResponded(false);
         setTotalMessageCount(totalMessageCount + 1);
+        if (questionsAsked > 3){
+            return alert('You have reached the maximum number of questions. Please sign up to ask more questions.');
+        }
         // Simulate bot response
         setTimeout(async () => {
           try {
-            const botResponse = await getBotResponse(input, selectedOption);
+            const botResponse = await getBotResponse(input, selectedOption, IP);
             try{
                 let sources = botResponse.sources.split(',');
                 for (let i = 0; i < sources.length; i++) {
@@ -55,6 +78,8 @@ const ChatContainer = () => {
             console.log('bot response sources: ', botResponse.sources);
             console.log('messages',botMessages)
             setBotResponded(true);
+            console.log('questions asked: ', botResponse.questions_asked)
+            setQuestionsAsked(parseInt(botResponse.questions_asked))
           } catch (error) {
             console.error('There was an error getting the bot response:', error);
           }

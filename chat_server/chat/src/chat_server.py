@@ -126,10 +126,15 @@ def get_data():
 
     county = request.args.get("county", "No county received")
     message = request.args.get("message")
+    ip = request.args.get("ip")
+    logging.info("ip: " + str(ip))
     logging.info("message: " + str(request.args.get("message")))
     logging.info("county: " + str(county))
 
     db = PGDB(host, user, password, dbname, county)
+
+    question_number = db.update_user_on_new_question(ip)
+    logging.info("question_number: " + str(question_number))
 
     llm = openai_helper(county=county)
     key_words_list = llm.get_key_words_from_message(message)
@@ -154,6 +159,7 @@ def get_data():
             "sender": "bot",
             "sources": source,
             "pages": db_resp[1],
+            "questions_asked": str(question_number),
         }
     )
     # app.config["SERVER_TIMEOUT"] = 120

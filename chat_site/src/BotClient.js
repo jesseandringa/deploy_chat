@@ -1,6 +1,6 @@
 
 // A simple function to simulate a more dynamic response based on user input
-const getBotResponse = (message, selectedCounty) => {
+const getBotResponse = (message, selectedCounty, IP) => {
     // Convert the user input to lowercase for easier keyword matching
 // run locally
 // const baseURL = 'http://localhost:3050/api'; // Base URL
@@ -10,6 +10,7 @@ const endpoint = '/get-response'; // Endpoint
 const url = new URL(endpoint, baseURL);
 url.searchParams.append('message', message);
 url.searchParams.append('county', selectedCounty);// Construct the full URL manually
+url.searchParams.append('ip', IP);
 console.log('url: ', url);
 
 
