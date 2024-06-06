@@ -35,6 +35,7 @@ function Login() {
               console.log('resp: ', resp);
               if (resp['Success'] === 'true'){
                 setValid(true);
+                console.log("use context : setIsLoggedIn");
                 setIsLoggedIn(true);
               }
           }

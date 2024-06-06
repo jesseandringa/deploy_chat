@@ -29,7 +29,13 @@ const ChatContainer = () => {
     const [gotIP, setGotIP] = useState(false);
     const [questionsAsked, setQuestionsAsked] = useState(0);
     const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
+    const [isHomePageUpdated, setIsHomePageUpdated] = useState(false);
 
+    useEffect(() => {
+        // Update flag when login state changes
+        console.log("isLoggedIn: ", isLoggedIn);
+        setIsHomePageUpdated(isLoggedIn);
+      }, [isLoggedIn]);
     const getIpAddress = async () => {
        
         const res = await axios.get("https://api.ipify.org/?format=json");
@@ -97,7 +103,7 @@ const ChatContainer = () => {
     <div className="chat-selector">
     {/* Render the DropdownMenu component and pass props */}
     <DropdownMenu selectedOption={selectedOption} onOptionChange={handleOptionChange} />
-    {isLoggedIn && (
+    {isLoggedIn && isHomePageUpdated &&(
         
     <p> HELLLO LOGED in user</p>)
     }

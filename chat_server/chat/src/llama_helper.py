@@ -15,7 +15,10 @@ from llama_index.llms.openai import OpenAI
 
 # from llama_index.readers.web import BeautifulSoupWebReader
 from openai_helper import OpenaiClient
-from website_scraper import convert_file_name_to_url  # , read_urls_from_json
+
+from chat_server.chat.scraper.website_scraper import (
+    convert_file_name_to_url,  # , read_urls_from_json
+)
 
 
 class LlamaRag:
