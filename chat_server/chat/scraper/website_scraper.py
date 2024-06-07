@@ -9,8 +9,11 @@ import html_helper
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.by import By
+from UniqueList import UniqueList
 
-from chat_server.chat.src.UniqueList import UniqueList
+# from chat_server.chat.src import postgres
+# from chat_server.chat.src import localpg
+
 
 # from UniqueList import UniqueList
 
@@ -599,23 +602,18 @@ def cut_out_duplicate_urls(url_list):
 
 
 def main():
-    url = "https://www.murray.utah.gov/"
-    saved_urls_path = "murray.json"
-    resource_path = "murray-resources"
-    index_path = "index.json"
-    isMuniCode = False
-
+    ############ CASEY change these ##################
     url = "https://codelibrary.amlegal.com/codes/murrayut/latest/"
     saved_urls_path = "murray_muni.json"
     resource_path = "murray-muni-resources"
     index_path = "muni_index.json"
     isMuniCode = True
+    ##################################################
 
     url_list = read_urls_from_json(saved_urls_path)
     if not url_list:
         url_list.append(url)
     url_ulist = UniqueList(url_list)
-    # url_set = set(url_list)
     pdf_set = set()
     pdf_list = read_filenames_from_dir(resource_path)
     pdf_set = set(pdf_list)

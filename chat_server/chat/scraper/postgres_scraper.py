@@ -2,9 +2,9 @@ import logging
 import os
 from datetime import datetime
 
+import database_vars
 import pdf_helper
 import psycopg2
-from util import log_text
 
 dbname = os.getenv("PGDATABASE")
 # conn = psycopg2.connect(
@@ -26,6 +26,25 @@ class PGDB:
             dbname=dbname,
         )
         self.county = county or "Gunnison"
+
+    def check_connection(self):
+        try:
+            self.conn.cursor().execute("SELECT 1")
+        except Exception as e:
+            print(f"Error checking connection: {e}")
+            return False
+        print("Connection successful.")
+        return True
+
+    def check_table_has_data(self, table_name):
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute(f"SELECT COUNT(*) FROM {table_name};")
+            count = cursor.fetchone()[0]
+            return count
+        except Exception as e:
+            print(f"Error checking table for data: {e}")
+            return False
 
     def create_pdf_text_table(self, table_name):
         cursor = self.conn.cursor()
@@ -68,11 +87,11 @@ class PGDB:
             )
             cursor.execute(insert_query)
             self.conn.commit()
-            log_text("Data inserted successfully.")
+            print("Data inserted successfully.")
             # print("Data inserted successfully.")
         except Exception as e:
             self.conn.rollback()
-            log_text(f"Error inserting data: {e}")
+            print(f"Error inserting data: {e}")
         cursor.close()
 
     def clean_and_trim_text(self, text):
@@ -98,25 +117,6 @@ class PGDB:
         text = text.replace("\\", " ")
         return text
 
-    def insert_data_into_pdf_text_table(self, pdf_name, page_number, chunk_text):
-        cursor = self.conn.cursor()
-        text = self.clean_and_trim_text(chunk_text)
-        try:
-            # Replace with your desired INSERT INTO statement
-            insert_query = f"""
-            INSERT INTO pdf_chunks (pdf_name, page_number, chunk_text)
-            VALUES ('{pdf_name}', {page_number}, '{text}');
-            """
-            cursor.execute(insert_query)
-            self.conn.commit()
-            # log_text("Data inserted successfully.")
-            # print("Data inserted successfully.")
-        except Exception:
-            self.conn.rollback()
-            # log_text(f"Error inserting data: {e}")
-        cursor.close()
-        # self.conn.close()
-
     def full_text_search_on_key_words(self, key_words, county):
         """
         Search for key words in the table
@@ -126,15 +126,15 @@ class PGDB:
         try:
             select_query = self.create_full_text_search_query(key_words, table_name)
         except Exception as e:
-            log_text(f"Error searching data: {e}")
+            print(f"Error searching data: {e}")
             return "No matching data found."
         try:
             first_result_tuple = select_query[0]
         except Exception:
-            log_text("no data: selectquery[0] " + str(select_query))
+            print("no data: selectquery[0] " + str(select_query))
             return "No matching data found."
 
-        log_text("select_query: " + str(select_query))
+        print("select_query: " + str(select_query))
         query_result = str(select_query[0][2])
         if len(query_result) < 50 and len(select_query) > 1:
             query_result = str(select_query[0][2] + ".. " + select_query[1][2])
@@ -171,7 +171,7 @@ class PGDB:
         result = cursor.fetchall()
         logging.info("result: " + str(result))
         # for row in result:
-        #     log_text("row: " + str(row))
+        #     print("row: " + str(row))
 
         return result
 
@@ -303,24 +303,24 @@ def create_database_and_data():
     # )
     pdf_files = pdf_helper.get_all_pdfs(folder_path)
     # xlsx_files = pdf_helper.get_all_xlsx(folder_path)
-    log_text("pdf_files:" + str(len(pdf_files)))
+    print("pdf_files:" + str(len(pdf_files)))
     for i, pdf_file in enumerate(pdf_files):
         # if (
         #     "nnisoncounty.org$$$DocumentCenter$$$View$$$12949$$$Genasys-Press-Release-for-Website_English.pdf"
         #     in pdf_file
         # ):
         # if i < 3:
-        # log_text("inserting pdf:")
+        # print("inserting pdf:")
         try:
             chunks = pdf_helper.chunk_pdf_into_paragraphs(pdf_file)
         except Exception as e:
-            log_text("failed to chunk pdf" + str(e))
+            print("failed to chunk pdf" + str(e))
         for i, chunk in enumerate(chunks):
             # if i < 1:
-            # log_text("chunk:" + str(chunk))
+            # print("chunk:" + str(chunk))
             text = chunk[3]
-            log_text("text: " + str(text))
-            # log_text("text: " + str(text))
+            print("text: " + str(text))
+            # print("text: " + str(text))
             # if i < len(chunks) - 1:
             #     if len(str(chunk[3])) < 50:
             #         text = (
@@ -330,17 +330,71 @@ def create_database_and_data():
             #             + " "
             #             + str(chunks[i + 1][3])
             #         )
-            # log_text("trying to insert chunk:" + str(text))
+            # print("trying to insert chunk:" + str(text))
             try:
                 db.insert_data_into_pdf_text_table(
                     str(chunk[0]), int(chunk[1]), str(text)
                 )
             except Exception as e:
-                log_text("failed to insert chunk" + str(e))
-    log_text("finished inserting pdfs")
+                print("failed to insert chunk" + str(e))
+    print("finished inserting pdfs")
+    # return db
+
+
+def create_table_and_insert_all_data(db, table_name, folder_path):
+    db.create_pdf_text_table(table_name)
+    pdf_files = pdf_helper.get_all_pdfs(folder_path)
+    for i, pdf_file in enumerate(pdf_files):
+        try:
+            chunks = pdf_helper.chunk_pdf_into_paragraphs(pdf_file)
+        except Exception as e:
+            print("failed to chunk pdf" + str(e))
+        for j, chunk in enumerate(chunks):
+            if j > 0 and j % 10 == 0:
+                print("inserting chunk " + str(j) + " of pdf : " + str(i))
+            text = chunk[3]
+            if len(text) < 300 and j < len(chunks) - 1:
+                text = str(chunks[j - 1][3]) + " " + text + " " + str(chunks[j + 1][3])
+            if len(text) < 500 and j < len(chunks) - 2:
+                text = (
+                    str(chunks[j - 2][3])
+                    + " "
+                    + str(chunks[j - 1][3])
+                    + " "
+                    + text
+                    + " "
+                    + str(chunks[j + 1][3])
+                    + " "
+                    + str(chunks[j + 2][3])
+                )
+            if len(text) < 15:
+                continue
+            try:
+                db.insert_data_into_pdf_text_table(
+                    table_name, str(chunk[0]), int(chunk[1]), str(text)
+                )
+            except Exception as e:
+                print("failed to insert chunk" + str(e))
+    print("finished inserting pdfs")
     # return db
 
 
 if __name__ == "__main__":
-    print("do nothing")
+    dbvars = database_vars.get_db_vars()
+    db = PGDB(
+        dbvars["PGHOST"],
+        dbvars["PGUSER"],
+        dbvars["PGPASSWORD"],
+        dbvars["PGDATABASE"],
+    )
+
+    ###########CASEY change table_name and folder_path to match your data#############################
+    # table names follow the format: county_state_pdf_data
+    # ex.      murray_ut_pdf_data
+    # folder path to the pdfs you want to upsert (control click folder copy and paste 'relatitve path')
+    # ex.      chat_server/chat/file_resources/murray-muni-resources
+    table_name = "gunnison_co_pdf_data"
+    folder_path = ""
+    ##################################################################################################
+    create_table_and_insert_all_data(db, table_name, folder_path)
     # user
