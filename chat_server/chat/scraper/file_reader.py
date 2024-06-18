@@ -9,28 +9,31 @@ from docx import Document
 
 def chunk_xlsx_into_paragraphs(xlsx_path):
     """Chunks an XLSX file into paragraphs."""
-    chunks = []
+    try:
+        chunks = []
 
-    # Open the XLSX file
-    xlsx_document = openpyxl.load_workbook(xlsx_path)
-    sheet = xlsx_document.active
+        # Open the XLSX file
+        xlsx_document = openpyxl.load_workbook(xlsx_path)
+        sheet = xlsx_document.active
 
-    paragraph_number = 0
-    labels = []
-    for row in sheet.iter_rows(
-        min_row=1, max_row=sheet.max_row, max_col=sheet.max_column
-    ):
-        paragraph = ""
-        for i, cell in enumerate(row):
-            if paragraph_number == 0:
-                labels.append(cell.value)
-            elif cell.value:
-                paragraph += str(labels[i]) + ": " + str(cell.value) + ", "
-        if paragraph_number > 0:
-            chunk = [xlsx_path, 1, paragraph_number, paragraph]
-            chunks.append(chunk)
-        paragraph_number += 1
-    return chunks
+        paragraph_number = 0
+        labels = []
+        for row in sheet.iter_rows(
+            min_row=1, max_row=sheet.max_row, max_col=sheet.max_column
+        ):
+            paragraph = ""
+            for i, cell in enumerate(row):
+                if paragraph_number == 0:
+                    labels.append(cell.value)
+                elif cell.value:
+                    paragraph += str(labels[i]) + ": " + str(cell.value) + ", "
+            if paragraph_number > 0:
+                chunk = [xlsx_path, 1, paragraph_number, paragraph]
+                chunks.append(chunk)
+            paragraph_number += 1
+        return chunks
+    except Exception:
+        return []
 
 
 def chunk_pdf_into_paragraphs(pdf_path):
@@ -102,7 +105,10 @@ def chunk_docx_into_paragraphs(docx_path):
     chunks = []
 
     # Open the DOCX file
-    doc = Document(docx_path)
+    try:
+        doc = Document(docx_path)
+    except Exception:
+        return []
 
     paragraph_number = 0
 

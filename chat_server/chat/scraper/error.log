@@ -1,0 +1,7 @@
+2024-06-17 20:30:34,546 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-17 20:30:34,546 - ERROR - Could not convert https://kingcounty.gov/ to pdf
