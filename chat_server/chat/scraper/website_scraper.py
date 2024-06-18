@@ -1,10 +1,11 @@
 import asyncio
 import json
+import os
 import time
 
 # import selenium_async
-from base64 import b64decode
-
+import downloader
+import file_reader
 import html_helper
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
@@ -54,7 +55,7 @@ class WebScraper:
 
         pdf_links, new_links = self.scrape_links(driver, url)
 
-        self.save_page_as_pdf(driver, url)
+        self.save_page_as_pdf(driver, url, self.file_resource_path)
         self.save_pdfs(pdf_links)
         self.add_links_to_url_set(new_links)
 
@@ -166,11 +167,11 @@ class WebScraper:
 
     def save_pdfs(self, pdf_links):
         if pdf_links:
-            for link in pdf_links:
-                if link not in self.pdf_set:
-                    self.pdf_set.add(link)
-                    download_file(link, self.file_resource_path)
-                    print(" downloading pdf: ", link)
+            for url in pdf_links:
+                if url not in self.pdf_set:
+                    self.pdf_set.add(url)
+                    download_file(url, self.file_resource_path)
+                    print(" downloading pdf: ", url)
 
     def add_links_to_url_set(self, links: UniqueList):
         for link in links:
@@ -191,7 +192,7 @@ class WebScraper:
 
         tasks = []
         chrome_options = ChromeOptions()
-        chrome_options.add_argument("--headless")
+        # chrome_options.add_argument("--headless")
 
         drivers = [webdriver.Chrome(chrome_options) for _ in range(5)]
         for i in range(range_end):
@@ -208,32 +209,8 @@ class WebScraper:
 
         return await self.recursive_search(index)
 
-    def save_page_as_pdf(self, driver, url):
-        if self.isMuniCode:
-            filename = convert_url_to_file_name(driver.current_url)
-            save_path = self.file_resource_path + "/" + filename + ".pdf"
-            try:
-                html_helper.write_webpage_to_pdf(None, url, save_path)
-            except Exception as e:
-                print("couldnnt save pdf", e)
-                # pass
-            return save_path
-        else:
-            pdf_data = driver.execute_cdp_cmd(
-                "Page.printToPDF",
-                {
-                    "path": self.file_resource_path
-                    + "/"
-                    + convert_url_to_file_name(url)
-                    + ".pdf",
-                    "format": "A4",
-                },
-            )
-            with open(
-                self.file_resource_path + "/" + convert_url_to_file_name(url) + ".pdf",
-                "wb",
-            ) as f:
-                f.write(b64decode(pdf_data["data"]))
+    def save_page_as_pdf(self, driver, url, directory):
+        download_file(url, directory, is_html_page=True)
 
 
 # url_save_pdf_path ='murray-url-resources'
@@ -432,66 +409,108 @@ def read_urls_from_json(file_path="urls.json"):
         return []
 
 
-def download_file(url, directory, extension=".pdf"):
-    """Downloads a file (PDF or spreadsheet) from the given URL and saves it to the specified directory.
+def download_file(url, directory, is_html_page=False):
+    file_path = directory + "/" + convert_url_to_file_name(url)
+    chrome_options = ChromeOptions()
+    chrome_options.add_argument("--headless")
+    driver = webdriver.Chrome(chrome_options)
 
-    Args:
-      url: The URL of the file.
-      directory: The directory path where the file should be saved.
-    """
-    import os
-
-    import requests
-
-    # Create the directory if it doesn't exist
     os.makedirs(directory, exist_ok=True)
-
-    # Send a HEAD request to get the content type
-    # head_response = requests.head(url)
-    # content_type = head_response.headers.get('Content-Type', '').lower()
-
-    filename = convert_url_to_file_name(url) + extension
-
-    # Construct the full save path
-    save_path = os.path.join(directory, filename)
-
-    # Send a GET request to download the file
-    try:
-        response = requests.get(url, stream=True)
-    except Exception:
-        print("exception requesting pdf: ", url)
-        return
-
-    # Check for successful response
-    if response.status_code == 200:
-        # Open the file in binary write mode
-        with open(save_path, "wb") as file:
-            for chunk in response.iter_content(1024):
-                # Write the downloaded data in chunks
-                file.write(chunk)
-        if not is_valid_pdf(save_path):
-            os.remove(save_path)
-            filename = convert_url_to_file_name(url) + ".xlsx"
-            # Construct the full save path
-            save_path = os.path.join(directory, filename)
-
-            # Send a GET request to download the file
-            response = requests.get(url, stream=True)
-            # Check for successful response
-            if response.status_code == 200:
-                # Open the file in binary write mode
-                with open(save_path, "wb") as file:
-                    for chunk in response.iter_content(1024):
-                        # Write the downloaded data in chunks
-                        file.write(chunk)
-                    if not is_valid_xlsx(save_path):
-                        os.remove(save_path)
-                        print(f"Error downloading file: {response.status_code}")
-                        print(save_path)
-                        return
-        print(f"File downloaded successfully: {save_path}")
+    # filename = convert_url_to_file_name(url) + extension
+    validity = []
+    if is_html_page:
+        funcs = [
+            downloader.download_page_with_requests,
+            downloader.download_page_using_chrome_print,
+            downloader.download_page_using_wkhtmltopdf,
+            downloader.download_page_using_pagesource_to_docx,
+        ]
     else:
-        print(f"Error downloading file: {response.status_code}")
+        funcs = [
+            downloader.download_page_with_requests,
+            downloader.download_page_using_chrome_print,
+            downloader.download_page_using_wkhtmltopdf,
+            downloader.download_page_using_pagesource_to_docx,
+            downloader.download_as_xlsl,
+        ]
+
+    for i in range(len(funcs)):
+        print("trying: ", str(funcs[i]))
+        try:
+            extension = funcs[i](driver, url, directory)
+        except Exception:
+            extension = ".xlsx"
+        temp_file = file_path + extension
+        validity.append(file_reader.check_validity_of_file(temp_file))
+
+    max_value = max(validity)
+    print("max value", max_value)
+    if max_value > 0:
+        index = validity.index(max_value)
+        print("index: ", index)
+        funcs[index](driver, url, directory)
+
+
+# def download_file(url, directory, extension=".pdf"):
+#     """Downloads a file (PDF or spreadsheet) from the given URL and saves it to the specified directory.
+
+#     Args:
+#       url: The URL of the file.
+#       directory: The directory path where the file should be saved.
+#     """
+#     import os
+
+#     import requests
+
+#     # Create the directory if it doesn't exist
+#     os.makedirs(directory, exist_ok=True)
+
+#     # Send a HEAD request to get the content type
+#     # head_response = requests.head(url)
+#     # content_type = head_response.headers.get('Content-Type', '').lower()
+
+#     filename = convert_url_to_file_name(url) + extension
+
+#     # Construct the full save path
+#     save_path = os.path.join(directory, filename)
+
+#     # Send a GET request to download the file
+#     try:
+#         response = requests.get(url, stream=True)
+#     except Exception:
+#         print("exception requesting pdf: ", url)
+#         return
+
+#     # Check for successful response
+#     if response.status_code == 200:
+#         # Open the file in binary write mode
+#         with open(save_path, "wb") as file:
+#             for chunk in response.iter_content(1024):
+#                 # Write the downloaded data in chunks
+#                 file.write(chunk)
+#         if not is_valid_pdf(save_path):
+#             os.remove(save_path)
+#             filename = convert_url_to_file_name(url) + ".xlsx"
+#             # Construct the full save path
+#             save_path = os.path.join(directory, filename)
+
+#             # Send a GET request to download the file
+#             response = requests.get(url, stream=True)
+#             # Check for successful response
+#             if response.status_code == 200:
+#                 # Open the file in binary write mode
+#                 with open(save_path, "wb") as file:
+#                     for chunk in response.iter_content(1024):
+#                         # Write the downloaded data in chunks
+#                         file.write(chunk)
+#                     if not is_valid_xlsx(save_path):
+#                         os.remove(save_path)
+#                         print(f"Error downloading file: {response.status_code}")
+#                         print(save_path)
+#                         return
+#         print(f"File downloaded successfully: {save_path}")
+#     else:
+#         print(f"Error downloading file: {response.status_code}")
 
 
 def is_valid_pdf(file_path):
@@ -603,9 +622,9 @@ def cut_out_duplicate_urls(url_list):
 
 def main():
     ############ CASEY change these ##################
-    url = "https://codelibrary.amlegal.com/codes/murrayut/latest/"
-    saved_urls_path = "murray_muni.json"
-    resource_path = "murray-muni-resources"
+    url = "https://kingcounty.gov/"
+    saved_urls_path = "king_wa.json"
+    resource_path = "king-wa-resources"
     index_path = "muni_index.json"
     isMuniCode = True
     ##################################################

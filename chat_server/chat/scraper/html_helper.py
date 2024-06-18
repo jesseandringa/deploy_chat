@@ -50,8 +50,9 @@ class PdfGenerator:
             pdfkit.from_string(
                 self.driver.page_source, "millcreek-muni-resources/page_source.pdf"
             )
-        except Exception as e:
-            print("eeeeerrrrrroooooorrrrrr", e)
+        except Exception:
+            # print("eeeeerrrrrroooooorrrrrr", e)
+            pass
         print_options = self.print_options.copy()
         result = self._send_devtools(self.driver, "Page.printToPDF", print_options)
         return base64.b64decode(result["data"])

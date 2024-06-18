@@ -3,8 +3,9 @@ import os
 from datetime import datetime
 
 import database_vars
-import pdf_helper
 import psycopg2
+
+import chat_server.chat.scraper.file_reader as file_reader
 
 dbname = os.getenv("PGDATABASE")
 # conn = psycopg2.connect(
@@ -301,7 +302,7 @@ def create_database_and_data():
     #     folder_path,
     #     db,
     # )
-    pdf_files = pdf_helper.get_all_pdfs(folder_path)
+    pdf_files = file_reader.get_all_pdfs(folder_path)
     # xlsx_files = pdf_helper.get_all_xlsx(folder_path)
     print("pdf_files:" + str(len(pdf_files)))
     for i, pdf_file in enumerate(pdf_files):
@@ -312,7 +313,7 @@ def create_database_and_data():
         # if i < 3:
         # print("inserting pdf:")
         try:
-            chunks = pdf_helper.chunk_pdf_into_paragraphs(pdf_file)
+            chunks = file_reader.chunk_pdf_into_paragraphs(pdf_file)
         except Exception as e:
             print("failed to chunk pdf" + str(e))
         for i, chunk in enumerate(chunks):
@@ -343,10 +344,10 @@ def create_database_and_data():
 
 def create_table_and_insert_all_data(db, table_name, folder_path):
     db.create_pdf_text_table(table_name)
-    pdf_files = pdf_helper.get_all_pdfs(folder_path)
+    pdf_files = file_reader.get_all_pdfs(folder_path)
     for i, pdf_file in enumerate(pdf_files):
         try:
-            chunks = pdf_helper.chunk_pdf_into_paragraphs(pdf_file)
+            chunks = file_reader.chunk_pdf_into_paragraphs(pdf_file)
         except Exception as e:
             print("failed to chunk pdf" + str(e))
         for j, chunk in enumerate(chunks):
