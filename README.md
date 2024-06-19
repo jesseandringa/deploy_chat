@@ -9,11 +9,20 @@ run webscraper.
 to change counties
 - in website_scraper search for casey
 - follow example of names for folders and such
+- for folder paths 
+  - right click on folder on the left side.
+  - click copy relative path
+  - paste
 
 to run in headless mode
 - search for headless in website_scraper.py
 - comment the headless line out (#)
 
+to move pdfs that are out of place
+- open up casey_move_pdfs.py
+- look at comments i made you
+- replace folder name with one you want them to end up in
+- run 'python chat_server/chat/scraper/casey_move_pdfs.py'
 
 
 
