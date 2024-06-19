@@ -831,3 +831,8 @@ Traceback (most recent call last):
          ^^^^^^^^^^^^^^^^^^^^^
 IsADirectoryError: [Errno 21] Is a directory: 'chat_server/chat/file_resources/king-wa-resources'
 2024-06-18 18:46:17,382 - ERROR - Could not convert https://aqua.kingcounty.gov/mkcc/members/vonreichbauer/pdf/Spring-2024-Quarterly-Update.pdf to pdf
+2024-06-19 13:16:53,046 - ERROR - Unhandled exception in FSEventsEmitter
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/watchdog/observers/fsevents.py", line 315, in run
+    _fsevents.add_watch(self, self.watch, self.events_callback, self.pathnames)
+RuntimeError: Cannot add watch <ObservedWatch: path='chat_server/chat/file_resources/king-wa-resources', is_recursive=False> - it is already scheduled

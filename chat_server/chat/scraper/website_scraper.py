@@ -170,7 +170,7 @@ class WebScraper:
             for url in pdf_links:
                 if url not in self.pdf_set:
                     self.pdf_set.add(url)
-                    print(" downloading pdf: ", url)
+                    # print(" downloading pdf: ", url)
                     download_file(url, self.file_resource_path, False)
 
     def add_links_to_url_set(self, links: UniqueList):
@@ -180,19 +180,20 @@ class WebScraper:
 
     async def recursive_search(self, index):
         # Example usage
-        print("index: ", index, "of ", len(self.url_ulist))
+        start_time = time.time()
+        # print("index: ", index, "of ", len(self.url_ulist))
         write_index_to_json(index, self.index_path)
         if index >= len(self.url_ulist):
             return "Done"
 
-        if len(self.url_ulist) - index > 8:
-            range_end = 8
+        if len(self.url_ulist) - index > 20:
+            range_end = 20
         else:
             range_end = 1
 
         tasks = []
         chrome_options = ChromeOptions()
-        # chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--headless")
 
         drivers = [webdriver.Chrome(chrome_options) for _ in range(range_end)]
         # for i in range(range_end):
@@ -219,6 +220,11 @@ class WebScraper:
 
         for driver in drivers:
             driver.quit()
+        end_time = time.time()
+        print("\n\n")
+        time_taken = (end_time - start_time) / range_end
+        print("Time taken per page: ", time_taken)
+        print("\n\n")
 
         self.recursive_depth += 1
 
@@ -287,7 +293,7 @@ def read_urls_from_json(file_path="urls.json"):
         # Reading the URLs from a JSON file
         with open(file_path, "r") as file:
             urls_list = json.load(file)
-        print("urls_list: ", urls_list)
+        # print("urls_list: ", urls_list)
         return urls_list
     except:
         return []
@@ -295,6 +301,7 @@ def read_urls_from_json(file_path="urls.json"):
 
 def download_file(url, directory, is_html_page=False):
     file_path = directory + "/" + convert_url_to_file_name(url)
+    # print("file_path: ", file_path)
     chrome_options = ChromeOptions()
     chrome_options.add_argument("--headless")
     driver = webdriver.Chrome(chrome_options)
@@ -317,7 +324,8 @@ def download_file(url, directory, is_html_page=False):
             downloader.download_page_using_pagesource_to_docx,
             downloader.download_as_xlsl,
         ]
-
+    pdfs = file_reader.get_all_pdfs(".")
+    num_pdfs_before = len(pdfs)
     for i in range(len(funcs)):
         # print("trying: ", str(funcs[i]))
         try:
@@ -334,10 +342,23 @@ def download_file(url, directory, is_html_page=False):
     delete_file(file_path + ".pdf")
     delete_file(file_path + ".docx")
     delete_file(file_path + ".xlsx")
+
+    pdfs = file_reader.get_all_pdfs(".")
+    num_pdfs_after = len(pdfs)
+    if num_pdfs_after > num_pdfs_before:
+        for i in range(num_pdfs_after):
+            if pdfs[i].lower() in file_path.lower():
+                dir_name = os.path.dirname(pdfs[i])
+                last_pdf_index = file_path.rfind(".pdf")
+                # If '.pdf' is found, slice the string up to that point
+                if last_pdf_index != -1:
+                    file_path = file_path[:last_pdf_index]
+                new_path = os.path.join(dir_name, file_path + ".pdf")
+                os.rename(pdfs[i], new_path)
+                return
+    index = 0
     if max_value > 0:
         index = validity.index(max_value)
-        # print("file_path: ", file_path)
-        # print("func: ", funcs[index])
         funcs[index](driver, url, directory)
 
 
@@ -492,7 +513,7 @@ def get_final_url(url):
     try:
         response = requests.get(url, allow_redirects=True)
     except requests.exceptions.RequestException as e:
-        print("eeee", e.args[0])
+        # print("eeee", e.args[0])
         error_message = str(e.args[0])  # Convert the first argument to a string
         host = error_message.split("'")[1]  # Split by single quotes to extract the host
         start_of_text = error_message.find("url: ") + 5
@@ -500,8 +521,8 @@ def get_final_url(url):
         end_of_text = subset_of_url_text.find(" (")
         url = subset_of_url_text[:end_of_text]
         # url = error_message.split("'")[3].split("(")[0].strip()  # Extract URL
-        print(f"Host: {host}")
-        print(f"URL: {url}")
+        # print(f"Host: {host}")
+        # print(f"URL: {url}")
         return host + url
     return response.url
 

@@ -72,12 +72,17 @@ def chunk_pdf_into_paragraphs(pdf_path):
 
 def get_all_pdfs(folder_path):
     """Get all PDF files in a folder."""
-    pdf_files = []
-    for root, _, files in os.walk(folder_path):
-        for file in files:
-            if file.endswith(".pdf"):
-                pdf_files.append(os.path.join(root, file))
-    return pdf_files
+    # List all files and directories in the given folder
+    items = os.listdir(folder_path)
+
+    # Filter out the PDFs
+    pdfs = [
+        item
+        for item in items
+        if item.endswith(".pdf") and os.path.isfile(os.path.join(folder_path, item))
+    ]
+
+    return pdfs
 
 
 def get_all_xlsx(folder_path):
@@ -120,7 +125,7 @@ def chunk_docx_into_paragraphs(docx_path):
                 cleaned_lines = p.replace("\xa0", " ")
                 chunk = [docx_path, 1, paragraph_number, cleaned_lines]
                 chunks.append(chunk)
-    print("chunks", chunks)
+    # print("chunks", chunks)
     return chunks
 
 
@@ -173,7 +178,7 @@ if __name__ == "__main__":
     # Extract text from PDF
     # extracted_text = chunk_docx_into_paragraphs(pdf_path)
     validity = check_validity_of_file(pdf_path)
-    print(validity)
+    # print(validity)
 # main()
 # chunk_docx_into_paragraphs("test.docx")
 
