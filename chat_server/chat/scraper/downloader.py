@@ -112,7 +112,7 @@ def download_page_using_pagesource_to_docx(
 
     # Extract all the text
     page_text = soup.get_text()
-    print(page_text)
+    # print(page_text)
     text = clean_text(page_text)
     filename = filepath + "/" + convert_url_to_file_name(url) + ".docx"
     # print(text)
@@ -151,7 +151,8 @@ def create_docx(text, filename):
 
 
 # from selenium import webdriver
+
 # driver = webdriver.Chrome()
-# url = "https://kingcounty.gov/en/shared-topics/about-king-county/departments"
-# file_path = "chat_server/chat/file_resources/king-wa-resources"
+# url = "https://codelibrary.amlegal.com/codes/murrayut/latest/murray_ut/0-0-0-2382"
+# file_path = "chat_server"
 # download_page_using_pagesource_to_docx(driver, url, file_path)

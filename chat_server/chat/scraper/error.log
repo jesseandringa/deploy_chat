@@ -5,3 +5,269 @@ Traceback (most recent call last):
          ^^^^^^^^^^^^^^^^^^^^^
 IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
 2024-06-17 20:30:34,546 - ERROR - Could not convert https://kingcounty.gov/ to pdf
+2024-06-18 16:51:24,468 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:51:24,469 - ERROR - Could not convert https://kingcounty.gov/en/dept/dajd/courts-jails-legal-system/information-services-jail-detention/locate-person-jail to pdf
+2024-06-18 16:51:24,978 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:51:24,978 - ERROR - Could not convert https://kingcounty.gov/en/dept/dnrp/about-king-county/about-dnrp/newsroom/news-releases/05-31-wilburton-trestle to pdf
+2024-06-18 16:51:25,340 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:51:25,340 - ERROR - Could not convert https://kingcounty.gov/en/shared-topics/about-king-county/departments to pdf
+2024-06-18 16:51:26,819 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:51:26,820 - ERROR - Could not convert https://kingcounty.gov/en/dept/council/governance-leadership/county-council/councilmembers-districts to pdf
+2024-06-18 16:51:34,427 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:51:34,427 - ERROR - Could not convert https://kingcounty.gov/en/index/#K to pdf
+2024-06-18 16:52:23,126 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:52:23,127 - ERROR - Could not convert https://kingcounty.gov/about/website/privacy to pdf
+2024-06-18 16:52:25,324 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:52:25,324 - ERROR - Could not convert https://kingcounty.gov/legacy/depts/community-human-services/mental-health-substance-abuse/services/crisis-services.aspx to pdf
+2024-06-18 16:52:26,413 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:52:26,414 - ERROR - Could not convert https://kingcounty.gov/legacy/depts/regional-animal-services/lost-and-found/FOUND.aspx to pdf
+2024-06-18 16:52:35,773 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:52:35,773 - ERROR - Could not convert https://kingcounty.gov/en/index/#W to pdf
+2024-06-18 16:52:36,055 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:52:36,056 - ERROR - Could not convert https://kingcounty.gov/en/index/#M to pdf
+2024-06-18 16:53:21,713 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:53:21,714 - ERROR - Could not convert https://kingcounty.gov/en/dept/dnrp/about-king-county/about-dnrp/newsroom/news-releases/05-28-movies-at-marymoor to pdf
+2024-06-18 16:53:26,050 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:53:26,050 - ERROR - Could not convert https://kingcounty.gov/en/legacy/elected/executive/constantine/news/release/2023.aspx to pdf
+2024-06-18 16:53:30,811 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:53:30,811 - ERROR - Could not convert https://kingcounty.gov/audience/employees.aspx to pdf
+2024-06-18 16:53:34,678 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:53:34,681 - ERROR - Could not convert https://kingcounty.gov/en/index/#B to pdf
+2024-06-18 16:53:34,759 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:53:34,760 - ERROR - Could not convert https://kingcounty.gov/en/index/#P to pdf
+2024-06-18 16:54:23,602 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:54:23,603 - ERROR - Could not convert https://kingcounty.gov/legacy/depts/health/environmental-health/food-safety/food-business-permit.aspx to pdf
+2024-06-18 16:54:24,949 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:54:24,950 - ERROR - Could not convert https://kingcounty.gov/en/dept/council/governance-leadership/county-council/councilmembers-districts/girmay-zahilay to pdf
+2024-06-18 16:54:25,518 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:54:25,519 - ERROR - Could not convert https://kingcounty.gov/legacy/depts/dnrp/solid-waste/programs/waste-prevention/food-too-good-to-waste.aspx to pdf
+2024-06-18 16:54:27,828 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:54:27,828 - ERROR - Could not convert https://kingcounty.gov/en/dept/council to pdf
+2024-06-18 16:54:28,748 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:54:28,748 - ERROR - Could not convert https://kingcounty.gov/en/legacy/audience/employees/careers to pdf
+2024-06-18 16:55:14,161 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:55:14,162 - ERROR - Could not convert https://kingcounty.gov/en/dept/dnrp/nature-recreation/parks-recreation/king-county-parks/parks/marymoor to pdf
+2024-06-18 16:55:14,484 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:55:14,484 - ERROR - Could not convert https://kingcounty.gov/en/dept/dnrp/nature-recreation/environment-ecology-conservation/flood-services/flood-warning-alerts/warning-system to pdf
+2024-06-18 16:55:14,693 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:55:14,693 - ERROR - Could not convert https://kingcounty.gov/en/ to pdf
+2024-06-18 16:55:16,673 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:55:16,673 - ERROR - Could not convert https://kingcounty.gov/legacy/depts/sheriff/services/concealed-pistol-license.aspx to pdf
+2024-06-18 16:55:18,173 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 16:55:18,174 - ERROR - Could not convert https://kingcounty.gov/en/dept/dph/health-safety/food-safety/search-restaurant-safety-ratings to pdf
+2024-06-18 17:10:15,594 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 17:10:15,596 - ERROR - Could not convert https://kingcounty.gov/en/legacy/about/website/accessibility to pdf
+2024-06-18 17:10:15,894 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 17:10:15,894 - ERROR - Could not convert https://kingcounty.gov/en/shared-topics/about-king-county/holiday-closures-impacts to pdf
+2024-06-18 17:10:19,157 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 17:10:19,158 - ERROR - Could not convert https://kingcounty.gov/en/dept/dnrp/waste-services/garbage-recycling-compost/solid-waste-facilities to pdf
+2024-06-18 17:10:27,487 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 17:10:27,488 - ERROR - Could not convert https://kingcounty.gov/en/index/#I to pdf
+2024-06-18 17:10:29,263 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 17:10:29,263 - ERROR - Could not convert https://kingcounty.gov/en/dept/metro/fares-and-payment/ways-to-pay/transit-go-ticket to pdf
+2024-06-18 17:11:14,927 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 17:11:14,927 - ERROR - Could not convert https://kingcounty.gov/en/court/courts-jails-legal-system/jury-duty to pdf
+2024-06-18 17:11:15,146 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 17:11:15,147 - ERROR - Could not convert https://kingcounty.gov/#maincontent to pdf
+2024-06-18 17:11:17,467 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-18 17:11:17,468 - ERROR - Could not convert https://kingcounty.gov/legacy/depts/regional-animal-services/adopt-a-pet.aspx to pdf
+2024-06-18 17:14:16,873 - ERROR - An error occurred: [Errno 21] Is a directory: '../file_resources/king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: '../file_resources/king-wa-resources'
+2024-06-18 17:14:16,874 - ERROR - Could not convert https://kingcounty.gov/en/dept/dajd/courts-jails-legal-system/information-services-jail-detention/locate-person-jail to pdf
+2024-06-18 17:14:17,476 - ERROR - An error occurred: [Errno 21] Is a directory: '../file_resources/king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: '../file_resources/king-wa-resources'
+2024-06-18 17:14:17,476 - ERROR - Could not convert https://kingcounty.gov/en/dept/dnrp/about-king-county/about-dnrp/newsroom/news-releases/05-31-wilburton-trestle to pdf
+2024-06-18 17:14:18,652 - ERROR - An error occurred: [Errno 21] Is a directory: '../file_resources/king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: '../file_resources/king-wa-resources'
+2024-06-18 17:14:18,653 - ERROR - Could not convert https://kingcounty.gov/en/shared-topics/about-king-county/departments to pdf
+2024-06-18 17:14:19,898 - ERROR - An error occurred: [Errno 21] Is a directory: '../file_resources/king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: '../file_resources/king-wa-resources'
+2024-06-18 17:14:19,898 - ERROR - Could not convert https://kingcounty.gov/en/dept/council/governance-leadership/county-council/councilmembers-districts to pdf
+2024-06-18 17:14:25,842 - ERROR - An error occurred: [Errno 21] Is a directory: '../file_resources/king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: '../file_resources/king-wa-resources'
+2024-06-18 17:14:25,842 - ERROR - Could not convert https://kingcounty.gov/en/index/#K to pdf

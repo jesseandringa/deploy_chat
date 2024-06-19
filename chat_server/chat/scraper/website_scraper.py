@@ -185,8 +185,8 @@ class WebScraper:
         if index >= len(self.url_ulist):
             return "Done"
 
-        if len(self.url_ulist) - index > 5:
-            range_end = 5
+        if len(self.url_ulist) - index > 8:
+            range_end = 8
         else:
             range_end = 1
 
@@ -203,7 +203,7 @@ class WebScraper:
         # await asyncio.gather(*tasks)
         threads = []
         results = []
-        for i in range(range_end):  # Example: Perform actions in 5 threads
+        for i in range(range_end):  # Example: Perform actions in {range_end} threads
             thread = threading.Thread(
                 target=lambda: results.append(
                     self.scrape(self.url_ulist[index], drivers[i])
@@ -306,14 +306,14 @@ def download_file(url, directory, is_html_page=False):
         funcs = [
             # downloader.download_page_with_requests,
             downloader.download_page_using_chrome_print,
-            downloader.download_page_using_wkhtmltopdf,
+            # downloader.download_page_using_wkhtmltopdf,
             downloader.download_page_using_pagesource_to_docx,
         ]
     else:
         funcs = [
             downloader.download_page_with_requests,
             downloader.download_page_using_chrome_print,
-            downloader.download_page_using_wkhtmltopdf,
+            # downloader.download_page_using_wkhtmltopdf,
             downloader.download_page_using_pagesource_to_docx,
             downloader.download_as_xlsl,
         ]
@@ -329,15 +329,15 @@ def download_file(url, directory, is_html_page=False):
             validity.append(file_reader.check_validity_of_file(temp_file))
         except Exception:
             validity.append(0)
-    print("validity: ", validity)
+    # print("validity: ", validity)
     max_value = max(validity)
     delete_file(file_path + ".pdf")
     delete_file(file_path + ".docx")
     delete_file(file_path + ".xlsx")
     if max_value > 0:
         index = validity.index(max_value)
-        print("file_path: ", file_path)
-        print("func: ", funcs[index])
+        # print("file_path: ", file_path)
+        # print("func: ", funcs[index])
         funcs[index](driver, url, directory)
 
 
@@ -558,7 +558,7 @@ def main():
             start_index = read_index_from_json(index_path)
             print("recursion error", e)
             pass
-
+    write_index_to_json(0, index_path)
     print(done)
 
 

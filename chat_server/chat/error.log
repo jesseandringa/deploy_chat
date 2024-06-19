@@ -1,0 +1,335 @@
+2024-06-13 15:01:44,151 - ERROR - An error occurred: [Errno 2] No such file or directory: 'pathpath/data:,.pdf'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 115, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'pathpath/data:,.pdf'
+2024-06-13 15:01:44,152 - ERROR - Could not convert https://codelibrary.amlegal.com/codes/murrayut/latest/ to pdf
+2024-06-13 15:14:32,776 - ERROR - An error occurred: [Errno 2] No such file or directory: 'pathpath/data:,.pdf'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 115, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'pathpath/data:,.pdf'
+2024-06-13 15:14:32,777 - ERROR - Could not convert https://codelibrary.amlegal.com/codes/murrayut/latest/ to pdf
+2024-06-13 15:14:55,382 - ERROR - An error occurred: [Errno 2] No such file or directory: 'pathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$.pdf'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 115, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'pathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$.pdf'
+2024-06-13 15:14:55,383 - ERROR - Could not convert https://codelibrary.amlegal.com/codes/murrayut/latest/ to pdf
+2024-06-13 15:17:17,181 - ERROR - An error occurred: [Errno 2] No such file or directory: 'pathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$.pdf'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 115, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'pathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$.pdf'
+2024-06-13 15:17:17,182 - ERROR - Could not convert https://codelibrary.amlegal.com/codes/murrayut/latest/ to pdf
+2024-06-13 15:20:36,655 - ERROR - An error occurred: [Errno 2] No such file or directory: 'pathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$.pdf'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 115, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'pathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$.pdf'
+2024-06-13 15:20:36,655 - ERROR - Could not convert https://codelibrary.amlegal.com/codes/murrayut/latest/ to pdf
+2024-06-13 15:21:32,975 - ERROR - An error occurred: [Errno 2] No such file or directory: 'pathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$.pdf'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 115, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'pathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$.pdf'
+2024-06-13 15:21:32,976 - ERROR - Could not convert https://codelibrary.amlegal.com/codes/murrayut/latest/ to pdf
+2024-06-13 15:23:13,348 - ERROR - An error occurred: [Errno 2] No such file or directory: 'pathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$.pdf'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 115, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'pathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$.pdf'
+2024-06-13 15:23:13,349 - ERROR - Could not convert https://codelibrary.amlegal.com/codes/murrayut/latest/ to pdf
+2024-06-13 15:41:58,430 - ERROR - An error occurred: [Errno 2] No such file or directory: 'pathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$murray_ut$$$0-0-0-4630.pdf'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 115, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'pathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$murray_ut$$$0-0-0-4630.pdf'
+2024-06-13 15:41:58,431 - ERROR - Could not convert https://codelibrary.amlegal.com/codes/murrayut/latest/murray_ut/0-0-0-4630 to pdf
+2024-06-13 16:11:24,034 - ERROR - An error occurred: [Errno 2] No such file or directory: 'pathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$murray_ut$$$0-0-0-4630.pdf'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 115, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'pathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$murray_ut$$$0-0-0-4630.pdf'
+2024-06-13 16:11:24,035 - ERROR - Could not convert https://codelibrary.amlegal.com/codes/murrayut/latest/murray_ut/0-0-0-4630 to pdf
+2024-06-17 19:51:17,437 - ERROR - An error occurred: [Errno 2] No such file or directory: 'king-wa-resources/https:$$$$$$kingcounty.gov$$$.pdf'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 115, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'king-wa-resources/https:$$$$$$kingcounty.gov$$$.pdf'
+2024-06-17 19:51:17,438 - ERROR - Could not convert https://kingcounty.gov/ to pdf
+2024-06-17 19:51:33,381 - ERROR - An error occurred: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connectionpool.py", line 789, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+               ^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connection.py", line 464, in getresponse
+    httplib_response = super().getresponse()
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.3/Frameworks/Python.framework/Versions/3.12/lib/python3.12/http/client.py", line 1428, in getresponse
+    response.begin()
+  File "/opt/homebrew/Cellar/python@3.12/3.12.3/Frameworks/Python.framework/Versions/3.12/lib/python3.12/http/client.py", line 331, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.3/Frameworks/Python.framework/Versions/3.12/lib/python3.12/http/client.py", line 300, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 111, in write_webpage_to_pdf
+    pdf_file = PdfGenerator([url]).main(driver)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 93, in main
+    self.driver = webdriver.Chrome(
+                  ^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/selenium/webdriver/chrome/webdriver.py", line 45, in __init__
+    super().__init__(
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/selenium/webdriver/chromium/webdriver.py", line 66, in __init__
+    super().__init__(command_executor=executor, options=options)
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py", line 208, in __init__
+    self.start_session(capabilities)
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py", line 292, in start_session
+    response = self.execute(Command.NEW_SESSION, caps)["value"]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py", line 345, in execute
+    response = self.command_executor.execute(driver_command, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/selenium/webdriver/remote/remote_connection.py", line 302, in execute
+    return self._request(command_info[0], url, body=data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/selenium/webdriver/remote/remote_connection.py", line 322, in _request
+    response = self._conn.request(method, url, body=body, headers=headers)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/_request_methods.py", line 144, in request
+    return self.request_encode_body(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/_request_methods.py", line 279, in request_encode_body
+    return self.urlopen(method, url, **extra_kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/poolmanager.py", line 443, in urlopen
+    response = conn.urlopen(method, u.request_uri, **kw)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connectionpool.py", line 843, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/util/retry.py", line 474, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/util/util.py", line 38, in reraise
+    raise value.with_traceback(tb)
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connectionpool.py", line 789, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+               ^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connection.py", line 464, in getresponse
+    httplib_response = super().getresponse()
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.3/Frameworks/Python.framework/Versions/3.12/lib/python3.12/http/client.py", line 1428, in getresponse
+    response.begin()
+  File "/opt/homebrew/Cellar/python@3.12/3.12.3/Frameworks/Python.framework/Versions/3.12/lib/python3.12/http/client.py", line 331, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.3/Frameworks/Python.framework/Versions/3.12/lib/python3.12/http/client.py", line 300, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+urllib3.exceptions.ProtocolError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2024-06-17 19:51:33,394 - ERROR - Could not convert https://kingcounty.gov/en/shared-topics/about-king-county/departments to pdf
+2024-06-17 19:52:26,612 - ERROR - An error occurred: [Errno 2] No such file or directory: 'king-wa-resources/https:$$$$$$kingcounty.gov$$$en$$$shared-topics$$$about-king-county$$$departments.pdf'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 115, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'king-wa-resources/https:$$$$$$kingcounty.gov$$$en$$$shared-topics$$$about-king-county$$$departments.pdf'
+2024-06-17 19:52:26,614 - ERROR - Could not convert https://kingcounty.gov/en/shared-topics/about-king-county/departments to pdf
+2024-06-17 19:53:06,062 - ERROR - An error occurred: [Errno 2] No such file or directory: 'king-wa-resources/https:$$$$$$kingcounty.gov$$$en$$$dept$$$council$$$governance-leadership$$$county-council$$$councilmembers-districts.pdf'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 115, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'king-wa-resources/https:$$$$$$kingcounty.gov$$$en$$$dept$$$council$$$governance-leadership$$$county-council$$$councilmembers-districts.pdf'
+2024-06-17 19:53:06,067 - ERROR - Could not convert https://kingcounty.gov/en/dept/council/governance-leadership/county-council/councilmembers-districts to pdf
+2024-06-17 20:15:20,669 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-17 20:15:20,670 - ERROR - Could not convert https://kingcounty.gov/en/shared-topics/about-king-county/departments to pdf
+2024-06-17 20:15:49,230 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-17 20:15:49,230 - ERROR - Could not convert https://kingcounty.gov/en/dept/council/governance-leadership/county-council/councilmembers-districts to pdf
+2024-06-17 20:16:04,248 - ERROR - unhandled exception during asyncio.run() shutdown
+task: <Task finished name='Task-1' coro=<WebScraper.recursive_search() done, defined at /Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/website_scraper.py:181> exception=MaxRetryError("HTTPConnectionPool(host='localhost', port=54288): Max retries exceeded with url: /session/498cd5f624a81bf2452a87a7ae4f6be2/timeouts (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x10b3f8e00>: Failed to establish a new connection: [Errno 61] Connection refused'))")>
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connection.py", line 196, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    raise err
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/util/connection.py", line 73, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 61] Connection refused
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connectionpool.py", line 789, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connectionpool.py", line 495, in _make_request
+    conn.request(
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connection.py", line 398, in request
+    self.endheaders()
+  File "/opt/homebrew/Cellar/python@3.12/3.12.3/Frameworks/Python.framework/Versions/3.12/lib/python3.12/http/client.py", line 1331, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "/opt/homebrew/Cellar/python@3.12/3.12.3/Frameworks/Python.framework/Versions/3.12/lib/python3.12/http/client.py", line 1091, in _send_output
+    self.send(msg)
+  File "/opt/homebrew/Cellar/python@3.12/3.12.3/Frameworks/Python.framework/Versions/3.12/lib/python3.12/http/client.py", line 1035, in send
+    self.connect()
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connection.py", line 236, in connect
+    self.sock = self._new_conn()
+                ^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connection.py", line 211, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x10b3f8e00>: Failed to establish a new connection: [Errno 61] Connection refused
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/website_scraper.py", line 203, in recursive_search
+    await asyncio.gather(*tasks)
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/website_scraper.py", line 58, in scrape
+    self.save_page_as_pdf(driver, url, self.file_resource_path)
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/website_scraper.py", line 213, in save_page_as_pdf
+    download_file(url, directory, is_html_page=True)
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/website_scraper.py", line 439, in download_file
+    extension = funcs[i](driver, url, directory)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/downloader.py", line 102, in download_page_using_pagesource_to_docx
+    driver.implicitly_wait(10)
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py", line 653, in implicitly_wait
+    self.execute(Command.SET_TIMEOUTS, {"implicit": int(float(time_to_wait) * 1000)})
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py", line 345, in execute
+    response = self.command_executor.execute(driver_command, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/selenium/webdriver/remote/remote_connection.py", line 302, in execute
+    return self._request(command_info[0], url, body=data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/selenium/webdriver/remote/remote_connection.py", line 322, in _request
+    response = self._conn.request(method, url, body=body, headers=headers)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/_request_methods.py", line 144, in request
+    return self.request_encode_body(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/_request_methods.py", line 279, in request_encode_body
+    return self.urlopen(method, url, **extra_kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/poolmanager.py", line 443, in urlopen
+    response = conn.urlopen(method, u.request_uri, **kw)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connectionpool.py", line 873, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connectionpool.py", line 873, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connectionpool.py", line 873, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/connectionpool.py", line 843, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/.venv/lib/python3.12/site-packages/urllib3/util/retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='localhost', port=54288): Max retries exceeded with url: /session/498cd5f624a81bf2452a87a7ae4f6be2/timeouts (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x10b3f8e00>: Failed to establish a new connection: [Errno 61] Connection refused'))
+2024-06-17 20:17:49,611 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-17 20:17:49,612 - ERROR - Could not convert https://kingcounty.gov/en/shared-topics/about-king-county/departments to pdf
+2024-06-17 20:18:25,467 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-17 20:18:25,467 - ERROR - Could not convert https://kingcounty.gov/en/dept/council/governance-leadership/county-council/councilmembers-districts to pdf
+2024-06-17 20:18:57,479 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-17 20:18:57,479 - ERROR - Could not convert https://kingcounty.gov/en/dept/dajd/courts-jails-legal-system/information-services-jail-detention/locate-person-jail to pdf
+2024-06-17 20:19:30,414 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-17 20:19:30,414 - ERROR - Could not convert https://kingcounty.gov/en/dept/dnrp/about-king-county/about-dnrp/newsroom/news-releases/05-31-wilburton-trestle to pdf
+2024-06-17 20:20:16,352 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-17 20:20:16,353 - ERROR - Could not convert https://kingcounty.gov/en/index/#K to pdf
+2024-06-17 20:24:20,708 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-17 20:24:20,710 - ERROR - Could not convert https://kingcounty.gov/en/shared-topics/about-king-county/departments to pdf
+2024-06-17 20:24:58,301 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-17 20:24:58,301 - ERROR - Could not convert https://kingcounty.gov/en/dept/council/governance-leadership/county-council/councilmembers-districts to pdf
+2024-06-17 20:25:31,966 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-17 20:25:31,967 - ERROR - Could not convert https://kingcounty.gov/en/dept/dajd/courts-jails-legal-system/information-services-jail-detention/locate-person-jail to pdf
+2024-06-17 20:26:07,688 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-17 20:26:07,689 - ERROR - Could not convert https://kingcounty.gov/en/dept/dnrp/about-king-county/about-dnrp/newsroom/news-releases/05-31-wilburton-trestle to pdf
+2024-06-17 20:26:53,999 - ERROR - An error occurred: [Errno 21] Is a directory: 'king-wa-resources'
+Traceback (most recent call last):
+  File "/Users/jesse/Documents/CountyChat/chat_site/chat_website/chat_server/chat/scraper/html_helper.py", line 116, in write_webpage_to_pdf
+    with open(save_path, "wb") as outfile:
+         ^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'king-wa-resources'
+2024-06-17 20:26:54,000 - ERROR - Could not convert https://kingcounty.gov/en/index/#K to pdf

@@ -1,4 +1,30 @@
 # chat_website
+CASEY INSTRUCTIONS
+cd into deploy_chat into terminal if not already
+- 'cd deploy_chat'
+run webscraper.
+- from deploy chat folder in terminal run the following command
+- 'python chat_server/chat/scraper/website_scraper.py'
+
+to change counties
+- in website_scraper search for casey
+- follow example of names for folders and such
+
+to run in headless mode
+- search for headless in website_scraper.py
+- comment the headless line out (#)
+
+
+
+
+
+
+
+
+
+
+
+
 Website chatbot to be hosted for individual investor use
 ssh -i chatkeypair.pem ec2-user@3.143.1.57
 
