@@ -1,12 +1,12 @@
 import asyncio
 import json
 import os
+import threading
 import time
 
 # import selenium_async
 import downloader
 import file_reader
-import html_helper
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.by import By
@@ -40,7 +40,7 @@ class WebScraper:
         self.isMuniCode = isMuniCode
         self.recursive_depth = 0
 
-    async def scrape(self, url, driver):
+    def scrape(self, url, driver):
         try:
             driver.get(url)
         except Exception as e:
@@ -170,8 +170,8 @@ class WebScraper:
             for url in pdf_links:
                 if url not in self.pdf_set:
                     self.pdf_set.add(url)
-                    download_file(url, self.file_resource_path)
                     print(" downloading pdf: ", url)
+                    download_file(url, self.file_resource_path, False)
 
     def add_links_to_url_set(self, links: UniqueList):
         for link in links:
@@ -194,13 +194,28 @@ class WebScraper:
         chrome_options = ChromeOptions()
         # chrome_options.add_argument("--headless")
 
-        drivers = [webdriver.Chrome(chrome_options) for _ in range(5)]
-        for i in range(range_end):
-            tasks.append(
-                asyncio.create_task(self.scrape(self.url_ulist[index], drivers[i]))
+        drivers = [webdriver.Chrome(chrome_options) for _ in range(range_end)]
+        # for i in range(range_end):
+        #     tasks.append(
+        #         asyncio.create_task(self.scrape(self.url_ulist[index], drivers[i]))
+        #     )
+        #     index += 1
+        # await asyncio.gather(*tasks)
+        threads = []
+        results = []
+        for i in range(range_end):  # Example: Perform actions in 5 threads
+            thread = threading.Thread(
+                target=lambda: results.append(
+                    self.scrape(self.url_ulist[index], drivers[i])
+                )
             )
+            threads.append(thread)
+            thread.start()
             index += 1
-        await asyncio.gather(*tasks)
+
+        # Wait for all threads to complete actions
+        for thread in threads:
+            thread.join()
 
         for driver in drivers:
             driver.quit()
@@ -211,135 +226,6 @@ class WebScraper:
 
     def save_page_as_pdf(self, driver, url, directory):
         download_file(url, directory, is_html_page=True)
-
-
-# url_save_pdf_path ='murray-url-resources'
-# Function to find PDF links on a page
-def find_pdf_links(
-    url, base_url, driver=None, sleep_time=2, file_resource_path="slco-resources"
-):
-    print("url: ", url)
-    print("base_url: ", base_url)
-    # driver = webdriver.Chrome()
-    try:
-        driver.get(url)
-    except Exception as e:
-        print("exception getting url: ", url, e)
-        return [], []
-    # Wait for the page to load. Adjust time as necessary for dynamic content.
-    time.sleep(sleep_time)
-    # html_helper.write_webpage_to_pdf(driver,url,file_resource_path)
-    filename = convert_url_to_file_name(driver.current_url)
-    save_path = file_resource_path + "/" + filename + ".pdf"
-    try:
-        # print('drivere infooo: ',driver.page_source)
-        # pdfkit.from_string(driver.page_source,save_path )
-        html_helper.write_webpage_to_pdf(None, url, save_path)
-    except Exception as e:
-        print("couldnnt save pdf", e)
-        # pass
-    # Find all <a> tags
-
-    links = driver.find_elements(By.TAG_NAME, "a")
-    input_links = []
-    if url.__contains__("#name="):
-        base_url = url.split("#name=")[0] + "#name="
-        input_tags = driver.find_elements(By.TAG_NAME, "input")
-        try:
-            input_links_endings = [
-                input.get_attribute("value")
-                for input in input_tags
-                if input.get_attribute("value")
-                and input.get_attribute("name") == "checkedNodes"
-            ]
-            input_links = [base_url + input_link for input_link in input_links_endings]
-            # print('input_links: ',input_links)
-        except Exception as e:
-            print("exception getting input links", e)
-
-    # Filter links ending with .pdf
-    try:
-        pdf_links = [
-            link.get_attribute("href")
-            for link in links
-            if link.get_attribute("href")
-            and link.get_attribute("href").__contains__("pdf")
-        ]
-    except Exception as e:
-        pdf_links = []
-        print("exception getting pdf links", e)
-    try:
-        pdf_links.extend(
-            [
-                link.get_attribute("href")
-                for link in links
-                if link.get_attribute("href")
-                and link.get_attribute("href").__contains__("xlsx")
-            ]
-        )
-    except:
-        print("exception getting pdf links")
-
-    try:
-        pdf_links.extend(
-            [
-                link.get_attribute("href")
-                for link in links
-                if link.get_attribute("href")
-                and link.get_attribute("href").__contains__("csv")
-            ]
-        )
-    except:
-        print("exception getting pdf links")
-
-    try:
-        pdf_links.extend(
-            [
-                link.get_attribute("href")
-                for link in links
-                if link.get_attribute("href")
-                and link.get_attribute("href").__contains__("ViewFile")
-            ]
-        )
-    except:
-        print("exception getting pdf links")
-
-    try:
-        pdf_links.extend(
-            [
-                link.get_attribute("href")
-                for link in links
-                if link.get_attribute("href")
-                and link.get_attribute("href").__contains__("View/")
-            ]
-        )
-    except:
-        print("exception getting pdf links")
-    try:
-        pdf_links.extend(
-            [
-                link.get_attribute("href")
-                for link in links
-                if link.get_attribute("href")
-                and link.get_attribute("href").__contains__("ADID")
-            ]
-        )
-    except:
-        print("exception getting pdf links")
-    try:
-        other_links = [
-            link.get_attribute("href")
-            for link in links
-            if link.get_attribute("href")
-            and link.get_attribute("href").startswith(base_url)
-        ]
-        other_links = cut_out_duplicate_urls(other_links)
-    except:
-        other_links = []
-        print("exception getting other links")
-    other_links.extend(input_links)
-    # driver.quit()
-    return [pdf_links, other_links]
 
 
 def write_index_to_json(index, file_path="index.json"):
@@ -397,13 +283,11 @@ def read_filenames_from_dir(directory):
 
 
 def read_urls_from_json(file_path="urls.json"):
-    import json
-
     try:
         # Reading the URLs from a JSON file
         with open(file_path, "r") as file:
             urls_list = json.load(file)
-
+        print("urls_list: ", urls_list)
         return urls_list
     except:
         return []
@@ -420,7 +304,7 @@ def download_file(url, directory, is_html_page=False):
     validity = []
     if is_html_page:
         funcs = [
-            downloader.download_page_with_requests,
+            # downloader.download_page_with_requests,
             downloader.download_page_using_chrome_print,
             downloader.download_page_using_wkhtmltopdf,
             downloader.download_page_using_pagesource_to_docx,
@@ -435,20 +319,35 @@ def download_file(url, directory, is_html_page=False):
         ]
 
     for i in range(len(funcs)):
-        print("trying: ", str(funcs[i]))
+        # print("trying: ", str(funcs[i]))
         try:
             extension = funcs[i](driver, url, directory)
         except Exception:
             extension = ".xlsx"
         temp_file = file_path + extension
-        validity.append(file_reader.check_validity_of_file(temp_file))
-
+        try:
+            validity.append(file_reader.check_validity_of_file(temp_file))
+        except Exception:
+            validity.append(0)
+    print("validity: ", validity)
     max_value = max(validity)
-    print("max value", max_value)
+    delete_file(file_path + ".pdf")
+    delete_file(file_path + ".docx")
+    delete_file(file_path + ".xlsx")
     if max_value > 0:
         index = validity.index(max_value)
-        print("index: ", index)
+        print("file_path: ", file_path)
+        print("func: ", funcs[index])
         funcs[index](driver, url, directory)
+
+
+def delete_file(filepath):
+    try:
+        os.remove(filepath)
+    except FileNotFoundError:
+        pass
+    except PermissionError:
+        pass
 
 
 # def download_file(url, directory, extension=".pdf"):
@@ -623,16 +522,18 @@ def cut_out_duplicate_urls(url_list):
 def main():
     ############ CASEY change these ##################
     url = "https://kingcounty.gov/"
-    saved_urls_path = "king_wa.json"
-    resource_path = "king-wa-resources"
-    index_path = "muni_index.json"
+    saved_urls_path = "chat_server/chat/king_wa.json"
+    resource_path = "chat_server/chat/file_resources/king-wa-resources"
+    index_path = "chat_server/chat/muni_index.json"
     isMuniCode = True
     ##################################################
 
     url_list = read_urls_from_json(saved_urls_path)
+    print("url_list", url_list)
     if not url_list:
         url_list.append(url)
     url_ulist = UniqueList(url_list)
+    print(url_list)
     pdf_set = set()
     pdf_list = read_filenames_from_dir(resource_path)
     pdf_set = set(pdf_list)

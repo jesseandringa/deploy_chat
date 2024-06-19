@@ -102,7 +102,6 @@ class PdfGenerator:
         except Exception as e:
             print("an error occured using driver", e)
             logging.error("An error occurred: %s", e, exc_info=True)
-        self.driver.quit()
         return result
 
 

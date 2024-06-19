@@ -5,9 +5,9 @@ from base64 import b64decode
 
 import html_helper
 import requests
-import website_scraper
 from bs4 import BeautifulSoup
 from docx import Document
+from urllib3.exceptions import MaxRetryError
 
 
 def is_valid_xlsx(file_path):
@@ -58,14 +58,14 @@ def download_as_xlsl(driver, url, file_path):
 
 def download_page_with_requests(driver, url, file_path):
     response = requests.get(url)
-    filename = file_path + "/" + website_scraper.convert_url_to_file_name(url) + ".pdf"
+    filename = file_path + "/" + convert_url_to_file_name(url) + ".pdf"
     with open(filename, "wb") as file:
         file.write(response.content)
     return ".pdf"
 
 
 def download_page_using_wkhtmltopdf(driver, url, file_path):
-    filename = website_scraper.convert_url_to_file_name(url)
+    filename = convert_url_to_file_name(url)
     try:
         html_helper.write_webpage_to_pdf(driver, url, file_path)
         # print("saved pdf")
@@ -76,19 +76,19 @@ def download_page_using_wkhtmltopdf(driver, url, file_path):
 
 
 def download_page_using_chrome_print(driver, url, file_path):
-    driver.get(url)
+    try:
+        driver.get(url)
+    except MaxRetryError:
+        return ".pdf"
     pdf_data = driver.execute_cdp_cmd(
         "Page.printToPDF",
         {
-            "path": file_path
-            + "/"
-            + website_scraper.convert_url_to_file_name(url)
-            + ".pdf",
+            "path": file_path + "/" + convert_url_to_file_name(url) + ".pdf",
             "format": "A4",
         },
     )
     with open(
-        file_path + "/" + website_scraper.convert_url_to_file_name(url) + ".pdf",
+        file_path + "/" + convert_url_to_file_name(url) + ".pdf",
         "wb",
     ) as f:
         f.write(b64decode(pdf_data["data"]))
@@ -114,12 +114,11 @@ def download_page_using_pagesource_to_docx(
     page_text = soup.get_text()
     print(page_text)
     text = clean_text(page_text)
-    filename = filepath + "/" + website_scraper.convert_url_to_file_name(url) + ".docx"
+    filename = filepath + "/" + convert_url_to_file_name(url) + ".docx"
     # print(text)
     create_docx(str(text), filename)
 
     # Close the browser
-    driver.quit()
     return ".docx"
 
 
@@ -127,8 +126,21 @@ def clean_text(text, max_length=100):
     # Define a regex pattern to find long continuous strings without spaces
     pattern = r"\S{%d,}" % max_length
     # Replace matched patterns with empty string
-    cleaned_text = re.sub(pattern, "", text)
-    return cleaned_text
+    text = re.sub(pattern, "", text)
+    text = text.replace("\n\n", " ")
+    start_marker = "Afrikaans"
+    end_marker = "Zulu"
+    start_position = text.find(start_marker)
+    end_position = text.find(end_marker, start_position)
+
+    if start_position != -1 and end_position != -1:
+        # Include the length of the end_marker to remove it completely
+        text = (
+            text[:start_position].strip()
+            + text[end_position + len(end_marker) :].strip()
+        )
+
+    return text
 
 
 def create_docx(text, filename):
@@ -136,3 +148,10 @@ def create_docx(text, filename):
     p = doc.add_paragraph()
     p.add_run(text)
     doc.save(filename)
+
+
+# from selenium import webdriver
+# driver = webdriver.Chrome()
+# url = "https://kingcounty.gov/en/shared-topics/about-king-county/departments"
+# file_path = "chat_server/chat/file_resources/king-wa-resources"
+# download_page_using_pagesource_to_docx(driver, url, file_path)
