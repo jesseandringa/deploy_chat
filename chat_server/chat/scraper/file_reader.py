@@ -129,13 +129,14 @@ def chunk_docx_into_paragraphs(docx_path):
     return chunks
 
 
-def check_validity_of_file(file_path):
-    if file_path.endswith(".pdf"):
-        chunks = chunk_pdf_into_paragraphs(file_path)
-    elif file_path.endswith(".xlsx"):
-        chunks = chunk_xlsx_into_paragraphs(file_path)
-    elif file_path.endswith(".docx"):
-        chunks = chunk_docx_into_paragraphs(file_path)
+def check_validity_of_file(file_path, chunks=None):
+    if chunks is None:
+        if file_path.endswith(".pdf"):
+            chunks = chunk_pdf_into_paragraphs(file_path)
+        elif file_path.endswith(".xlsx"):
+            chunks = chunk_xlsx_into_paragraphs(file_path)
+        elif file_path.endswith(".docx"):
+            chunks = chunk_docx_into_paragraphs(file_path)
 
     total_text = ""
     for chunk in chunks:

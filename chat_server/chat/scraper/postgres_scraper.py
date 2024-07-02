@@ -348,6 +348,9 @@ def create_table_and_insert_all_data(db, table_name, folder_path):
     for i, pdf_file in enumerate(pdf_files):
         try:
             chunks = file_reader.chunk_pdf_into_paragraphs(pdf_file)
+            valid = file_reader.check_validity_of_file(pdf_file=None, chunks=chunks)
+            if valid == 0:
+                continue
         except Exception as e:
             print("failed to chunk pdf" + str(e))
         for j, chunk in enumerate(chunks):
