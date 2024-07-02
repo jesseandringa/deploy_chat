@@ -1,6 +1,4 @@
-body{
-    background-color: #D4EAFF;
-  }
+
 .about-us{
     margin: 0 auto;  
     width: 50%;
@@ -34,12 +32,12 @@ body{
   }
   .message.user {
     margin: 8px 0;
-    background-color: #007bff;
+    background-color: #e7cf80;
     align-self: flex-end; /* Aligns user messages to the right */
   }
   
   .submit-button {
-    background-color: #007bff;
+    background-color: #e7cf80;
     color: #fff;
     border: none;
     padding: 10px 20px;

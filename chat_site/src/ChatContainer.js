@@ -105,11 +105,11 @@ const ChatContainer = () => {
     <DropdownMenu selectedOption={selectedOption} onOptionChange={handleOptionChange} />
     {isLoggedIn && isHomePageUpdated &&(
         
-    <p> HELLLO LOGED in user</p>)
+    <p> HELLLO LOGGED in user</p>)
     }
     </div>
     <div className="image-container">
-      <img src={background_image} alt="Placeholder" />
+      {/* <img src={background_image} alt="Placeholder" /> */}
 
        
        <div className="overlay-no-messages">

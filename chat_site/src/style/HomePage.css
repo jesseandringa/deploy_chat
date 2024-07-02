@@ -1,11 +1,21 @@
 body{
-  background-color: #D4EAFF;
+  background-image: url('../assets/mas-seal-timeline.jpg');
+  /* background-size: cover; */
+  background-position: center;
+  background-position: center -100%;
+  /* overflow: hidden; */
+  height: 80vh; 
 }
 .container {
   max-width: 90%; /* Changed to 90% of the viewport width */
   margin: 0 auto; /* Center the container */
   padding: 20px;
   text-align: center; /* Center align text */
+}
+.example-questions{
+  z-index: 5;
+  backdrop-filter: blur(10px);
+  width: 15%;
 }
 
 .plans-modal{
@@ -29,12 +39,12 @@ body{
 }
 .message.user {
   margin: 8px 0;
-  background-color: #007bff;
+  background-color: #e7cf80;
   align-self: flex-end; /* Aligns user messages to the right */
 }
 
 .submit-button {
-  background-color: #007bff;
+  background-color: #e7cf80;
   color: #fff;
   border: none;
   padding: 10px 20px;

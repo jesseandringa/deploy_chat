@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import time
 from base64 import b64decode
 
@@ -8,6 +9,18 @@ import requests
 from bs4 import BeautifulSoup
 from docx import Document
 from urllib3.exceptions import MaxRetryError
+
+
+def trim_filename(filepath, extension=".pdf"):
+    last_pdf_index = filepath.rfind(extension)
+    # If '.pdf' is found, slice the string up to that point
+    if last_pdf_index != -1:
+        filepath = filepath[:last_pdf_index]
+    else:
+        last_pdf_index = filepath.rfind(".ashx")
+        if last_pdf_index != -1:
+            filepath = filepath[:last_pdf_index]
+    return filepath
 
 
 def is_valid_xlsx(file_path):
@@ -24,7 +37,11 @@ def is_valid_xlsx(file_path):
     try:
         workbook = openpyxl.load_workbook(file_path)
         return True
-    except:
+    except KeyboardInterrupt:
+        print("\nProgram interrupted with Control-C")
+        sys.exit(1)
+    except Exception as e:
+        print("Error loading workbook:", e)
         return False
 
 
@@ -35,6 +52,7 @@ def convert_url_to_file_name(url):
 
 
 def download_as_xlsl(driver, url, file_path):
+    url = trim_filename(url, ".xlsx")
     filename = convert_url_to_file_name(url) + ".xlsx"
     # Construct the full save path
     save_path = os.path.join(file_path, filename)
@@ -58,6 +76,7 @@ def download_as_xlsl(driver, url, file_path):
 
 def download_page_with_requests(driver, url, file_path):
     response = requests.get(url)
+    url = trim_filename(url, ".pdf")
     just_file_name = convert_url_to_file_name(url)
     filename = file_path + "/" + just_file_name + ".pdf"
     with open(filename, "wb") as file:
@@ -66,23 +85,34 @@ def download_page_with_requests(driver, url, file_path):
 
 
 def download_page_using_wkhtmltopdf(driver, url, file_path):
-    filename = convert_url_to_file_name(url)
     try:
         html_helper.write_webpage_to_pdf(driver, url, file_path)
         # print("saved pdf")
-    except Exception:
-        # print("couldnnt save pdf", e)
+    except KeyboardInterrupt:
+        print("\nProgram interrupted with Control-C")
+        sys.exit(1)
+    except Exception as e:
+        print("couldnnt save pdf usignwkhtmltopdf ", e)
         pass
     return ".pdf"
 
 
 def download_page_using_chrome_print(driver, url, file_path):
+    url = trim_filename(url, ".pdf")
     filename = convert_url_to_file_name(url)
 
     try:
         driver.get(url)
+    except KeyboardInterrupt:
+        print("\nProgram interrupted with Control-C")
+        sys.exit(1)
     except MaxRetryError:
+        print("Max retries exceeded in chrome print")
         return ".pdf"
+    except Exception as e:
+        print("Error no internet")
+        if "ERR_INTERNET_DISCONNECTED" in str(e):
+            sys.exit(1)
 
     pdf_data = driver.execute_cdp_cmd(
         "Page.printToPDF",
@@ -107,7 +137,18 @@ def download_page_using_pagesource_to_docx(
 ):
     driver.implicitly_wait(10)
     # Load the page
-    driver.get(url)
+    try:
+        driver.get(url)
+    except KeyboardInterrupt:
+        print("\nProgram interrupted with Control-C")
+        sys.exit(1)
+    except MaxRetryError as e:
+        print("Max retries exceeded in pagesource to docx", e)
+        return ".pdf"
+    except Exception as e:
+        print("Error no internet")
+        if "ERR_INTERNET_DISCONNECTED" in str(e):
+            sys.exit(1)
     time.sleep(3)
     # Get the page source
     html = driver.page_source
@@ -119,6 +160,7 @@ def download_page_using_pagesource_to_docx(
     page_text = soup.get_text()
     # print(page_text)
     text = clean_text(page_text)
+    url = trim_filename(url, ".docx")
     filename = filepath + "/" + convert_url_to_file_name(url) + ".docx"
     # print(text)
     create_docx(str(text), filename)

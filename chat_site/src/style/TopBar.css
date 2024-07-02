@@ -23,22 +23,23 @@
     padding-bottom: 4px;
 }
 .sign-in-up {
-  display: flex; /* Make the buttons sit next to each other */
-  justify-content: flex-end; /* Align buttons to the right */
+  display: flex; 
+  justify-content: flex-end; 
 }
 
 .sign-in-up button {
-    margin: 0 50px; 
+    /* margin: 0 50px;  */
     padding: 4px 8px;
-    width: 100px;
+    /* width: 100px; */
     border: none;
-    border-radius: 3px;
-    background-color: #b3cde6;
+    /* border-radius: 3px; */
     color: rgb(0, 0, 0);
+    background-color: #e7cf8000;
+    /* color: rgb(0, 0, 0); */
     font-size: 16px;
     cursor: pointer;
-    border: 2px solid black;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* border: 2px solid black; */
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); */
 }
   
   h1, h2 {
@@ -47,7 +48,6 @@
 .top-bar {
     display: flex;
     justify-content: center; /* Center the buttons horizontally */
-    background-color: #D4EAFF;
     padding: 0px 20px;
   }
   
@@ -57,7 +57,7 @@
     width: 140px;
     border: none;
     border-radius: 5px;
-    background-color: #c9e3fb;
+    background-color: #e7cf80;
     color: rgb(0, 0, 0);
     font-size: 16px;
     cursor: pointer;
@@ -66,6 +66,6 @@
   }
   
   .top-bar button:hover {
-    background-color: #91a7bb;
+    background-color: #fddf7d;
   }
   

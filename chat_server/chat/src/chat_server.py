@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import threading
 
 import gmailer
 
@@ -157,18 +158,35 @@ def get_data():
     key_words_list = llm.get_key_words_from_message(message)
     db_resp = "No matching data found."
     i = 0
-    while db_resp == "No matching data found." and i < 2:  # i < len(key_words_list):
+    # do multiple database reads at same time
+    threads = []
+    results = []
+    thread_count = 2
+    for i in range(thread_count):
         key_words = key_words_list[i][0].split(" ")
-        logging.info("key_words: " + str(key_words))
-        db_resp = db.full_text_search_on_key_words(key_words, county)
-        logging.info("db_resp: " + str(db_resp))
-        i += 1
+        thread = threading.Thread(
+            target=lambda: results.append(
+                db.full_text_search_on_key_words(key_words, county)
+            )
+        )
+        threads.append(thread)
+        thread.start()
 
-    # db_resp = db.full_text_search_on_key_words(key_words)
-    response = llm.create_response_message(request.args.get("message"), db_resp[2])
+    # Wait for all threads to complete actions
+    for thread in threads:
+        thread.join()
+    context = "No matching data found."
+    for i in range(thread_count):
+        if results[i] != "No matching data found.":
+            if context == "No matching data found.":
+                context = results[i][2]
+            else:
+                context += results[i][2]
+
+    response = llm.create_response_message(request.args.get("message"), context)
     logging.info("response: " + str(response))
-    # log_text("db_resp: " + str(db_resp))
-    # app.config["LLAMA"].log_text("get_resposnse: " + str(db_resp))
+
+    # TODO: figure out how to add many sources
     source = convert_file_name_to_url(db_resp[0])
     return jsonify(
         {

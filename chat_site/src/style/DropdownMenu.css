@@ -17,9 +17,9 @@
   }
 
   .default-option {
-    background-color: #eef7ff; /* Background color for default option */
+    background-color: #fff7db;; 
   }
   
   .selected-option {
-    background-color: #D4EAFF; /* Background color for selected option */
+    background-color: #e7cf80;; 
   }

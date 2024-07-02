@@ -1,6 +1,4 @@
-body{
-    background-color: #D4EAFF;
-  }
+
 .how-it-works{
     margin: 0 auto;  
     width: 50%;
@@ -8,7 +6,7 @@ body{
     text-align: center; 
 }
 #chat-button{
-    background-color: #7db6ee;
+    background-color: #e7cf80;
     margin-top: 5px;
     height: 70px;
     width: 200px;
@@ -17,7 +15,7 @@ body{
     border-radius: 7px;
   }
   #chat-button:hover{
-    background-color: #aedff7;
+    background-color: #e7cf80;
     cursor: pointer;
   }
 .how-it-works-steps{
@@ -53,11 +51,11 @@ body{
     margin-bottom: 10px;
     font-size: 16px;
   }
-  .message.user {
+  /* .message.user {
     margin: 8px 0;
     background-color: #007bff;
-    align-self: flex-end; /* Aligns user messages to the right */
-  }
+    align-self: flex-end;
+  } */
   
   .submit-button {
     background-color: #007bff;

@@ -1,12 +1,14 @@
 import asyncio
 import json
 import os
+import sys
 import threading
 import time
 
 # import selenium_async
 import downloader
 import file_reader
+from casey_move_pdfs import move_all_pdfs_from_folder_to_folder
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.by import By
@@ -40,10 +42,16 @@ class WebScraper:
         self.isMuniCode = isMuniCode
         self.recursive_depth = 0
 
-    def scrape(self, url, driver):
+    def scrape(self, url, driver, thread_num):
         try:
             driver.get(url)
+        except KeyboardInterrupt:
+            print("\nProgram interrupted with Control-C")
+            sys.exit(1)
         except Exception as e:
+            if "ERR_INTERNET_DISCONNECTED" in str(e):
+                print("Error no internet")
+                sys.exit(1)
             print("exception getting url: ", url, e)
             return [], []
         if self.recursive_depth == 0:
@@ -56,7 +64,7 @@ class WebScraper:
         pdf_links, new_links = self.scrape_links(driver, url)
 
         self.save_page_as_pdf(driver, url, self.file_resource_path)
-        self.save_pdfs(pdf_links)
+        self.save_pdfs(pdf_links, thread_num)
         self.add_links_to_url_set(new_links)
 
         write_list_to_json_file(self.url_ulist, self.saved_urls_path)
@@ -78,6 +86,9 @@ class WebScraper:
                 input_links = [
                     base_url_split + input_link for input_link in input_links_endings
                 ]
+            except KeyboardInterrupt:
+                print("\nProgram interrupted with Control-C")
+                sys.exit(1)
             except Exception as e:
                 print("exception getting input links", e)
 
@@ -89,6 +100,9 @@ class WebScraper:
                 if link.get_attribute("href")
                 and link.get_attribute("href").__contains__("pdf")
             ]
+        except KeyboardInterrupt:
+            print("\nProgram interrupted with Control-C")
+            sys.exit(1)
         except Exception as e:
             pdf_links = []
             print("exception getting pdf links", e)
@@ -101,7 +115,10 @@ class WebScraper:
                     and link.get_attribute("href").__contains__("xlsx")
                 ]
             )
-        except:
+        except KeyboardInterrupt:
+            print("\nProgram interrupted with Control-C")
+            sys.exit(1)
+        except Exception:
             print("exception getting pdf links")
 
         try:
@@ -113,7 +130,10 @@ class WebScraper:
                     and link.get_attribute("href").__contains__("csv")
                 ]
             )
-        except:
+        except KeyboardInterrupt:
+            print("\nProgram interrupted with Control-C")
+            sys.exit(1)
+        except Exception:
             print("exception getting pdf links")
 
         try:
@@ -125,7 +145,10 @@ class WebScraper:
                     and link.get_attribute("href").__contains__("ViewFile")
                 ]
             )
-        except:
+        except KeyboardInterrupt:
+            print("\nProgram interrupted with Control-C")
+            sys.exit(1)
+        except Exception:
             print("exception getting pdf links")
 
         try:
@@ -137,7 +160,10 @@ class WebScraper:
                     and link.get_attribute("href").__contains__("View/")
                 ]
             )
-        except:
+        except KeyboardInterrupt:
+            print("\nProgram interrupted with Control-C")
+            sys.exit(1)
+        except Exception:
             print("exception getting pdf links")
         try:
             pdf_links.extend(
@@ -148,7 +174,10 @@ class WebScraper:
                     and link.get_attribute("href").__contains__("ADID")
                 ]
             )
-        except:
+        except KeyboardInterrupt:
+            print("\nProgram interrupted with Control-C")
+            sys.exit(1)
+        except Exception:
             print("exception getting pdf links")
         try:
             other_links = [
@@ -158,20 +187,62 @@ class WebScraper:
                 and link.get_attribute("href").startswith(self.base_url)
             ]
             other_links = cut_out_duplicate_urls(other_links)
-        except:
+        except KeyboardInterrupt:
+            print("\nProgram interrupted with Control-C")
+            sys.exit(1)
+        except Exception:
             other_links = []
             print("exception getting other links")
         other_links.extend(input_links)
 
         return pdf_links, other_links
 
-    def save_pdfs(self, pdf_links):
+    def save_pdfs(self, pdf_links, thread_num):
+        threads = []
+        threads = []
+        results = []
+        # if len(pdf_links) > 3:
+        #     for i, url in enumerate(
+        #         pdf_links
+        #     ):  # Example: Perform actions in {range_end} threads
+        #         if url not in self.pdf_set:
+        #             self.pdf_set.add(url)
+        #             # print(" downloading pdf: ", url)
+        #             thread = threading.Thread(
+        #                 target=lambda: results.append(
+        #                     download_file(url, self.file_resource_path, False)
+        #                 )
+        #             )
+        #         threads.append(thread)
+        #         thread.start()
+
+        #     # Wait for all threads to complete actions
+        #     for thread in threads:
+        #         thread.join()
+        total_saved = 0
         if pdf_links:
             for url in pdf_links:
-                if url not in self.pdf_set:
+                temp_url = convert_file_name_to_url(url)
+                if temp_url not in self.pdf_set:
+                    if "newsletters#" in url:
+                        continue
+                    if "/bulletins/" in url:
+                        continue
+                    if url.endswith("MediaFileFormat=wmv"):
+                        continue
+                    if url.endswith("MediaFileFormat=mp4"):
+                        continue
+                    if url.endswith("MediaFileFormat=ismv"):
+                        continue
+
+                    # print("trying to downloading pdf in thread : ", thread_num, url)
                     self.pdf_set.add(url)
                     # print(" downloading pdf: ", url)
-                    download_file(url, self.file_resource_path, False)
+                    result = download_file(url, self.file_resource_path, False)
+                    # print(f"result:{result} in thread {thread_num}")
+                    total_saved += result  # 1 if successful, 0 if not
+
+        print("total saved from thread: ", total_saved, thread_num)
 
     def add_links_to_url_set(self, links: UniqueList):
         for link in links:
@@ -181,7 +252,7 @@ class WebScraper:
     async def recursive_search(self, index):
         # Example usage
         start_time = time.time()
-        # print("index: ", index, "of ", len(self.url_ulist))
+        print("index: ", index, "of ", len(self.url_ulist))
         write_index_to_json(index, self.index_path)
         if index >= len(self.url_ulist):
             return "Done"
@@ -191,23 +262,17 @@ class WebScraper:
         else:
             range_end = 1
 
-        tasks = []
         chrome_options = ChromeOptions()
         chrome_options.add_argument("--headless")
 
         drivers = [webdriver.Chrome(chrome_options) for _ in range(range_end)]
-        # for i in range(range_end):
-        #     tasks.append(
-        #         asyncio.create_task(self.scrape(self.url_ulist[index], drivers[i]))
-        #     )
-        #     index += 1
-        # await asyncio.gather(*tasks)
+
         threads = []
         results = []
         for i in range(range_end):  # Example: Perform actions in {range_end} threads
             thread = threading.Thread(
                 target=lambda: results.append(
-                    self.scrape(self.url_ulist[index], drivers[i])
+                    self.scrape(self.url_ulist[index], drivers[i], i)
                 )
             )
             threads.append(thread)
@@ -226,12 +291,18 @@ class WebScraper:
         print("Time taken per page: ", time_taken)
         print("\n\n")
 
+        # move all pdfs that are out of place into correct place
+        move_all_pdfs_from_folder_to_folder(
+            "./", self.file_resource_path, self.pdf_set, True
+        )
+
         self.recursive_depth += 1
 
         return await self.recursive_search(index)
 
     def save_page_as_pdf(self, driver, url, directory):
-        download_file(url, directory, is_html_page=True)
+        result = download_file(url, directory, is_html_page=True)
+        print(f"result:{bool(result)} for {url}")
 
 
 def write_index_to_json(index, file_path="index.json"):
@@ -247,7 +318,10 @@ def read_index_from_json(file_path="index.json"):
             index = json.load(file)
 
         return index
-    except:
+    except KeyboardInterrupt:
+        print("\nProgram interrupted with Control-C")
+        sys.exit(1)
+    except Exception:
         return 0
 
 
@@ -284,7 +358,10 @@ def read_filenames_from_dir(directory):
     try:
         file_list = os.listdir(directory)
         return file_list
-    except:
+    except KeyboardInterrupt:
+        print("\nProgram interrupted with Control-C")
+        sys.exit(1)
+    except Exception:
         return []
 
 
@@ -295,12 +372,16 @@ def read_urls_from_json(file_path="urls.json"):
             urls_list = json.load(file)
         # print("urls_list: ", urls_list)
         return urls_list
-    except:
+    except KeyboardInterrupt:
+        print("\nProgram interrupted with Control-C")
+        sys.exit(1)
+    except Exception:
         return []
 
 
 def download_file(url, directory, is_html_page=False):
-    file_path = directory + "/" + convert_url_to_file_name(url)
+    file_path = downloader.trim_filename(url)
+    file_path = directory + "/" + convert_url_to_file_name(file_path)
     # print("file_path: ", file_path)
     chrome_options = ChromeOptions()
     chrome_options.add_argument("--headless")
@@ -330,11 +411,17 @@ def download_file(url, directory, is_html_page=False):
         # print("trying: ", str(funcs[i]))
         try:
             extension = funcs[i](driver, url, directory)
+        except KeyboardInterrupt:
+            print("\nProgram interrupted with Control-C")
+            sys.exit(1)
         except Exception:
             extension = ".xlsx"
         temp_file = file_path + extension
         try:
             validity.append(file_reader.check_validity_of_file(temp_file))
+        except KeyboardInterrupt:
+            print("\nProgram interrupted with Control-C")
+            sys.exit(1)
         except Exception:
             validity.append(0)
     # print("validity: ", validity)
@@ -346,20 +433,22 @@ def download_file(url, directory, is_html_page=False):
     pdfs = file_reader.get_all_pdfs(".")
     num_pdfs_after = len(pdfs)
     if num_pdfs_after > num_pdfs_before:
+        found = False
         for i in range(num_pdfs_after):
             if pdfs[i].lower() in file_path.lower():
+                file_path = downloader.trim_filename(pdfs[i])
                 dir_name = os.path.dirname(pdfs[i])
-                last_pdf_index = file_path.rfind(".pdf")
-                # If '.pdf' is found, slice the string up to that point
-                if last_pdf_index != -1:
-                    file_path = file_path[:last_pdf_index]
                 new_path = os.path.join(dir_name, file_path + ".pdf")
                 os.rename(pdfs[i], new_path)
-                return
+                found = True
+        if found:
+            return 1
     index = 0
     if max_value > 0:
         index = validity.index(max_value)
         funcs[index](driver, url, directory)
+        return 1
+    return 0
 
 
 def delete_file(filepath):
@@ -369,6 +458,9 @@ def delete_file(filepath):
         pass
     except PermissionError:
         pass
+    except KeyboardInterrupt:
+        print("\nProgram interrupted with Control-C")
+        sys.exit(1)
 
 
 # def download_file(url, directory, extension=".pdf"):
@@ -462,7 +554,9 @@ def is_valid_pdf(file_path):
     except FileNotFoundError:
         print(f"File not found: {file_path}")
         return False
-
+    except KeyboardInterrupt:
+        print("\nProgram interrupted with Control-C")
+        sys.exit(1)
     except Exception as e:
         print(f"Unexpected error: {e}")
         return False
@@ -494,7 +588,10 @@ def is_valid_xlsx(file_path):
     try:
         workbook = openpyxl.load_workbook(file_path)
         return True
-    except:
+    except KeyboardInterrupt:
+        print("\nProgram interrupted with Control-C")
+        sys.exit(1)
+    except Exception:
         return False
 
 
@@ -512,6 +609,9 @@ def get_final_url(url):
   """
     try:
         response = requests.get(url, allow_redirects=True)
+    except KeyboardInterrupt:
+        print("\nProgram interrupted with Control-C")
+        sys.exit(1)
     except requests.exceptions.RequestException as e:
         # print("eeee", e.args[0])
         error_message = str(e.args[0])  # Convert the first argument to a string
@@ -550,13 +650,14 @@ def main():
     ##################################################
 
     url_list = read_urls_from_json(saved_urls_path)
-    print("url_list", url_list)
+    # print("url_list", url_list)
     if not url_list:
         url_list.append(url)
     url_ulist = UniqueList(url_list)
-    print(url_list)
+    # print(url_list)
     pdf_set = set()
     pdf_list = read_filenames_from_dir(resource_path)
+    print("pdf_list: ", pdf_list)
     pdf_set = set(pdf_list)
 
     web_scraper = WebScraper(
@@ -575,6 +676,9 @@ def main():
     while done is None:
         try:
             done = asyncio.run(web_scraper.recursive_search(start_index))
+        except KeyboardInterrupt:
+            print("\nProgram interrupted with Control-C")
+            sys.exit(1)
         except RecursionError as e:
             start_index = read_index_from_json(index_path)
             print("recursion error", e)

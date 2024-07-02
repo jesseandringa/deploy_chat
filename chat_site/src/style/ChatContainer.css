@@ -1,15 +1,15 @@
+
 /* ImageWithOverlay.css */
 .image-container {
-    padding-top: 5px;
+    padding-top: 100px;
     position: relative; /* Make the container position relative */
     width: 100%; /* Ensure the image and overlay span the full width */
   }
 
-.image-container img {
-    width: 100%; /* Make the image width 100% */
-    display: block; /* Remove any default inline spacing */
-    /* align-self: center; */
-}
+/* .image-container img {
+    width: 100%;
+    display: block; 
+} */
 .content-separator{
     border: none; /* Remove default border */
     border-top: 1px solid #6f6e6e; /* Add top border to create separator line */
@@ -22,7 +22,8 @@
     margin: 0 auto; /* Center the container horizontally */
     /* Set the container height to full viewport height */
     /* height: 100vh;  */
-    background-color: #e1f1ff;
+    /* background-color: #e1f1ff; */
+    backdrop-filter: blur(20px);
     display: flex; /* Use flexbox for centering */
     justify-content: center; /* Center the content horizontally */
     border: 1px solid #6f6e6e;
@@ -103,7 +104,6 @@
   
 .overlay-no-messages {
     position: absolute; /* Position the overlay absolutely */
-    
     top: 90%; /* Position the overlay vertically in the middle */
     left: 50%; /* Position the overlay horizontally in the middle */
     transform: translate(-50%, -50%); /* Adjust to center the overlay exactly */
@@ -164,9 +164,9 @@
 
   #send-button{
         /* Styles for the button */
-        background-color: #6096d4; /* Adjust as needed */
+        background-color: #e7cf80; /* Adjust as needed */
         color: white;
-        padding: 10px 15px;
+        padding: 6px 15px;
         border: none;
         border-radius: 5px;
         cursor: pointer;

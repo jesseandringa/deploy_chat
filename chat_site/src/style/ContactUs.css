@@ -34,7 +34,7 @@
   }
   
   .contact-us button {
-    background-color: #4CAF50;
+    background-color: #e7cf80;;
     color: white;
     padding: 10px 15px;
     border: none;
@@ -44,6 +44,6 @@
   }
   
   .contact-us button:hover {
-    background-color: #3e8e41;
+    background-color: #ffe99f;;
   }
   

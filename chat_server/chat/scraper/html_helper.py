@@ -50,8 +50,10 @@ class PdfGenerator:
             pdfkit.from_string(
                 self.driver.page_source, "millcreek-muni-resources/page_source.pdf"
             )
+        except KeyboardInterrupt:
+            print("\nProgram interrupted with Control-C")
+            sys.exit(1)
         except Exception:
-            # print("eeeeerrrrrroooooorrrrrr", e)
             pass
         print_options = self.print_options.copy()
         result = self._send_devtools(self.driver, "Page.printToPDF", print_options)
@@ -114,6 +116,11 @@ def write_webpage_to_pdf(driver, url, save_path):
         print("path", save_path)
         with open(save_path, "wb") as outfile:
             outfile.write(pdf_file[0].getbuffer())
+    except KeyboardInterrupt:
+        import sys
+
+        print("\nProgram interrupted with Control-C")
+        sys.exit(1)
     except Exception as e:
         logging.error("An error occurred: %s", e, exc_info=True)
         logging.error(f"Could not convert {url} to pdf")
@@ -130,5 +137,10 @@ if __name__ == "__main__":
         with open("xxxxxx/" + filename + ".pdf", "wb") as outfile:
             outfile.write(pdf_file[0].getbuffer())
             print("written pdf with index")
+    except KeyboardInterrupt:
+        print("\nProgram interrupted with Control-C")
+        import sys
+
+        sys.exit(1)
     except Exception as e:
         print("error", e)
