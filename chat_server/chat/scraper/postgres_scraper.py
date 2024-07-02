@@ -371,7 +371,8 @@ def create_table_and_insert_all_data(db, table_name, folder_path):
                     + " "
                     + str(chunks[j + 2][3])
                 )
-            if len(text) < 15:
+                j += 2
+            if len(text) < 25:
                 continue
             try:
                 db.insert_data_into_pdf_text_table(
