@@ -3,9 +3,8 @@ import os
 from datetime import datetime
 
 import database_vars
+import file_reader
 import psycopg2
-
-import chat_server.chat.scraper.file_reader as file_reader
 
 dbname = os.getenv("PGDATABASE")
 # conn = psycopg2.connect(
@@ -46,6 +45,9 @@ class PGDB:
         except Exception as e:
             print(f"Error checking table for data: {e}")
             return False
+
+    def get_just_file_name(self, file_path):
+        return file_path.split("/")[-1]
 
     def create_pdf_text_table(self, table_name):
         cursor = self.conn.cursor()
@@ -89,7 +91,6 @@ class PGDB:
             cursor.execute(insert_query)
             self.conn.commit()
             print("Data inserted successfully.")
-            # print("Data inserted successfully.")
         except Exception as e:
             self.conn.rollback()
             print(f"Error inserting data: {e}")
@@ -295,8 +296,6 @@ def create_database_and_data():
     db = PGDB(user, password, dbname)
     db.create_pdf_text_table()
     db.remove_all_data_from_table()
-    # db.insert_data_into_pdf_text_table("test.pdf", 1, "Hello, World!")
-    # db.insert_data_into_pdf_text_table("test.pdf", 2, "This is a test.")
     folder_path = "/app/file_resources/gunnison-resources"
     # pdf_helper.insert_all_file_chunks_to_database(
     #     folder_path,
@@ -344,37 +343,48 @@ def create_database_and_data():
 
 def create_table_and_insert_all_data(db, table_name, folder_path):
     db.create_pdf_text_table(table_name)
-    pdf_files = file_reader.get_all_pdfs(folder_path)
+    pdf_files = file_reader.get_all_files_with_full_path(folder_path)
+    print(len(pdf_files))
     for i, pdf_file in enumerate(pdf_files):
         try:
-            chunks = file_reader.chunk_pdf_into_paragraphs(pdf_file)
-            valid = file_reader.check_validity_of_file(pdf_file=None, chunks=chunks)
+            chunks = file_reader.chunk_file_into_paragraphs(pdf_file)
+            valid = file_reader.check_validity_of_file(file_path=None, chunks=chunks)
             if valid == 0:
                 continue
         except Exception as e:
             print("failed to chunk pdf" + str(e))
-        for j, chunk in enumerate(chunks):
-            if j > 0 and j % 10 == 0:
-                print("inserting chunk " + str(j) + " of pdf : " + str(i))
+        j = 0
+        for chunk_index, chunk in enumerate(chunks):
+            if chunk_index < j:
+                continue
             text = chunk[3]
-            if len(text) < 300 and j < len(chunks) - 1:
-                text = str(chunks[j - 1][3]) + " " + text + " " + str(chunks[j + 1][3])
-            if len(text) < 500 and j < len(chunks) - 2:
-                text = (
-                    str(chunks[j - 2][3])
-                    + " "
-                    + str(chunks[j - 1][3])
-                    + " "
-                    + text
-                    + " "
-                    + str(chunks[j + 1][3])
-                    + " "
-                    + str(chunks[j + 2][3])
-                )
-                j += 2
-            if len(text) < 25:
+            num_chunks = 1
+            while len(text) < 300:
+                try:
+                    text = (
+                        str(chunks[j - num_chunks][3])
+                        + " "
+                        + text
+                        + " "
+                        + str(chunks[j + num_chunks][3])
+                    )
+                    num_chunks += 1
+                # catch index out of bounds
+                except Exception:
+                    break
+            j += int((num_chunks + 1) / 2)
+            if len(text) < 50:
                 continue
             try:
+                if chunk_index % 10 == 0:
+                    print(
+                        "inserting chunk "
+                        + str(j)
+                        + "of "
+                        + str(len(chunks))
+                        + " of pdf : "
+                        + str(i)
+                    )
                 db.insert_data_into_pdf_text_table(
                     table_name, str(chunk[0]), int(chunk[1]), str(text)
                 )
@@ -398,8 +408,8 @@ if __name__ == "__main__":
     # ex.      murray_ut_pdf_data
     # folder path to the pdfs you want to upsert (control click folder copy and paste 'relatitve path')
     # ex.      chat_server/chat/file_resources/murray-muni-resources
-    table_name = "gunnison_co_pdf_data"
-    folder_path = ""
+    table_name = "king_wa_pdf_data"
+    folder_path = "chat_server/chat/file_resources/king-wa-resources"
     ##################################################################################################
     create_table_and_insert_all_data(db, table_name, folder_path)
     # user

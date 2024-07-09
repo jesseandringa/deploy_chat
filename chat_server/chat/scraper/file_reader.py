@@ -7,6 +7,23 @@ import openpyxl
 from docx import Document
 
 
+def chunk_file_into_paragraphs(file_path):
+    """Chunks a file into paragraphs."""
+    if file_path.endswith(".pdf"):
+        return chunk_pdf_into_paragraphs(file_path)
+    elif (
+        file_path.endswith(".xlsx")
+        or file_path.endswith(".xls")
+        or file_path.endswith(".xlsm")
+        or file_path.endswith(".csv")
+    ):
+        return chunk_xlsx_into_paragraphs(file_path)
+    elif file_path.endswith(".docx") or file_path.endswith(".doc"):
+        return chunk_docx_into_paragraphs(file_path)
+    else:
+        return []
+
+
 def chunk_xlsx_into_paragraphs(xlsx_path):
     """Chunks an XLSX file into paragraphs."""
     try:
@@ -83,6 +100,21 @@ def get_all_pdfs(folder_path):
     ]
 
     return pdfs
+
+
+def get_all_files_with_full_path(folder_path):
+    """Get all files in a folder."""
+    # List all files and directories in the given folder
+    items = os.listdir(folder_path)
+
+    # Filter out the PDFs
+    files = [
+        os.path.join(folder_path, item)
+        for item in items
+        if os.path.isfile(os.path.join(folder_path, item))
+    ]
+
+    return files
 
 
 def get_all_xlsx(folder_path):
