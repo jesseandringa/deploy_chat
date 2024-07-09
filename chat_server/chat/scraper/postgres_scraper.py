@@ -385,6 +385,8 @@ def create_table_and_insert_all_data(db, table_name, folder_path):
                         + " of pdf : "
                         + str(i)
                     )
+                if (i + 1) % 10 == 0:
+                    print("\n", text)
                 db.insert_data_into_pdf_text_table(
                     table_name, str(chunk[0]), int(chunk[1]), str(text)
                 )
