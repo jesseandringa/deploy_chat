@@ -17,7 +17,7 @@ chat_server/chat/myenv/
 /coverage
 
 # production
-/build
+# /build
 
 # misc
 *.DS_Store*
