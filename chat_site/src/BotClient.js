@@ -3,10 +3,11 @@
 const getBotResponse = (message, selectedCounty, IP) => {
     // Convert the user input to lowercase for easier keyword matching
 // run locally
-// const baseURL = 'http://localhost:3050/api'; // Base URL
+// const baseURL = 'http://localhost:3050/api/'; // Base URL
 // run on server
-const baseURL = 'http://3.143.1.57:3050/api'; // Base URL
-const endpoint = '/get-response'; // Endpoint
+// const baseURL = 'http://3.143.1.57:3050/api/'; // Base URL
+const baseURL = 'http://3.143.1.57/api/';
+const endpoint = 'get-response'; // Endpoint
 const url = new URL(endpoint, baseURL);
 url.searchParams.append('message', message);
 url.searchParams.append('county', selectedCounty);// Construct the full URL manually
@@ -38,11 +39,12 @@ export {getBotResponse};
 const sendUserData = (ip) => {
   // Convert the user input to lowercase for easier keyword matching
 // run locally
-// const baseURL = 'http://localhost:3050/api'; // Base URL
+// const baseURL = 'http://localhost:3050/api/'; // Base URL
 // run on server
+const baseURL = 'http://3.143.1.57/api/'; // Base URL
+
 console.log('ip in sendUserData: ', ip);
-const baseURL = 'http://3.143.1.57:3050/api'; // Base URL
-const endpoint = '/user-data'; // Endpoint
+const endpoint = 'user-data'; // Endpoint
 const url = new URL(endpoint, baseURL);
 url.searchParams.append('ip', ip);
 console.log('url: ', url);

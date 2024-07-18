@@ -161,7 +161,7 @@ class PGDB:
             + table_name
             + """ 
             WHERE to_tsvector('english', chunk_text) @@ plainto_tsquery(%s) 
-            LIMIT 2;
+            LIMIT 1;
         """
         )
 

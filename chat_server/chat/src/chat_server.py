@@ -161,7 +161,7 @@ def get_data():
     # do multiple database reads at same time
     threads = []
     results = []
-    thread_count = 2
+    thread_count = 3
     for i in range(thread_count):
         key_words = key_words_list[i][0].split(" ")
         thread = threading.Thread(
@@ -176,18 +176,22 @@ def get_data():
     for thread in threads:
         thread.join()
     context = "No matching data found."
+    source = ""
     for i in range(thread_count):
         if results[i] != "No matching data found.":
             if context == "No matching data found.":
                 context = results[i][2]
+                source = convert_file_name_to_url(results[i][0])
             else:
                 context += results[i][2]
+            source += "," + convert_file_name_to_url(results[i][0])
 
     response = llm.create_response_message(request.args.get("message"), context)
-    logging.info("response: " + str(response))
+    # logging.info("response: " + str(response))
 
     # TODO: figure out how to add many sources
-    source = convert_file_name_to_url(db_resp[0])
+
+    logging.info("source: " + str(source))
     return jsonify(
         {
             "response": response,
@@ -229,4 +233,4 @@ if __name__ == "__main__":
     logging.debug("This is a debug message")
     logging.info("This is an info message")
     app = create_app()
-    app.run(debug=True, host="0.0.0.0", port=5002)
+    app.run(debug=True, host="0.0.0.0", port=5003)
