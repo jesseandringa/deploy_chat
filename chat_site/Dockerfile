@@ -24,10 +24,10 @@ FROM nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
 
 # Expose the port Nginx runs on
-# EXPOSE 80
-CMD ["tail", "-f", "/dev/null"]
+EXPOSE 80
+# CMD ["tail", "-f", "/dev/null"]
 # Start Nginx
-# CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
 
 
 
