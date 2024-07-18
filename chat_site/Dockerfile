@@ -17,5 +17,17 @@ COPY . .
 # CMD ["npm", "run", "start"]
 CMD ["npm", "run", "build"]
 
+# Production stage
+FROM nginx:alpine
+
+# Copy the build output to Nginx's html directory
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Expose the port Nginx runs on
+EXPOSE 80
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
+
 
 

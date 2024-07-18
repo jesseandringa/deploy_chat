@@ -39,6 +39,7 @@ services:
       context: ./chat_site  # Path to your React web app Dockerfile
     ports:
       - "3000:3000"  # Adjust port if needed
+      - "80:80"
 
 # volumes:
 #   my_volume:
