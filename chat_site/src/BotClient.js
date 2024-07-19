@@ -11,6 +11,7 @@ const endpoint = 'get-response'; // Endpoint
 const url = new URL(endpoint, baseURL);
 url.searchParams.append('message', message);
 url.searchParams.append('county', selectedCounty);// Construct the full URL manually
+console.log("yoolo")
 url.searchParams.append('ip', IP);
 console.log('url: ', url);
 console.log("hoohoh")
