@@ -9,6 +9,7 @@ import gmailer
 # import llama_helper
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from gevent.pywsgi import WSGIServer
 from llm_helper import openai_helper
 from util import convert_file_name_to_url
 
@@ -233,4 +234,8 @@ if __name__ == "__main__":
     logging.debug("This is a debug message")
     logging.info("This is an info message")
     app = create_app()
-    app.run(debug=True, host="0.0.0.0", port=5003)
+
+    app.debug = True
+    http_server = WSGIServer(("", 5003), app)
+    http_server.serve_forever()
+# app.run(debug=True, host="0.0.0.0", port=5003)
