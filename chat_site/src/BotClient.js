@@ -49,6 +49,7 @@ const endpoint = 'user-data'; // Endpoint
 const url = new URL(endpoint, baseURL);
 url.searchParams.append('ip', ip);
 console.log('url: ', url);
+console.log("hoohoh")
 
 
 // Use the fetch API to send a GET request
