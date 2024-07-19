@@ -24,7 +24,7 @@ services:
   nginx:
     depends_on:
       - api
-      # - react-webapp
+      - react-webapp
     restart: always
     build:
       dockerfile: Dockerfile.dev
