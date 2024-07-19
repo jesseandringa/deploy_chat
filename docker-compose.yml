@@ -5,7 +5,7 @@ services:
     build:
       context: ./chat_server/chat  # Path to your Python server Dockerfile
     ports:
-      - "5003:5003"  # Adjust port if needed
+      - "5002:5002"  # Adjust port if needed
     depends_on:
       - react-webapp
       # - postgres
