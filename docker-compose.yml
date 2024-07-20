@@ -21,18 +21,18 @@ services:
       # - v /data:ro 
         # - ./chat_server/chat/storage_resources:/app/storage_resources
   
-  nginx:
-    depends_on:
-      - api
-      - react-webapp
-    restart: always
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./nginx
-    ports:
-      - "443:443"
-      # - "80:80"
-      - "3050:80"
+  # nginx:
+  #   depends_on:
+  #     - api
+  #     - react-webapp
+  #   restart: always
+  #   build:
+  #     dockerfile: Dockerfile.dev
+  #     context: ./nginx
+  #   ports:
+  #     - "443:443"
+  #     # - "80:80"
+  #     - "3050:80"
 
 
   react-webapp:
@@ -41,6 +41,8 @@ services:
     ports:
       # - "3000:3000"  # Adjust port if needed
       - "80:80"
+      - "3050:80"
+      - "443:443"
    
 
 # volumes:
