@@ -1,6 +1,15 @@
 # version: '3'
 
 services:
+  # postgres:
+  #   image: 'postgres-latest'
+  #   build:
+  #     context: ./postgres
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     POSTGRES_PASSWORD: 'password'
+  #   ports:
+  #     - "5432:5432" 
   api:
     build:
       context: ./chat_server/chat  # Path to your Python server Dockerfile
@@ -30,18 +39,16 @@ services:
       dockerfile: Dockerfile.dev
       context: ./nginx
     ports:
-      - "443:443"
-      # - "80:80"
       - "3050:80"
+      - "80:80"
+      - "443:443"
 
 
   react-webapp:
     build:
       context: ./chat_site  # Path to your React web app Dockerfile
     ports:
-      # - "3000:3000"  # Adjust port if needed
-      - "80:80"
-   
+      - "3000:3000"  # Adjust port if needed
 
 # volumes:
 #   my_volume:
