@@ -25,7 +25,7 @@ COPY --from=build /app/build /usr/share/nginx/html
 # RUN rm /etc/nginx/conf.d/default.conf
 
 RUN rm /etc/nginx/conf.d/default.conf
-COPY ../nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Expose the port Nginx runs on
 EXPOSE 80
