@@ -3,10 +3,10 @@
 const getBotResponse = (message, selectedCounty, IP) => {
     // Convert the user input to lowercase for easier keyword matching
 // run locally
-// const baseURL = 'http://localhost:3050/api/'; // Base URL
+const baseURL = 'http://localhost:3050/api/'; // Base URL
 // run on server
 // const baseURL = 'http://3.143.1.57:80/api/'; // Base URL
-const baseURL = 'https://munihelp.com/api/';
+// const baseURL = 'https://munihelp.com/api/';
 const endpoint = 'get-response'; // Endpoint
 const url = new URL(endpoint, baseURL);
 url.searchParams.append('message', message);
@@ -40,10 +40,10 @@ export {getBotResponse};
 const sendUserData = (ip) => {
   // Convert the user input to lowercase for easier keyword matching
 // run locally
-// const baseURL = 'http://localhost:3050/api/'; // Base URL
+const baseURL = 'http://localhost:3050/api/'; // Base URL
 // run on server
-const baseURL = 'https://munihelp.com/api/'; // Base URL
-// const baseURL = 'https://3.143.1.57:80/api/'; // Base URL
+// const baseURL = 'https://munihelp.com/api/'; // Base URL
+// const baseURL = 'http://3.143.1.57:80/api/'; // Base URL
 console.log('ip in sendUserData: ', ip);
 const endpoint = 'user-data'; // Endpoint
 const url = new URL(endpoint, baseURL);
