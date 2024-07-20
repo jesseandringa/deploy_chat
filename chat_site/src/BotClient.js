@@ -43,7 +43,7 @@ const sendUserData = (ip) => {
 // const baseURL = 'http://localhost:3050/api/'; // Base URL
 // run on server
 // const baseURL = 'https://munihelp.com/api/'; // Base URL
-const baseURL = 'http://3.143.1.57:3050/api'; // Base URL
+const baseURL = 'https://3.143.1.57:3050/api'; // Base URL
 console.log('ip in sendUserData: ', ip);
 const endpoint = 'user-data'; // Endpoint
 const url = new URL(endpoint, baseURL);
@@ -76,7 +76,7 @@ export {sendUserData};
 
 const changeCounty = (selectedCounty) => {
 // const baseURL = 'http://localhost:3050/api'; // Base URL
-const baseURL = 'http://18.191.103.216:3050/api'; // Base URL
+const baseURL = 'https://18.191.103.216:3050/api'; // Base URL
 const endpoint = '/change-county'; // Endpoint
 const url = new URL(endpoint, baseURL);
 url.searchParams.append('county', selectedCounty);// Construct the full URL manually
