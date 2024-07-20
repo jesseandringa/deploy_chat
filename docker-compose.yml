@@ -40,8 +40,8 @@ services:
       context: ./nginx
     ports:
       - "3050:443"
-      # - "80:80"
-      - "443:443"
+      - "80:80"
+      # - "443:443"
 
 
   react-webapp:
