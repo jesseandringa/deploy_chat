@@ -40,7 +40,7 @@ services:
       context: ./nginx
     ports:
       - "3050:80"
-      - "80:80"
+      # - "80:80"
       - "443:443"
 
 
@@ -48,7 +48,7 @@ services:
     build:
       context: ./chat_site  # Path to your React web app Dockerfile
     ports:
-      - "3000:3000"  # Adjust port if needed
+      - "80:80"  # Adjust port if needed
 
 # volumes:
 #   my_volume:
