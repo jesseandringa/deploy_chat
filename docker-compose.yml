@@ -28,19 +28,19 @@ services:
     restart: always
     build:
       dockerfile: Dockerfile.dev
-      context: ../chat_site
+      context: ./nginx
     ports:
       - "443:443"
-      - "80:80"
+      # - "80:80"
       - "3050:80"
 
 
   react-webapp:
     build:
       context: ./chat_site  # Path to your React web app Dockerfile
-    # ports:
+    ports:
       # - "3000:3000"  # Adjust port if needed
-      # - "80:80"
+      - "80:80"
    
 
 # volumes:
