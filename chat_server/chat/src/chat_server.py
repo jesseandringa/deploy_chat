@@ -162,7 +162,7 @@ def get_data():
     # do multiple database reads at same time
     threads = []
     results = []
-    thread_count = 3
+    thread_count = len(key_words_list)
     for i in range(thread_count):
         key_words = key_words_list[i][0].split(" ")
         thread = threading.Thread(
