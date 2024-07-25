@@ -16,19 +16,19 @@ COPY . .
 # Run the app
 # RUN npm run start
 # Serve the build folder
-# CMD ["npx", "serve", "-s", "build"]
+CMD ["npm", "run", "start"]
 
 # Use Nginx to serve the static files
-FROM nginx:alpine
+# FROM nginx:alpine
 
 # Copy the build files to the Nginx html directory
-COPY --from=build /app/build /usr/share/nginx/html
+# COPY --from=build /app/build /usr/share/nginx/html
 
 # Copy Nginx configuration file
-COPY nginx/default.conf /etc/nginx/nginx.conf
+# COPY nginx/default.conf /etc/nginx/nginx.conf
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# EXPOSE 80
+# CMD ["nginx", "-g", "daemon off;"]
 
 
 
