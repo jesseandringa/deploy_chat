@@ -30,6 +30,7 @@ services:
     ports:
       - "443:443"
       - "80:80"
+    command: rm -rf /usr/share/nginx/html
   
   react-webapp:
     container_name: react-webapp
