@@ -14,6 +14,11 @@ counties_table_names = {
     "sandy-ut": "sandy_ut_pdf_data",
     "millcreek-ut": "millcreek_ut_pdf_data",
     "murray-ut": "murray_ut_pdf_data",
+    "king-wa": "king_wa_pdf_data",
+    "elko-nv": "elko_nv_pdf_data",
+    "cullman-al": "cullman_al_pdf_data",
+    "cumberland-nc": "cumberland_nc_pdf_data",
+    "summit-ut": "summit_ut_pdf_data",
 }
 
 
@@ -189,7 +194,7 @@ class PGDB:
             """
             cursor.execute(update_query)
             questions_asked = cursor.fetchone()
-            logging.info("User updated successfully.", questions_asked)
+            logging.info("User updated successfully.", str(questions_asked))
 
             self.conn.commit()
             return questions_asked[0]
