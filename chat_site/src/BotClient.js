@@ -7,10 +7,8 @@ const endpoint = 'get-response'; // Endpoint
 const url = new URL(endpoint, baseURL);
 url.searchParams.append('message', message);
 url.searchParams.append('county', selectedCounty);// Construct the full URL manually
-console.log("yoolo")
 url.searchParams.append('ip', IP);
 console.log('url: ', url);
-console.log("hoohoh")
 
 // Use the fetch API to send a GET request
 return fetch(url)
@@ -42,7 +40,7 @@ const endpoint = 'user-data'; // Endpoint
 const url = new URL(endpoint, baseURL);
 url.searchParams.append('ip', ip);
 console.log('url: ', url);
-console.log("hoohoh")
+console.log('this is different');
 
 
 // Use the fetch API to send a GET request
