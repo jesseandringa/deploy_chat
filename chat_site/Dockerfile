@@ -14,9 +14,9 @@ RUN npm install
 COPY . .
 
 # Run the app
-RUN npm run start
+# RUN npm run start
 # Serve the build folder
-CMD ["npx", "serve", "-s", "build"]
+# CMD ["npx", "serve", "-s", "build"]
 
 # Use Nginx to serve the static files
 FROM nginx:alpine
