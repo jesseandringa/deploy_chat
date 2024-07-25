@@ -1,11 +1,7 @@
 
 // A simple function to simulate a more dynamic response based on user input
 const getBotResponse = (message, selectedCounty, IP) => {
-    // Convert the user input to lowercase for easier keyword matching
-// run locally
-// const baseURL = 'http://localhost:3050/api/'; // Base URL
-// run on server
-// const baseURL = 'http://3.143.1.57:3050/api'; // Base URL
+    // Convert the user input to lowercase for easier keyword ma
 const baseURL = 'https://munihelp.com/api/';
 const endpoint = 'get-response'; // Endpoint
 const url = new URL(endpoint, baseURL);
@@ -40,10 +36,7 @@ export {getBotResponse};
 const sendUserData = (ip) => {
   // Convert the user input to lowercase for easier keyword matching
 // run locally
-// const baseURL = 'http://localhost:3050/api/'; // Base URL
-// run on server
 const baseURL = 'https://munihelp.com/api/'; // Base URL
-// const baseURL = 'https://3.143.1.57:3050/api'; // Base URL
 console.log('ip in sendUserData: ', ip);
 const endpoint = 'user-data'; // Endpoint
 const url = new URL(endpoint, baseURL);
@@ -75,8 +68,7 @@ export {sendUserData};
 
 
 const changeCounty = (selectedCounty) => {
-// const baseURL = 'http://localhost:3050/api'; // Base URL
-const baseURL = 'https://18.191.103.216:3050/api'; // Base URL
+const baseURL = 'https://munichat.com/api'; // Base URL
 const endpoint = '/change-county'; // Endpoint
 const url = new URL(endpoint, baseURL);
 url.searchParams.append('county', selectedCounty);// Construct the full URL manually
@@ -106,7 +98,7 @@ export {changeCounty};
 
 const postEmail = (message, name,email) => {
     // Convert the user input to lowercase for easier keyword matching
-const baseURL = 'http://api:5002';
+const baseURL = 'http://munichat/api/';
 // The message you want to send
 
 // Construct the full URL with query parameters

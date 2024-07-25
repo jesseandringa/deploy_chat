@@ -1,6 +1,6 @@
 const SignUpUser = (firstName, lastName, email, password, ip) => {
-    const baseURL = 'http://3.143.1.57:3050/api';
-    const endpoint = '/sign-up';
+    const baseURL = 'https://munihelp.com/api/';
+    const endpoint = 'sign-up';
     const url = new URL(endpoint, baseURL);
 
     // Create a new object with user data
@@ -32,8 +32,8 @@ const SignUpUser = (firstName, lastName, email, password, ip) => {
 export {SignUpUser};
 
 const LoginUser = (email, password) => {
-    const baseURL = 'http://3.143.1.57:3050/api';
-    const endpoint = '/login';
+    const baseURL = 'https://munihelp.com/api/';
+    const endpoint = 'login';
     const url = new URL(endpoint, baseURL);
 
     // Create a new object with user data
