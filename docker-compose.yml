@@ -22,6 +22,8 @@ services:
     depends_on:
       - api
       - react-webapp
+    build:
+      context: ./nginx
     restart: always
     image: nginx:latest
     volumes:
