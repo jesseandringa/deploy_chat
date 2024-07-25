@@ -188,8 +188,8 @@ def get_data():
                 else:
                     context += results[i][2]
                 source += "," + convert_file_name_to_url(results[i][0])
-        except:
-            logging.info("results[i] failed")
+        except Exception as e:
+            logging.info("results[i] failed", e)
     response = llm.create_response_message(request.args.get("message"), context)
     # logging.info("response: " + str(response))
 
