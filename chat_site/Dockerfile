@@ -16,7 +16,7 @@ COPY . .
 # Run the app
 # RUN npm run start
 # Serve the build folder
-CMD ["npm", "run", "start"]
+# CMD ["npm", "run", "start"]
 # Build the app
 CMD ["npm", "run", "start"]
 # CMD ["npm", "run", "start"]
