@@ -35,20 +35,21 @@ services:
       - api
       - react-webapp
     restart: always
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
     ports:
-      - "3050:443"
-      - "443:80"
-      # - "443:443"
+      # - "3050:80"
+      # - "443:80"
+      - "443:443"
+      - "80:80"
+  
+    
 
-
-  react-webapp:
-    build:
-      context: ./chat_site  # Path to your React web app Dockerfile
-    ports:
-      - "80:80"  # Adjust port if needed
+  # react-webapp:
+  #   build:
+  #     context: ./chat_site  # Path to your React web app Dockerfile
+  #   ports:
+  #     - "80:80"  # Adjust port if needed
 
 # volumes:
 #   my_volume:

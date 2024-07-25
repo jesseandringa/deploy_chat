@@ -25,6 +25,7 @@ COPY --from=build /app/build /usr/share/nginx/html
 # RUN rm /etc/nginx/conf.d/default.conf
 # Expose the port Nginx runs on
 EXPOSE 80
+EXPOSE 443
 # CMD ["tail", "-f", "/dev/null"]
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
