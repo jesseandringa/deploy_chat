@@ -178,15 +178,18 @@ def get_data():
         thread.join()
     context = "No matching data found."
     source = ""
+    logging.info("results: " + str(results))
     for i in range(thread_count):
-        if results[i] != "No matching data found.":
-            if context == "No matching data found.":
-                context = results[i][2]
-                source = convert_file_name_to_url(results[i][0])
-            else:
-                context += results[i][2]
-            source += "," + convert_file_name_to_url(results[i][0])
-
+        try:
+            if results[i] != "No matching data found.":
+                if context == "No matching data found.":
+                    context = results[i][2]
+                    source = convert_file_name_to_url(results[i][0])
+                else:
+                    context += results[i][2]
+                source += "," + convert_file_name_to_url(results[i][0])
+        except:
+            logging.info("results[i] failed")
     response = llm.create_response_message(request.args.get("message"), context)
     # logging.info("response: " + str(response))
 
