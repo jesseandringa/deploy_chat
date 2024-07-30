@@ -19,24 +19,23 @@ COPY . .
 # CMD ["npm", "run", "start"]
 # Build the app
 CMD ["npm", "run", "start"]
-# CMD ["npm", "run", "start"]
 # Build the app
 ########### do this to change the app
 # then comment out to get app to work 
 #################
-# RUN npm run build
+RUN npm run build
 
-# # Use Nginx to serve the static files
-# FROM nginx:alpine
+# Use Nginx to serve the static files
+FROM nginx:alpine
 
-# # Copy the build files to the Nginx html directory
-# COPY --from=build /app/build /usr/share/nginx/html
+# Copy the build files to the Nginx html directory
+COPY --from=build /app/build /usr/share/nginx/html
 
-# # Copy Nginx configuration file
-# COPY nginx/default.conf /etc/nginx/nginx.conf
+# Copy Nginx configuration file
+COPY nginx/default.conf /etc/nginx/nginx.conf
 
-# EXPOSE 80
-# CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
 
 
 
