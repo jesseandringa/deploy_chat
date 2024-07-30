@@ -13,11 +13,8 @@ RUN npm install
 # Copy the remaining app files to the working directory
 COPY . .
 
-# Run the app
-# RUN npm run start
-# Serve the build folder
-# CMD ["npm", "run", "start"]
-# Build the app
+# Run the app after removing the build folder
+RUN rm -rf build
 CMD ["npm", "run", "start"]
 # Build the app
 ########### do this to change the app
