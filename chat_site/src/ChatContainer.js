@@ -57,9 +57,9 @@ const ChatContainer = () => {
     }, []);
 
     const sendMessage = (e) => {
-        if (questionsAsked > 3){
-            return alert('You have reached the maximum number of questions. Please sign up to ask more questions.');
-        }
+        // if (questionsAsked > 3){
+        //     return alert('You have reached the maximum number of questions. Please sign up to ask more questions.');
+        // }
         e.preventDefault();
         if (!input.trim()) return;
         console.log("user message: ", input);
