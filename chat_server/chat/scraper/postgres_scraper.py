@@ -5,6 +5,9 @@ from datetime import datetime
 import database_vars
 import file_reader
 import psycopg2
+import threading
+import sys
+import json
 
 dbname = os.getenv("PGDATABASE")
 # conn = psycopg2.connect(
@@ -340,58 +343,99 @@ def create_database_and_data():
     print("finished inserting pdfs")
     # return db
 
+def read_index_from_json(file_path="index.json"):
+    try:
+        # Reading the index from a JSON file
+        with open(file_path, "r") as file:
+            index = json.load(file)
+
+        return index
+    except KeyboardInterrupt:
+        print("\nProgram interrupted with Control-C")
+        sys.exit(1)
+    except Exception:
+        return 0
+    
+def write_index_to_json(index, file_path="index.json"):
+    # Writing the index to a JSON file
+    with open(file_path, "w") as file:
+        json.dump(index, file)
+    
+def chunk_text_and_insert(pdf_files, i, db, table_name):
+    try:
+        chunks = file_reader.chunk_file_into_paragraphs(pdf_files[i])
+        valid = file_reader.check_validity_of_file(file_path=None, chunks=chunks)
+        if valid == 0:
+                return 1
+    except Exception as e:
+        print("failed to chunk pdf" + str(e))
+
+    j = 0
+    for chunk_index, chunk in enumerate(chunks):
+        if chunk_index < j:
+            continue
+        text = chunk[3]
+        num_chunks = 1
+        while len(text) < 500:
+            try:
+                text = (
+                    str(chunks[j - num_chunks][3])
+                    + " "
+                    + text
+                    + " "
+                    + str(chunks[j + num_chunks][3])
+                )
+                num_chunks += 1
+            # catch index out of bounds
+            except Exception:
+                break
+        j += int((num_chunks + 1) / 2)
+        if len(text) < 50:
+            continue
+        try:
+            if chunk_index % 10 == 0:
+                print(
+                    "inserting chunk "
+                    + str(j)
+                    + "of "
+                    + str(len(chunks))
+                    + " of pdf : "
+                    + str(i)
+                )
+            if (i + 1) % 10 == 0:
+                print("\n", text)
+            db.insert_data_into_pdf_text_table(
+                table_name, str(chunk[0]), int(chunk[1]), str(text)
+            )
+        except Exception as e:
+            print("failed to insert chunk" + str(e))
 
 def create_table_and_insert_all_data(db, table_name, folder_path):
     db.create_pdf_text_table(table_name)
     pdf_files = file_reader.get_all_files_with_full_path(folder_path)
     print(len(pdf_files))
-    for i, pdf_file in enumerate(pdf_files):
-        try:
-            chunks = file_reader.chunk_file_into_paragraphs(pdf_file)
-            valid = file_reader.check_validity_of_file(file_path=None, chunks=chunks)
-            if valid == 0:
-                continue
-        except Exception as e:
-            print("failed to chunk pdf" + str(e))
-        j = 0
-        for chunk_index, chunk in enumerate(chunks):
-            if chunk_index < j:
-                continue
-            text = chunk[3]
-            num_chunks = 1
-            while len(text) < 300:
-                try:
-                    text = (
-                        str(chunks[j - num_chunks][3])
-                        + " "
-                        + text
-                        + " "
-                        + str(chunks[j + num_chunks][3])
-                    )
-                    num_chunks += 1
-                # catch index out of bounds
-                except Exception:
-                    break
-            j += int((num_chunks + 1) / 2)
-            if len(text) < 50:
-                continue
-            try:
-                if chunk_index % 10 == 0:
-                    print(
-                        "inserting chunk "
-                        + str(j)
-                        + "of "
-                        + str(len(chunks))
-                        + " of pdf : "
-                        + str(i)
-                    )
-                if (i + 1) % 10 == 0:
-                    print("\n", text)
-                db.insert_data_into_pdf_text_table(
-                    table_name, str(chunk[0]), int(chunk[1]), str(text)
+    index_path = 'chat_server/chat/scraper/database_index.json'
+    i = read_index_from_json(index_path)
+    while i < len(pdf_files):
+        threads = []
+        results = []
+        for j in range(6):  # Example: Perform actions in {range_end} threads
+            thread = threading.Thread(
+                target=lambda: results.append(
+                    chunk_text_and_insert(pdf_files, i+j, db, table_name)
                 )
-            except Exception as e:
-                print("failed to insert chunk" + str(e))
+            )
+            threads.append(thread)
+            thread.start()
+            i += 1
+
+        # Wait for all threads to complete actions
+        for thread in threads:
+            thread.join()
+    
+        write_index_to_json(i,index_path )
+
+        
     print("finished inserting pdfs")
     # return db
 
@@ -410,8 +454,8 @@ if __name__ == "__main__":
     # ex.      murray_ut_pdf_data
     # folder path to the pdfs you want to upsert (control click folder copy and paste 'relatitve path')
     # ex.      chat_server/chat/file_resources/murray-muni-resources
-    table_name = "king_wa_pdf_data"
-    folder_path = "chat_server/chat/file_resources/king-wa-resources"
+    table_name = "cumberland_nc_pdf_data"
+    folder_path = "chat_server/chat/scraper/file_resources/cumberland-nc-resources"
     ##################################################################################################
     create_table_and_insert_all_data(db, table_name, folder_path)
     # user
