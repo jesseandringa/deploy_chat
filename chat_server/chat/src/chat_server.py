@@ -53,7 +53,7 @@ def send_email():
     return json_response
 
 
-@app.route("/upsert_user", methods=["POST"])
+@app.route("/upsert_user", methods=["GET"])
 def upsert_user():
     logging.info("in upsert_user")
     # data = request.get_json()

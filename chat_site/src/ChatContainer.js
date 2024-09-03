@@ -9,70 +9,33 @@ import { FcBusinesswoman } from "react-icons/fc";
 import DropdownMenu from './DropdownMenu';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
-import {UpsertUser} from './BotClient';
 
 
-const ChatContainer = () => {
+const ChatContainer = ({userInfo}) => {
     // const [messages, setMessages] = useState([]);
     const [userMessage, setUserMessage] = useState('');
     const [botMessages, setBotMessages] = useState('');
     const [botSources, setBotSources] = useState([]);
     const [input, setInput] = useState('');
-    const [chatClicked, setChatClicked] = useState(false);
+    // const [chatClicked, setChatClicked] = useState(false);
     const [areMessages, setAreMessages] = useState(false);
     const [botResponded, setBotResponded] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
     const [totalMessageCount, setTotalMessageCount] = useState(0);
-    const [IP, setIP] = useState('');
-    const [gotIP, setGotIP] = useState(false);
     const [questionsAsked, setQuestionsAsked] = useState(0);
-    const [isHomePageUpdated, setIsHomePageUpdated] = useState(false);
     const { isAuthenticated, isLoading, user } = useAuth0();
-    const [userInfo, setUserInfo] = useState({});
     const [isPayingUser, setIsPayingUser] = useState(false);
     // useEffect(() => {
     //     // Update flag when login state changes
     //     console.log("isLoggedIn: ", isLoggedIn);
     //     setIsHomePageUpdated(isLoggedIn);
     //   }, [isLoggedIn]);
-    const getIpAddress = async () => {
-       
-        console.log('inside getIpAddress')
-        const res = await axios.get("https://api.ipify.org/?format=json");
-        // console.log('res: ');
-        // console.log(res.data);
-        setIP(res.data['ip']);
-        setGotIP(true);
-        if (isAuthenticated && !isLoading) {
-            console.log("user: ", user);
-            setUserInfo({"ip": res.data['ip'], 
-                        "email": user.email,
-                        "name": user.name,
-                        "given_name": user.given_name,
-                        "family_name": user.family_name});
-        }
-        else{
-            setUserInfo({"ip": res.data['ip']});
-        }
-        setTimeout(async () => {
-            try {
-                setGotIP(true);
-                const response = await UpsertUser(userInfo);
-            }
-            catch(error){
-                console.log('error upserting user', error);
-            }
-        }, 500);
-        
-    }
+    
 
     const handleOptionChange = (selectedValue) => {
         setSelectedOption(selectedValue);
     };
 
-    useEffect(() => {
-        getIpAddress();
-    }, [isAuthenticated, isLoading, user, gotIP]);
 
     const sendMessage = (e) => {
         // if (questionsAsked > 3){

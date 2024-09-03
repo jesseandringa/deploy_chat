@@ -39,6 +39,7 @@ const UpsertUser = (userInfo) => {
   const baseURL = 'https://munihelp.com/api/'; // Base URL
   const endpoint = 'upsert_user'; // Endpoint
   const url = new URL(endpoint, baseURL);
+
   const username = userInfo.name;
   const email = userInfo.email;
   const ip = userInfo.ip;
@@ -46,13 +47,13 @@ const UpsertUser = (userInfo) => {
   const family_name = userInfo.family_name;
   console.log('email: ', email);  
   url.searchParams.append('ip', ip);
-  url.searchParams.append('name', username);
-  url.searchParams.append('email', email);
-  url.searchParams.append('given_name', given_name);
-  url.searchParams.append('family_name', family_name);
+  if (email){
+    url.searchParams.append('email', email);
+    url.searchParams.append('name', username);
+    url.searchParams.append('given_name', given_name);
+    url.searchParams.append('family_name', family_name);
+  }
 
-  // console.log('url: ', url);
-  // console.log('this is different');
 
 
   // Use the fetch API to send a GET request
