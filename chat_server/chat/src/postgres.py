@@ -181,11 +181,12 @@ class PGDB:
 
         return result
 
-    def get_user_by_info(self, userInfo):
+    def get_user_by_info(self, email, ip):
         cursor = self.conn.cursor()
-        search_query = f"email = '{userInfo['email']}'"
-        if "email" not in userInfo:
-            search_query = f"ip_addr = '{userInfo['ip']}'"
+        if email:
+            search_query = f"email = '{email}'"
+        else:
+            search_query = f"ip_addr = '{ip}'"
 
         user_query = f"""
         SELECT * FROM basic_user_info WHERE {search_query};';  
@@ -201,20 +202,13 @@ class PGDB:
         cursor.close()
         return user
 
-    def update_user_on_new_question(self, userInfo):
+    def update_user_on_new_question(self, email, ip):
         cursor = self.conn.cursor()
         timestamp = datetime.now()
-        try:
-            email = userInfo["email"]
+        if email:
             where_clause = f"email = '{email}'"
-        except Exception:
-            email = None
-        if not email:
-            try:
-                ip_address = userInfo["ip"]
-                where_clause = f"ip_addr = '{ip_address}'"
-            except Exception:
-                ip_address = None
+        else:
+            where_clause = f"ip_addr = '{ip}'"
 
         try:
             # Replace with your desired DELETE statement

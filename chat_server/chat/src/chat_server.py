@@ -115,15 +115,20 @@ def get_data():
 
     county = request.args.get("county", "No county received")
     message = request.args.get("message")
-    userInfo = request.args.get("userInfo")
-    logging.info("userInfo: " + str(userInfo))
+    ip = request.args.get("ip")
+    try:
+        email = request.args.get("email")
+    except Exception:
+        email = None
+
+    logging.info("userInfo: " + str(email))
     logging.info("message: " + str(request.args.get("message")))
     logging.info("county: " + str(county))
 
     db = PGDB(host, user, password, dbname, county)
 
-    question_number = db.update_user_on_new_question(userInfo)
-    user = db.get_user_by_info(userInfo)
+    question_number = db.update_user_on_new_question(email, ip)
+    user = db.get_user_by_info(email, ip)
     logging.info("user: " + str(user))
     logging.info("question_number: " + str(question_number))
 
