@@ -295,6 +295,21 @@ class PGDB:
             except Exception as e:
                 logging.error(f"Error inserting data: {e}")
                 return None
+        else:
+            # Update the user's last visited time and all other fields
+            update_query = f"""
+            UPDATE basic_user_info
+            SET last_visited = '{current_timestamp}',
+            first_name = '{given_name}',
+            last_name = '{family_name}'
+            WHERE email = '{email}';
+            """
+            try:
+                self.conn.cursor().execute(update_query)
+                self.conn.commit()
+            except Exception as e:
+                logging.error(f"Error updating data: {e}")
+                return None
         return True
 
     def sign_up_user(self, firstname, lastname, email, password, ip):
