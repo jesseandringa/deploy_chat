@@ -181,16 +181,44 @@ class PGDB:
 
         return result
 
-    def update_user_on_new_question(self, ip_address, user):
+    def get_user_by_info(self, userInfo):
+        cursor = self.conn.cursor()
+        user_query = f"""
+        SELECT * FROM basic_user_info WHERE email = '{userInfo["email"]}';  
+        """
+        try:
+            cursor.execute(user_query)
+            user = cursor.fetchone()
+            logging.info("User found: " + str(user))
+            return user
+        except Exception as e:
+            user = None
+            logging.error(f"Error searching data: {e}")
+        cursor.close()
+        return user
+
+    def update_user_on_new_question(self, userInfo):
         cursor = self.conn.cursor()
         timestamp = datetime.now()
+        try:
+            email = userInfo["email"]
+            where_clause = f"email = '{email}'"
+        except Exception:
+            email = None
+        if not email:
+            try:
+                ip_address = userInfo["ip"]
+                where_clause = f"ip_addr = '{ip_address}'"
+            except Exception:
+                ip_address = None
+
         try:
             # Replace with your desired DELETE statement
             update_query = f"""
             UPDATE basic_user_info
             SET questions_asked = questions_asked + 1,
             last_question_asked = '{timestamp}'
-            WHERE ip_addr = '{ip_address}'
+            WHERE {where_clause}
             RETURNING questions_asked;
             """
             cursor.execute(update_query)
@@ -243,10 +271,10 @@ class PGDB:
 
         return result
 
-    def login_user(self, username, password):
+    def upsert_user(self, email, ip, given_name, family_name):
         current_timestamp = datetime.now()
         query = f"""
-        SELECT * FROM basic_user_info WHERE email = '{username}' AND password_hash = '{password}';
+        SELECT * FROM basic_user_info WHERE email = '{email}';
         """
         try:
             result = self.execute(query)
@@ -254,7 +282,20 @@ class PGDB:
             logging.error(f"Error searching data: {e}")
             result = None
         logging.info(f"User found: {result}")
-        return result
+
+        if not result:
+            questions_asked = 0
+            insert_query = f"""
+            INSERT INTO basic_user_info (email, ip_addr, first_name, last_name, questions_asked, last_visited, created_at)
+            VALUES ('{email}', '{ip}', '{given_name}', '{family_name}', '{questions_asked}','{current_timestamp}','{current_timestamp}');
+            """
+            try:
+                self.conn.cursor().execute(insert_query)
+                self.conn.commit()
+            except Exception as e:
+                logging.error(f"Error inserting data: {e}")
+                return None
+        return True
 
     def sign_up_user(self, firstname, lastname, email, password, ip):
         questions_asked = 0

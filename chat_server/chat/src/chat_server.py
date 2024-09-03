@@ -53,14 +53,22 @@ def send_email():
     return json_response
 
 
-@app.route("/login", methods=["POST"])
-def login():
-    logging.info("in sign up")
-    data = request.get_json()
-    logging.info("data: " + str(data))
+@app.route("/upsert_user", methods=["POST"])
+def upsert_user():
+    logging.info("in upsert_user")
+    # data = request.get_json()
+    ip = request.args.get("ip", "No ip received")
+    email = request.args.get("email")
+    name = request.args.get("name", "")
+    given_name = request.args.get("given_name", "")
+    family_name = request.args.get("family_name", "")
+    if given_name == "":
+        given_name = name
+    if family_name == "":
+        family_name = name
+
+    logging.info("data: " + str(request.args))
     # Extract data into variables
-    email = data.get("email")
-    password = data.get("password")
 
     db = PGDB(
         os.getenv("PGHOST"),
@@ -69,7 +77,7 @@ def login():
         os.getenv("PGDATABASE"),
         "",
     )
-    resp = db.login_user(email, password)
+    resp = db.upsert_user(email, ip, given_name, family_name)
 
     if resp:
         json_response = json.dumps({"Success": "true"})
@@ -77,44 +85,6 @@ def login():
         json_response = json.dumps({"Success": "false"})
 
     return json_response
-
-
-@app.route("/sign-up", methods=["POST"])
-def sign_up():
-    logging.info("in sign up")
-    data = request.get_json()
-    logging.info("data: " + str(data))
-    # Extract data into variables
-    firstname = data.get("firstname")
-    lastname = data.get("lastname")
-    email = data.get("email")
-    password = data.get("password")
-    ip = data.get("ip")
-
-    db = PGDB(
-        os.getenv("PGHOST"),
-        os.getenv("PGUSER"),
-        os.getenv("PGPASSWORD"),
-        os.getenv("PGDATABASE"),
-        "",
-    )
-    resp = db.sign_up_user(firstname, lastname, email, password, ip)
-    logging.info("resp: " + str(resp))
-    if resp:
-        json_response = json.dumps({"Success": "true"})
-    else:
-        json_response = json.dumps({"Success": "false"})
-
-    return json_response
-
-
-@app.route("/change-county", methods=["GET"])
-def change_county():
-    app.config["SERVER_TIMEOUT"] = 50
-    county = request.args.get("county", "No county received")
-    # current_app.config["LLAMA"].set_county(county)
-    # current_app.config["LLAMA"].log_text("Changed county to " + county)
-    return jsonify({"success": True})
 
 
 @app.route("/user-data", methods=["GET"])
@@ -145,14 +115,16 @@ def get_data():
 
     county = request.args.get("county", "No county received")
     message = request.args.get("message")
-    ip = request.args.get("ip")
-    logging.info("ip: " + str(ip))
+    userInfo = request.args.get("userInfo")
+    logging.info("userInfo: " + str(userInfo))
     logging.info("message: " + str(request.args.get("message")))
     logging.info("county: " + str(county))
 
     db = PGDB(host, user, password, dbname, county)
 
-    question_number = db.update_user_on_new_question(ip, None)
+    question_number = db.update_user_on_new_question(userInfo)
+    user = db.get_user_by_info(userInfo)
+    logging.info("user: " + str(user))
     logging.info("question_number: " + str(question_number))
 
     llm = openai_helper(county=county)
@@ -203,6 +175,7 @@ def get_data():
             "sources": source,
             "pages": db_resp[1],
             "questions_asked": str(question_number),
+            "is_paying": user[0][5],
         }
     )
     # app.config["SERVER_TIMEOUT"] = 120

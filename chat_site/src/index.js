@@ -6,11 +6,10 @@ import AboutUs from './AboutUs';
 import HowItWorks from './HowItWorks';
 import ContactUs from './ContactUs';
 import Features from './Features';
-import SignUp from './SignUp';
-import Login from './Login';
 import reportWebVitals from './reportWebVitals';
 import { createContext } from 'react';
-import LoginContext from './LoginContext';
+import LoginButton from './Login';
+import Auth0ProviderWithNavigate from './AuthProviderWithNavigate';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 
@@ -18,18 +17,15 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Router>
-    <LoginContext.Provider value={{ isLoggedIn: false, setIsLoggedIn: () => {} }}>
-      <Routes>
-        <Route path="/" exact element={ <HomePage/> } />
-        <Route path="/about-us" element={ <AboutUs/> } />
-        <Route path="/how-it-works" element={ <HowItWorks/> } />
-        <Route path="/contact-us" element={ <ContactUs/> } />
-        <Route path="/features" element={ <Features/> } />
-        <Route path="/login" element={ <Login/> } />
-        <Route path="/register" element={ <SignUp/> } />
-
-      </Routes>
-    </LoginContext.Provider>
+      <Auth0ProviderWithNavigate>
+        <Routes>
+          <Route path="/" exact element={ <HomePage/> } />
+          <Route path="/about-us" element={ <AboutUs/> } />
+          <Route path="/how-it-works" element={ <HowItWorks/> } />
+          <Route path="/contact-us" element={ <ContactUs/> } />
+          <Route path="/features" element={ <Features/> } />
+        </Routes>
+      </Auth0ProviderWithNavigate>
   </Router>
 );
 

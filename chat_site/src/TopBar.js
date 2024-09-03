@@ -1,16 +1,17 @@
 import React from "react";
 import "./style/TopBar.css";
+import LoginButton from "./Login";
 const TopBar = () => {
     // Define a function to handle button clicks
-    const handleButtonClick = (buttonName) => {
-      // Handle button click logic here
-      console.log(`Clicked ${buttonName} button`);
-    };
+    // const handleButtonClick = (buttonName) => {
+    //   // Handle button click logic here
+    //   console.log(`Clicked ${buttonName} button`);
+    // };
   
     return (
         <div className="top-container">
             <div className = "sign-in-up">
-                <button onClick={() => window.location.href = '/login'}>Sign Up/Login</button>
+                <LoginButton></LoginButton>
             </div>
             <div className="name-and-description">
                 <h1 id="website-name" onClick={() => window.location.href = '/'}>Muni</h1>

@@ -5,7 +5,6 @@ import TopBar from './TopBar';
 import BottomButtons from './BottomButtons';
 import ChatContainer from './ChatContainer';
 import PlansModal from './PlansModal';
-import {sendUserData} from './BotClient';
 import axios from 'axios';
 
 const HomePage = () => {
@@ -17,39 +16,6 @@ const HomePage = () => {
       setShowModal(true);
     };
     
-    const getData = async () => {
-      const res = await axios.get("https://api.ipify.org/?format=json");
-      console.log('res: ');
-      console.log(res.data);
-      setIP(res.data['ip']);
-      setGotIP(true);
-      console.log('IP: ', IP);
-
-      setTimeout(async () => {
-        try {
-          setGotIP(true);
-          const response = await sendUserData(res.data['ip']);
-          try{
-              console.log( 'response: ', response);
-              setGotIP(false);
-          }
-          catch(error){
-              console.log('error response printing', error);
-          }
-
-        } catch (error) {
-          console.error('There was an error getting the bot response:', error);
-        }
-            }, 500);
-    };
-
-    useEffect(() => {
-      console.log('inside useEffect')
-      if (!gotIP) {
-        getData();
-      }
-  }, []);
-  
 
   return (
     <>

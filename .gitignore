@@ -18,6 +18,7 @@ chat_server/chat/myenv/
 
 # production
 # /build
+*.pyc
 
 # misc
 *.DS_Store*

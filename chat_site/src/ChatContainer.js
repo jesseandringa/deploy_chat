@@ -4,15 +4,13 @@ import './style/ChatContainer.css';
 import { useState, useEffect } from 'react';
 import background_image from './assets/chat-image-background.png'; // Import the image file
 import {getBotResponse} from './BotClient';
-// import iconUrl from './assets/paper-plane.png';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faPaperPlane, faUser} from '@fortawesome/free-solid-svg-icons';
 import { FcSportsMode } from "react-icons/fc";
 import { FcBusinesswoman } from "react-icons/fc";
 import DropdownMenu from './DropdownMenu';
 import axios from 'axios';
-import { useContext } from 'react';
-import LoginContext from './LoginContext';
+import { useAuth0 } from '@auth0/auth0-react';
+import {UpsertUser} from './BotClient';
+
 
 const ChatContainer = () => {
     // const [messages, setMessages] = useState([]);
@@ -28,21 +26,44 @@ const ChatContainer = () => {
     const [IP, setIP] = useState('');
     const [gotIP, setGotIP] = useState(false);
     const [questionsAsked, setQuestionsAsked] = useState(0);
-    const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
     const [isHomePageUpdated, setIsHomePageUpdated] = useState(false);
-
-    useEffect(() => {
-        // Update flag when login state changes
-        console.log("isLoggedIn: ", isLoggedIn);
-        setIsHomePageUpdated(isLoggedIn);
-      }, [isLoggedIn]);
+    const { isAuthenticated, isLoading, user } = useAuth0();
+    const [userInfo, setUserInfo] = useState({});
+    const [isPayingUser, setIsPayingUser] = useState(false);
+    // useEffect(() => {
+    //     // Update flag when login state changes
+    //     console.log("isLoggedIn: ", isLoggedIn);
+    //     setIsHomePageUpdated(isLoggedIn);
+    //   }, [isLoggedIn]);
     const getIpAddress = async () => {
        
+        console.log('inside getIpAddress')
         const res = await axios.get("https://api.ipify.org/?format=json");
-        console.log('res: ');
-        console.log(res.data);
+        // console.log('res: ');
+        // console.log(res.data);
         setIP(res.data['ip']);
         setGotIP(true);
+        if (isAuthenticated && !isLoading) {
+            console.log("user: ", user);
+            setUserInfo({"ip": res.data['ip'], 
+                        "email": user.email,
+                        "name": user.name,
+                        "given_name": user.given_name,
+                        "family_name": user.family_name});
+        }
+        else{
+            setUserInfo({"ip": res.data['ip']});
+        }
+        setTimeout(async () => {
+            try {
+                setGotIP(true);
+                const response = await UpsertUser(userInfo);
+            }
+            catch(error){
+                console.log('error upserting user', error);
+            }
+        }, 500);
+        
     }
 
     const handleOptionChange = (selectedValue) => {
@@ -50,11 +71,8 @@ const ChatContainer = () => {
     };
 
     useEffect(() => {
-        console.log('inside useEffect')
-        if (!gotIP) {
-          getIpAddress();
-        }
-    }, []);
+        getIpAddress();
+    }, [isAuthenticated, isLoading, user, gotIP]);
 
     const sendMessage = (e) => {
         // if (questionsAsked > 3){
@@ -62,7 +80,7 @@ const ChatContainer = () => {
         // }
         e.preventDefault();
         if (!input.trim()) return;
-        console.log("user message: ", input);
+        // console.log("user message: ", input);
         setUserMessage(input);
         setAreMessages(true);
         setBotMessages('');
@@ -73,7 +91,7 @@ const ChatContainer = () => {
         // Simulate bot response
         setTimeout(async () => {
           try {
-            const botResponse = await getBotResponse(input, selectedOption, IP);
+            const botResponse = await getBotResponse(input, selectedOption, userInfo);
             try{
                 let sources = botResponse.sources.split(',');
                 for (let i = 0; i < sources.length; i++) {
@@ -85,11 +103,12 @@ const ChatContainer = () => {
             }
 
             setBotMessages(botResponse.response);
-            console.log('bot response sources: ', botResponse.sources);
-            console.log('messages',botMessages)
+            // console.log('bot response sources: ', botResponse.sources);
+            // console.log('messages',botMessages)
             setBotResponded(true);
-            console.log('questions asked: ', botResponse.questions_asked)
+            // console.log('questions asked: ', botResponse.questions_asked)
             setQuestionsAsked(parseInt(botResponse.questions_asked))
+            setIsPayingUser(botResponse.is_paying_user);
           } catch (error) {
             console.error('There was an error getting the bot response:', error);
           }
@@ -103,10 +122,10 @@ const ChatContainer = () => {
     <div className="chat-selector">
     {/* Render the DropdownMenu component and pass props */}
     <DropdownMenu selectedOption={selectedOption} onOptionChange={handleOptionChange} />
-    {isLoggedIn && isHomePageUpdated &&(
+    {/* {isLoggedIn && isHomePageUpdated &&(
         
     <p> HELLLO LOGGED in user</p>)
-    }
+    } */}
     </div>
     <div className="image-container">
       {/* <img src={background_image} alt="Placeholder" /> */}
