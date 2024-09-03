@@ -11,7 +11,7 @@ COPY package*.json ./
 RUN npm install
 
 # Copy the remaining app files to the working directory
-RUN npm run build
+# RUN npm run build
 COPY . .
 
 # Run the app after removing the build folder
