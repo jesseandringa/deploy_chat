@@ -45,6 +45,7 @@ const UpsertUser = (userInfo) => {
   const ip = userInfo.ip;
   const given_name = userInfo.given_name;
   const family_name = userInfo.family_name;
+  
   console.log('email: ', email);  
   url.searchParams.append('ip', ip);
   if (email){

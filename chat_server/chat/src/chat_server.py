@@ -58,7 +58,7 @@ def upsert_user():
     logging.info("in upsert_user")
     # data = request.get_json()
     ip = request.args.get("ip", "No ip received")
-    email = request.args.get("email")
+    email = request.args.get("email", None)
     name = request.args.get("name", "")
     given_name = request.args.get("given_name", "")
     family_name = request.args.get("family_name", "")

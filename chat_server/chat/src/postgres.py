@@ -183,8 +183,12 @@ class PGDB:
 
     def get_user_by_info(self, userInfo):
         cursor = self.conn.cursor()
+        search_query = f"email = '{userInfo['email']}'"
+        if "email" not in userInfo:
+            search_query = f"ip_addr = '{userInfo['ip']}'"
+
         user_query = f"""
-        SELECT * FROM basic_user_info WHERE email = '{userInfo["email"]}';  
+        SELECT * FROM basic_user_info WHERE {search_query};';  
         """
         try:
             cursor.execute(user_query)
@@ -273,9 +277,12 @@ class PGDB:
 
     def upsert_user(self, email, ip, given_name, family_name):
         current_timestamp = datetime.now()
-        query = f"""
-        SELECT * FROM basic_user_info WHERE email = '{email}';
-        """
+        if not email:
+            query = f""" SELECT * FROM basic_user_info WHERE ip_addr = '{ip}'; """
+        else:
+            query = f"""
+            SELECT * FROM basic_user_info WHERE email = '{email}';
+            """
         try:
             result = self.execute(query)
         except Exception as e:
@@ -285,10 +292,16 @@ class PGDB:
 
         if not result:
             questions_asked = 0
-            insert_query = f"""
-            INSERT INTO basic_user_info (email, ip_addr, first_name, last_name, questions_asked, last_visited, created_at)
-            VALUES ('{email}', '{ip}', '{given_name}', '{family_name}', '{questions_asked}','{current_timestamp}','{current_timestamp}');
-            """
+            if not email:
+                insert_query = f"""
+                INSERT INTO basic_user_info (ip_addr, first_name, last_name, questions_asked, last_visited, created_at)
+                VALUES ('{ip}', '{given_name}', '{family_name}', '{questions_asked}','{current_timestamp}','{current_timestamp}');
+                """
+            else:
+                insert_query = f"""
+                INSERT INTO basic_user_info (email, ip_addr, first_name, last_name, questions_asked, last_visited, created_at)
+                VALUES ('{email}', '{ip}', '{given_name}', '{family_name}', '{questions_asked}','{current_timestamp}','{current_timestamp}');
+                """
             try:
                 self.conn.cursor().execute(insert_query)
                 self.conn.commit()
