@@ -11,12 +11,14 @@ import { createContext } from 'react';
 import LoginButton from './Login';
 import Auth0ProviderWithNavigate from './AuthProviderWithNavigate';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Router>
+    <PayPalScriptProvider options={{ clientId: "test" }}>
       <Auth0ProviderWithNavigate>
         <Routes>
           <Route path="/" exact element={ <HomePage/> } />
@@ -26,6 +28,7 @@ root.render(
           <Route path="/features" element={ <Features/> } />
         </Routes>
       </Auth0ProviderWithNavigate>
+      </PayPalScriptProvider>
   </Router>
 );
 

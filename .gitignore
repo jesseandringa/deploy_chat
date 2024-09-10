@@ -1,5 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 #storage
+paypal_creds.json
 /chat_server/chat/storage_resource/
 storage-all*
 openaikey.json

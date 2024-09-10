@@ -53,6 +53,10 @@ const ChatContainer = ({userInfo}) => {
         
         // Simulate bot response
         setTimeout(async () => {
+         console.log('db user: ', userInfo);
+         if (questionsAsked > 3 && !isPayingUser){
+            return alert('You have reached the maximum number of questions. Please sign up and subscribe to ask more questions.');
+        }
           try {
             const botResponse = await getBotResponse(input, selectedOption, userInfo);
             try{

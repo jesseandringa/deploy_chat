@@ -87,6 +87,74 @@ def upsert_user():
     return json_response
 
 
+@app.route("/get_user", methods=["GET"])
+def get_user():
+    logging.info("in get_user")
+    # data = request.get_json()
+    email = request.args.get("email", None)
+
+    # Extract data into variables
+
+    db = PGDB(
+        os.getenv("PGHOST"),
+        os.getenv("PGUSER"),
+        os.getenv("PGPASSWORD"),
+        os.getenv("PGDATABASE"),
+        "",
+    )
+    user = db.get_user_by_email(email)
+
+    if user:
+        json_response = json.dumps({"User": user})
+    else:
+        json_response = json.dumps({"User": None})
+
+    return json_response
+
+
+@app.route("/subscribe", methods=["GET"])
+def subscribe():
+    logging.info("in subscribe")
+    # data = request.get_json()
+    email = request.args.get("email", None)
+    subscription_id = request.args.get("subscription_id", None)
+    payment_source = request.args.get("payment_source", None)
+    facilitator_access_token = request.args.get("facilitator_access_token", None)
+    order_id = request.args.get("order_id", None)
+
+    if (
+        not email
+        or not subscription_id
+        or not payment_source
+        or not facilitator_access_token
+        or not order_id
+    ):
+        logging.error("Missing required fields")
+        return jsonify({"success": False})
+    # Extract data into variables
+
+    db = PGDB(
+        os.getenv("PGHOST"),
+        os.getenv("PGUSER"),
+        os.getenv("PGPASSWORD"),
+        os.getenv("PGDATABASE"),
+        "",
+    )
+    resp = db.subscribe(
+        email, subscription_id, payment_source, facilitator_access_token, order_id
+    )
+    if resp:
+        # update user to paying
+        updated = db.update_user_to_paying(email)
+
+    if resp and updated:
+        json_response = json.dumps({"Success": "true"})
+    else:
+        json_response = json.dumps({"Success": "false"})
+
+    return json_response
+
+
 @app.route("/user-data", methods=["GET"])
 def get_user_data():
     logging.info("Hit 'user-data' endpoint")

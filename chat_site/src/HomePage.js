@@ -7,8 +7,8 @@ import ChatContainer from './ChatContainer';
 import PlansModal from './PlansModal';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
-import {UpsertUser} from './BotClient';
-
+import {UpsertUser, UpdateUserSubscription, GetUser} from './BotClient';
+import PayPal from './PayPal';
 
 const HomePage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -16,16 +16,35 @@ const HomePage = () => {
   const [gotIP, setGotIP] = useState(false);
   const { isAuthenticated, isLoading, user } = useAuth0();
   const [userInfo, setUserInfo] = useState({});
+  const [dbUser, setDbUser] = useState({});
+  const [isUpserted, setIsUpserted] = useState(false);
 
+  const onSubscriptionComplete = (data) => {
+    console.log('Subscription complete!', data);
+    setTimeout(async () => {
+      try {
+          const resposne = await UpdateUserSubscription(data,userInfo);
+          if (resposne){
+              setShowModal(false);
+              var temp = userInfo;
+              temp['is_paying'] = true;
+              setUserInfo(temp);
+          }
+        }
+      catch(error){
+          console.log('error upserting user', error);
+      }
+  }, 500);
+
+  }
   const handlePlansClicked = () => {
       setShowModal(true);
     };
-    const getIpAddress = async () => {
+  const getIpAddress = async () => {
        
       console.log('inside getIpAddress')
       const res = await axios.get("https://api.ipify.org/?format=json");
-      // console.log('res: ');
-      // console.log(res.data);
+
       setIP(res.data['ip']);
       setGotIP(true);
       if (isAuthenticated && !isLoading) {
@@ -42,7 +61,10 @@ const HomePage = () => {
       setTimeout(async () => {
           try {
               setGotIP(true);
-              const response = await UpsertUser(userInfo);
+              const user = await UpsertUser(userInfo);
+              if (user){
+                  setIsUpserted(true);
+              }
           }
           catch(error){
               console.log('error upserting user', error);
@@ -51,11 +73,33 @@ const HomePage = () => {
       
   }
   useEffect(() => {
-      if (!isLoading){
+      if (!isLoading && !gotIP){
         getIpAddress();
       }
   }, [isAuthenticated, isLoading, user, gotIP]);
     
+  const getDBUser = async () => {
+    setTimeout(async () => {
+      try {
+          setGotIP(true);
+          const userResponse = await GetUser(userInfo.email);
+          if (userResponse){
+              setDbUser(userResponse);
+              console.log('dbUser: ', dbUser);
+          }
+      }
+      catch(error){
+          console.log('error upserting user', error);
+      }
+    }, 500);
+  }
+    
+
+  useEffect(() => {
+    if (isAuthenticated && !isLoading && isUpserted){
+      getDBUser();
+    }
+  }, [dbUser,isAuthenticated, isLoading, userInfo, isUpserted]);
 
   return (
     <>
@@ -64,7 +108,7 @@ const HomePage = () => {
       {/* {!showModal && ( */}
       <div>
         <TopBar />
-      <ChatContainer userInfo={userInfo}/>
+      <ChatContainer userInfo={dbUser}/>
       <div className ="example-questions">
         <h2>Example Questions</h2>
         <ul>
@@ -79,7 +123,12 @@ const HomePage = () => {
      
 
     </div>
-    {showModal && <PlansModal className ="plans-modal" onClose={() => setShowModal(false)} />}
+    {showModal && 
+    <>
+    {/* <PlansModal className ="plans-modal" onClose={() => setShowModal(false)} /> */}
+      <PayPal className="plans-modal" onClose={() => setShowModal(false) } onSubscriptionComplete={onSubscriptionComplete}></PayPal>
+      </>
+      }
     </>
   );
 };

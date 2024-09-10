@@ -269,6 +269,22 @@ class PGDB:
 
         return result
 
+    def get_user_by_email(self, email):
+        cursor = self.conn.cursor()
+        user_query = f"""
+        SELECT * FROM basic_user_info WHERE email = '{email}';
+        """
+        try:
+            cursor.execute(user_query)
+            user = cursor.fetchone()
+            logging.info("User found: " + str(user))
+            return user
+        except Exception as e:
+            user = None
+            logging.error(f"Error searching data: {e}")
+        cursor.close()
+        return user
+
     def upsert_user(self, email, ip, given_name, family_name):
         current_timestamp = datetime.now()
         if not email:
@@ -332,6 +348,37 @@ class PGDB:
             self.conn.commit()
         except Exception as e:
             logging.error(f"Error inserting data: {e}")
+            return None
+        return True
+
+    def update_user_to_paying(self, email):
+        insert_query = f"""
+        UPDATE basic_user_info
+        SET is_paying = TRUE
+        WHERE email = '{email}';
+        """
+        try:
+            self.conn.cursor().execute(insert_query)
+            self.conn.commit()
+        except Exception as e:
+            logging.error(f"Error updating user to paying: {e}")
+            return None
+        return True
+
+    def subscribe(
+        self, email, subscription_id, payment_source, facilitator_access_token, order_id
+    ):
+        insert_query = f"""
+        INSERT INTO subscriptions (email, subscription_id, payment_source, facilitator_access_token, order_id)
+        VALUES ('{email}', '{subscription_id}', '{payment_source}', '{facilitator_access_token}', '{order_id}');
+        """
+        try:
+            self.conn.cursor().execute(insert_query)
+            self.conn.commit()
+        except Exception as e:
+            logging.error(
+                f"Error inserting subscription with params: {e} {email} {subscription_id} {payment_source} {facilitator_access_token} {order_id}"
+            )
             return None
         return True
 
