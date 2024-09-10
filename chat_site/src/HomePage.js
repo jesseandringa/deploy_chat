@@ -17,6 +17,7 @@ const HomePage = () => {
   const { isAuthenticated, isLoading, user } = useAuth0();
   const [userInfo, setUserInfo] = useState({});
   const [dbUser, setDbUser] = useState({});
+  const [dbUserGot, setDbUserGot] = useState(false);
   const [isUpserted, setIsUpserted] = useState(false);
 
   const onSubscriptionComplete = (data) => {
@@ -85,6 +86,7 @@ const HomePage = () => {
           const userResponse = await GetUser(userInfo.email);
           if (userResponse){
               setDbUser(userResponse);
+              setDbUserGot(true);
               console.log('dbUser: ', dbUser);
           }
       }
@@ -96,7 +98,7 @@ const HomePage = () => {
     
 
   useEffect(() => {
-    if (isAuthenticated && !isLoading && isUpserted){
+    if (isAuthenticated && !isLoading && isUpserted && !dbUserGot){
       getDBUser();
     }
   }, [dbUser,isAuthenticated, isLoading, userInfo, isUpserted]);
