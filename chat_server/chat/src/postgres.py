@@ -272,7 +272,8 @@ class PGDB:
     def get_user_by_email(self, email):
         cursor = self.conn.cursor()
         user_query = f"""
-        SELECT * FROM basic_user_info WHERE email = '{email}';
+        SELECT email,ip_addr,user_name,questions_asked,is_paying
+        FROM basic_user_info WHERE email = '{email}';
         """
         try:
             cursor.execute(user_query)
