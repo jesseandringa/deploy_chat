@@ -85,6 +85,7 @@ const HomePage = () => {
           setGotIP(true);
           const userResponse = await GetUser(userInfo.email);
           if (userResponse){
+              console.log('userResponse: ', userResponse);
               setDbUser(userResponse);
               setDbUserGot(true);
               console.log('dbUser: ', dbUser);
