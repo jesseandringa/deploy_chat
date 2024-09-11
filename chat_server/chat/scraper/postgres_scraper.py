@@ -281,12 +281,12 @@ class PGDB:
             cursor.execute(query)
             return cursor.fetchall()
 
-    def remove_all_data_from_table(self):
+    def remove_all_data_from_table(self, table_name):
         cursor = self.conn.cursor()
         try:
             # Replace with your desired DELETE statement
             delete_query = """
-            TRUNCATE TABLE pdf_chunks;
+            TRUNCATE TABLE {table_name};
             """
             cursor.execute(delete_query)
             self.conn.commit()
@@ -427,6 +427,8 @@ def create_table_and_insert_all_data(db, table_name, folder_path):
     print(len(pdf_files))
     index_path = "chat_server/chat/scraper/database_index.json"
     i = read_index_from_json(index_path)
+    if i == 0:
+        db.delete_all_data_from_table(table_name)
     while i < len(pdf_files):
         threads = []
         results = []
