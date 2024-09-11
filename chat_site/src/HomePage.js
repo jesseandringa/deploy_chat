@@ -86,14 +86,7 @@ const HomePage = () => {
           const userResponse = await GetUser(userInfo.email);
           if (userResponse){
               console.log('userResponse: ', userResponse);
-              const tempUser = {
-                "email": userResponse[0],
-                "ip": userResponse[1],
-                "name": userResponse[2],
-                "questions_asked": userResponse[3],
-                "is_paying": userResponse[4],
-              }
-              setDbUser(tempUser);
+              setDbUser(userResponse);
               setDbUserGot(true);
               console.log('dbUser: ', dbUser);
           }

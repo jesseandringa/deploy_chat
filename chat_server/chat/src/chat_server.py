@@ -102,10 +102,17 @@ def get_user():
         os.getenv("PGDATABASE"),
         "",
     )
-    user = db.get_user_by_email(email)
+    user_resp = db.get_user_by_email(email)
+    user = {
+        "email": user_resp[0],
+        "ip": user_resp[1],
+        "name": user_resp[2],
+        "questions_asked": user_resp[3],
+        "is_paying": user_resp[4],
+    }
 
     if user:
-        json_response = json.dumps({"User": user})
+        json_response = json.dumps(user)
     else:
         json_response = json.dumps({"User": None})
 

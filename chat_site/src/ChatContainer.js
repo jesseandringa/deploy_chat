@@ -30,6 +30,16 @@ const ChatContainer = ({userInfo}) => {
     //     console.log("isLoggedIn: ", isLoggedIn);
     //     setIsHomePageUpdated(isLoggedIn);
     //   }, [isLoggedIn]);
+    useEffect(() => {
+        //update isPayingUser when userInfo changes
+        console.log('userInfo: ', userInfo);
+        if (userInfo.is_paying){
+            setIsPayingUser(true);
+        }
+        else{
+            setIsPayingUser(false);
+        }
+    }, [userInfo]);
     
 
     const handleOptionChange = (selectedValue) => {
