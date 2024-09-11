@@ -285,7 +285,12 @@ class PGDB:
         cursor.close()
         if user_resp[2] and user_resp[3]:
             name = user_resp[2] + " " + user_resp[3]
-        name = user_resp[2] + " " + user_resp[3]
+        elif user_resp[2]:
+            name = user_resp[2]
+        elif user_resp[3]:
+            name = user_resp[3]
+        else:
+            name = ""
         user = {
             "email": user_resp[0],
             "ip": user_resp[1],
