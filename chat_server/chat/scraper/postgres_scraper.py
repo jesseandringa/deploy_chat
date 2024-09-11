@@ -326,7 +326,7 @@ def create_database_and_data():
             print("failed to chunk pdf" + str(e))
         for i, chunk in enumerate(chunks):
             # if i < 1:
-            # print("chunk:" + str(chunk))
+            print("chunk:" + str(chunk))
             text = chunk[3]
             print("text: " + str(text))
             # print("text: " + str(text))
@@ -372,7 +372,6 @@ def write_index_to_json(index, file_path="index.json"):
 
 def chunk_text_and_insert(pdf_files, i, db, table_name):
     try:
-        # test
         chunks = file_reader.chunk_file_into_paragraphs(pdf_files[i], chunk_size=10000)
         valid = file_reader.check_validity_of_file(file_path=None, chunks=chunks)
         if valid == 0:
@@ -380,46 +379,26 @@ def chunk_text_and_insert(pdf_files, i, db, table_name):
     except Exception as e:
         print("failed to chunk pdf" + str(e))
 
-    j = 0
     for chunk_index, chunk in enumerate(chunks):
-        if chunk_index < j:
-            continue
-        text = chunk[3]
-        num_chunks = 1
-        while len(text) < 500:
-            try:
-                text = (
-                    str(chunks[j - num_chunks][3])
-                    + " "
-                    + text
-                    + " "
-                    + str(chunks[j + num_chunks][3])
-                )
-                num_chunks += 1
-            # catch index out of bounds
-            except Exception:
-                break
-        j += int((num_chunks + 1) / 2)
-        if len(text) < 50:
-            continue
-        try:
-            if chunk_index % 10 == 0:
-                print(
-                    "inserting chunk "
-                    + str(j)
-                    + "of "
-                    + str(len(chunks))
-                    + " of pdf : "
-                    + str(i)
-                )
-            if (i + 1) % 10 == 0:
-                print("\n", text)
-            db.insert_data_into_pdf_text_table(
-                table_name, str(chunk[0]), int(chunk[1]), str(text)
+        text = chunk[1]
+        if chunk_index < len(chunks) - 2:
+            text = text + " " + chunks[chunk_index + 1][1]
+        if chunk_index > 0:
+            text = chunks[chunk_index - 1][1] + " " + text
+
+        if chunk_index % 10 == 0:
+            print(
+                "inserting chunk "
+                + str(chunk_index)
+                + "of "
+                + str(len(chunks))
+                + " of pdf : "
+                + str(i)
             )
+        try:
+            db.insert_data_into_pdf_text_table(table_name, str(chunk[0]), 0, str(text))
         except Exception as e:
             print("failed to insert chunk" + str(e))
-
 
 def create_table_and_insert_all_data(db, table_name, folder_path):
     db.create_pdf_text_table(table_name)
@@ -428,7 +407,7 @@ def create_table_and_insert_all_data(db, table_name, folder_path):
     index_path = "chat_server/chat/scraper/database_index.json"
     i = read_index_from_json(index_path)
     if i == 0:
-        db.delete_all_data_from_table(table_name)
+        db.remove_all_data_from_table(table_name)
     while i < len(pdf_files):
         threads = []
         results = []
@@ -476,8 +455,8 @@ if __name__ == "__main__":
     # ex.      murray_ut_pdf_data
     # folder path to the pdfs you want to upsert (control click folder copy and paste 'relatitve path')
     # ex.      chat_server/chat/file_resources/murray-muni-resources
-    table_name = "cumberland_nc_pdf_data"
-    folder_path = "chat_server/chat/scraper/file_resources/cumberland-nc-resources"
+    table_name = "cullman_al_pdf_data"
+    folder_path = "chat_server/chat/file_resources/cullman-al-resources"
     ##################################################################################################
     create_table_and_insert_all_data(db, table_name, folder_path)
     # user
