@@ -16,6 +16,15 @@ chat_server/chat/myenv/
 # testing
 /coverage
 
+#dumb
+*crdownload
+*.pyc
+*jpg
+*.xlsx
+*pdf
+*pptx
+
+
 # production
 /build
 
