@@ -90,10 +90,7 @@ def upsert_user():
 @app.route("/get_user", methods=["GET"])
 def get_user():
     logging.info("in get_user")
-    # data = request.get_json()
     email = request.args.get("email", None)
-
-    # Extract data into variables
 
     db = PGDB(
         os.getenv("PGHOST"),
@@ -102,14 +99,7 @@ def get_user():
         os.getenv("PGDATABASE"),
         "",
     )
-    user_resp = db.get_user_by_email(email)
-    user = {
-        "email": user_resp[0],
-        "ip": user_resp[1],
-        "name": user_resp[2],
-        "questions_asked": user_resp[3],
-        "is_paying": user_resp[4],
-    }
+    user = db.get_user_by_email(email)
 
     if user:
         json_response = json.dumps(user)
@@ -122,7 +112,6 @@ def get_user():
 @app.route("/subscribe", methods=["GET"])
 def subscribe():
     logging.info("in subscribe")
-    # data = request.get_json()
     email = request.args.get("email", None)
     subscription_id = request.args.get("subscription_id", None)
     payment_source = request.args.get("payment_source", None)
@@ -180,9 +169,7 @@ def get_user_data():
 
 @app.route("/get-response", methods=["GET"])
 def get_data():
-    # logging.debug("This is a debug message hit endpoing")
     logging.info("Hit 'get-response' endpoint")
-    # log_text("get_data hit")
     host = os.getenv("PGHOST")
     user = os.getenv("PGUSER")
     password = os.getenv("PGPASSWORD")
@@ -203,7 +190,7 @@ def get_data():
     db = PGDB(host, user, password, dbname, county)
 
     question_number = db.update_user_on_new_question(email, ip)
-    user = db.get_user_by_info(email, ip)
+    user = db.get_user_by_email(email)
     logging.info("user: " + str(user))
     logging.info("question_number: " + str(question_number))
 
@@ -243,7 +230,6 @@ def get_data():
         except Exception as e:
             logging.info("results[i] failed", e)
     response = llm.create_response_message(request.args.get("message"), context)
-    # logging.info("response: " + str(response))
 
     # TODO: figure out how to add many sources
 
@@ -255,28 +241,9 @@ def get_data():
             "sources": source,
             "pages": db_resp[1],
             "questions_asked": str(question_number),
-            "is_paying": user[0][5],
+            "is_paying": user.get("is_paying", False),
         }
     )
-    # app.config["SERVER_TIMEOUT"] = 120
-    # current_app.config["LLAMA"].log_text(
-    #     "get_resposnse: " + str(request.args.get("message"))
-    # )
-
-    # county = request.args.get("county", "No county received")
-    # # print("county:", county)
-    # message = request.args.get("message", "No message received")
-    # llama = current_app.config["LLAMA"]
-    # try:
-    #     response_message = get_response_message(message, county, llama=llama)
-    # except Exception as e:
-    #     logging.info(f"Failed to get response, {e}")
-    #     response_message = {"sender": "bot", "response": "Sorry, I couldn't find that."}
-    # # Process the data (this example just echoes back the received message)
-    # # print("resepos", response_message)
-    # logging.info(f"Response: {response_message}")
-    # # Return the processed data as JSON
-    # return jsonify(response_message)
 
 
 if __name__ == "__main__":

@@ -25,21 +25,24 @@ const ChatContainer = ({userInfo}) => {
     const [questionsAsked, setQuestionsAsked] = useState(0);
     const { isAuthenticated, isLoading, user } = useAuth0();
     const [isPayingUser, setIsPayingUser] = useState(false);
-    // useEffect(() => {
-    //     // Update flag when login state changes
-    //     console.log("isLoggedIn: ", isLoggedIn);
-    //     setIsHomePageUpdated(isLoggedIn);
-    //   }, [isLoggedIn]);
+
     useEffect(() => {
         //update isPayingUser when userInfo changes
-        console.log('userInfo: ', userInfo);
+        console.log('userInfo:: ', userInfo);
         if (userInfo.is_paying){
             setIsPayingUser(true);
+            console.log('isPayingUser: ', isPayingUser);
         }
         else{
             setIsPayingUser(false);
+            console.log('isPayingUser: ', isPayingUser);
         }
-    }, [userInfo]);
+        if (userInfo.questions_asked){
+            console.log('userInfo.questions_asked: ', userInfo.questions_asked);
+            setQuestionsAsked(parseInt(userInfo.questions_asked));
+            console.log('questionsAsked: ', questionsAsked);
+        }
+    }, [userInfo, isPayingUser, questionsAsked]);
     
 
     const handleOptionChange = (selectedValue) => {
@@ -85,6 +88,7 @@ const ChatContainer = ({userInfo}) => {
             setBotResponded(true);
             // console.log('questions asked: ', botResponse.questions_asked)
             setQuestionsAsked(parseInt(botResponse.questions_asked))
+            userInfo.questions_asked = botResponse.questions_asked;
             setIsPayingUser(botResponse.is_paying_user);
           } catch (error) {
             console.error('There was an error getting the bot response:', error);

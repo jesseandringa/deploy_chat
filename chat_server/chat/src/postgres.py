@@ -277,13 +277,21 @@ class PGDB:
         """
         try:
             cursor.execute(user_query)
-            user = cursor.fetchone()
-            logging.info("User found: " + str(user))
-            return user
+            user_resp = cursor.fetchone()
+            logging.info("User found: " + str(user_resp))
         except Exception as e:
             user = None
             logging.error(f"Error searching data: {e}")
         cursor.close()
+
+        user = {
+            "email": user_resp[0],
+            "ip": user_resp[1],
+            "name": user_resp[2],
+            "questions_asked": user_resp[3],
+            "is_paying": user_resp[4],
+        }
+
         return user
 
     def upsert_user(self, email, ip, given_name, family_name):
