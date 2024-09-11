@@ -1,5 +1,8 @@
+import json
 import logging
 import os
+import sys
+import threading
 from datetime import datetime
 
 import database_vars
@@ -17,6 +20,11 @@ counties_table_names = {
     "sandy-ut": "sandy_ut_pdf_data",
     "millcreek-ut": "millcreek_ut_pdf_data",
     "murray-ut": "murray_ut_pdf_data",
+    "king-wa": "king_wa_pdf_data",
+    "elko-nv": "elko_nv_pdf_data",
+    "cullman-al": "cullman_al_pdf_data",
+    "cumberland-nc": "cumberland_nc_pdf_data",
+    "summit-ut": "summit_ut_pdf_data",
 }
 
 
@@ -122,12 +130,13 @@ class PGDB:
         text = text.replace("\\", " ")
         return text
 
-    def full_text_search_on_key_words(self, key_words, county):
+    def full_text_search_on_key_words(self, key_words, county, table_name=None):
         """
         Search for key words in the table
         key_words: [str]
         """
-        table_name = counties_table_names[county]
+        if not table_name:
+            table_name = counties_table_names[county]
         try:
             select_query = self.create_full_text_search_query(key_words, table_name)
         except Exception as e:
@@ -194,7 +203,7 @@ class PGDB:
             """
             cursor.execute(update_query)
             questions_asked = cursor.fetchone()
-            logging.info("User updated successfully.", questions_asked)
+            logging.info("User updated successfully.", str(questions_asked))
 
             self.conn.commit()
             return questions_asked[0]
@@ -437,7 +446,6 @@ def create_table_and_insert_all_data(db, table_name, folder_path):
 
         
     print("finished inserting pdfs")
-    # return db
 
 
 if __name__ == "__main__":
@@ -448,6 +456,17 @@ if __name__ == "__main__":
         dbvars["PGPASSWORD"],
         dbvars["PGDATABASE"],
     )
+    # # start timer:
+    # import time
+
+    # start_time = time.time()
+    # text = db.full_text_search_on_key_words(
+    #     ["governing", "annual", "delegates"], "g", "test_10000"
+    # )
+    # end_time = time.time()
+    # print("text: " + str(text))
+    # execution_time = end_time - start_time
+    # print(f"Execution time: {execution_time} seconds")
 
     ###########CASEY change table_name and folder_path to match your data#############################
     # table names follow the format: county_state_pdf_data

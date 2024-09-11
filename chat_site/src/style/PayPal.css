@@ -1,0 +1,48 @@
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0; /* corrected from 'left: 200' to cover the entire screen */
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Make sure it's on top of everything */
+  }
+
+
+.modal-content{
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px; /* Set a fixed width for the modal */
+  max-width: 90%; /* Allow it to shrink on small screens */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Adds a shadow for a more defined look */
+  position: relative; /* For positioning close button relative to the modal */
+  text-align: center; /* Center-align content */
+}
+.modal-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.modal-description {
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  color: #ff0000; /* Optional hover effect */
+}

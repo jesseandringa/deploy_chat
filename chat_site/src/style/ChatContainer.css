@@ -24,6 +24,7 @@
     /* height: 100vh;  */
     /* background-color: #e1f1ff; */
     backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.1);
     display: flex; /* Use flexbox for centering */
     justify-content: center; /* Center the content horizontally */
     border: 1px solid #6f6e6e;

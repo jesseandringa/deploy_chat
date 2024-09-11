@@ -14,6 +14,11 @@ counties_table_names = {
     "sandy-ut": "sandy_ut_pdf_data",
     "millcreek-ut": "millcreek_ut_pdf_data",
     "murray-ut": "murray_ut_pdf_data",
+    "king-wa": "king_wa_pdf_data",
+    "elko-nv": "elko_nv_pdf_data",
+    "cullman-al": "cullman_al_pdf_data",
+    "cumberland-nc": "cumberland_nc_pdf_data",
+    "summit-ut": "summit_ut_pdf_data",
 }
 
 
@@ -161,7 +166,8 @@ class PGDB:
             + table_name
             + """ 
             WHERE to_tsvector('english', chunk_text) @@ plainto_tsquery(%s) 
-            LIMIT 2;
+            ORDER BY match_count DESC
+            LIMIT 1;
         """
         )
 
@@ -175,21 +181,47 @@ class PGDB:
 
         return result
 
-    def update_user_on_new_question(self, ip_address, user):
+    def get_user_by_info(self, email, ip):
+        cursor = self.conn.cursor()
+        if email:
+            search_query = f"email = '{email}'"
+        else:
+            search_query = f"ip_addr = '{ip}'"
+
+        user_query = f"""
+        SELECT * FROM basic_user_info WHERE {search_query};  
+        """
+        try:
+            cursor.execute(user_query)
+            user = cursor.fetchone()
+            logging.info("User found: " + str(user))
+            return user
+        except Exception as e:
+            user = None
+            logging.error(f"Error searching data: {e}")
+        cursor.close()
+        return user
+
+    def update_user_on_new_question(self, email, ip):
         cursor = self.conn.cursor()
         timestamp = datetime.now()
+        if email:
+            where_clause = f"email = '{email}'"
+        else:
+            where_clause = f"ip_addr = '{ip}'"
+
         try:
             # Replace with your desired DELETE statement
             update_query = f"""
             UPDATE basic_user_info
             SET questions_asked = questions_asked + 1,
             last_question_asked = '{timestamp}'
-            WHERE ip_addr = '{ip_address}'
+            WHERE {where_clause}
             RETURNING questions_asked;
             """
             cursor.execute(update_query)
             questions_asked = cursor.fetchone()
-            logging.info("User updated successfully.", questions_asked)
+            logging.info("User updated successfully.", str(questions_asked))
 
             self.conn.commit()
             return questions_asked[0]
@@ -237,18 +269,94 @@ class PGDB:
 
         return result
 
-    def login_user(self, username, password):
-        current_timestamp = datetime.now()
-        query = f"""
-        SELECT * FROM basic_user_info WHERE email = '{username}' AND password_hash = '{password}';
+    def get_user_by_email(self, email):
+        cursor = self.conn.cursor()
+        user_query = f"""
+        SELECT email,ip_addr,first_name, last_name ,questions_asked,is_paying
+        FROM basic_user_info WHERE email = '{email}';
         """
+        try:
+            cursor.execute(user_query)
+            user_resp = cursor.fetchone()
+            logging.info("User found: " + str(user_resp))
+        except Exception as e:
+            user = None
+            logging.error(f"Error searching data: {e}")
+        cursor.close()
+        if user_resp[2] and user_resp[3]:
+            name = user_resp[2] + " " + user_resp[3]
+        elif user_resp[2]:
+            name = user_resp[2]
+        elif user_resp[3]:
+            name = user_resp[3]
+        else:
+            name = ""
+        user = {
+            "email": user_resp[0],
+            "ip": user_resp[1],
+            "name": name,
+            "questions_asked": user_resp[4],
+            "is_paying": user_resp[5],
+        }
+
+        return user
+
+    def upsert_user(self, email, ip, given_name, family_name):
+        current_timestamp = datetime.now()
+        logging.info(
+            f"upserting user with params: {email} {ip} {given_name} {family_name}"
+        )
+        if not email:
+            query = f""" 
+            SELECT * FROM basic_user_info WHERE ip_addr = '{ip}' LIMIT 1; 
+            """
+        else:
+            query = f"""
+            SELECT * FROM basic_user_info WHERE email = '{email}' LIMIT 1;
+            """
+        logging.info(f"query: {query}")
         try:
             result = self.execute(query)
         except Exception as e:
             logging.error(f"Error searching data: {e}")
             result = None
         logging.info(f"User found: {result}")
-        return result
+        if not result:
+            questions_asked = 0
+            if not email:
+                insert_query = f"""
+                INSERT INTO basic_user_info (ip_addr, first_name, last_name, questions_asked, last_visited, created_at)
+                VALUES ('{ip}', '{given_name}', '{family_name}', '{questions_asked}','{current_timestamp}','{current_timestamp}');
+                """
+            else:
+                insert_query = f"""
+                INSERT INTO basic_user_info (email, ip_addr, first_name, last_name, questions_asked, last_visited, created_at)
+                VALUES ('{email}', '{ip}', '{given_name}', '{family_name}', '{questions_asked}','{current_timestamp}','{current_timestamp}');
+                """
+            try:
+                self.conn.cursor().execute(insert_query)
+                self.conn.commit()
+            except Exception as e:
+                logging.error(f"Error inserting data: {e}")
+                return None
+        else:
+            # Update the user's last visited time and all other fields
+            if email:
+                update_query = f"""
+                UPDATE basic_user_info
+                SET last_visited = '{current_timestamp}',
+                first_name = '{given_name}',
+                last_name = '{family_name}'
+                WHERE email = '{email}';
+                """
+                logging.info(f"update_query: {update_query}")
+                try:
+                    self.conn.cursor().execute(update_query)
+                    self.conn.commit()
+                except Exception as e:
+                    logging.error(f"Error updating data: {e}")
+                    return None
+        return True
 
     def sign_up_user(self, firstname, lastname, email, password, ip):
         questions_asked = 0
@@ -262,6 +370,37 @@ class PGDB:
             self.conn.commit()
         except Exception as e:
             logging.error(f"Error inserting data: {e}")
+            return None
+        return True
+
+    def update_user_to_paying(self, email):
+        insert_query = f"""
+        UPDATE basic_user_info
+        SET is_paying = TRUE
+        WHERE email = '{email}';
+        """
+        try:
+            self.conn.cursor().execute(insert_query)
+            self.conn.commit()
+        except Exception as e:
+            logging.error(f"Error updating user to paying: {e}")
+            return None
+        return True
+
+    def subscribe(
+        self, email, subscription_id, payment_source, facilitator_access_token, order_id
+    ):
+        insert_query = f"""
+        INSERT INTO subscriptions (email, subscription_id, payment_source, facilitator_access_token, order_id)
+        VALUES ('{email}', '{subscription_id}', '{payment_source}', '{facilitator_access_token}', '{order_id}');
+        """
+        try:
+            self.conn.cursor().execute(insert_query)
+            self.conn.commit()
+        except Exception as e:
+            logging.error(
+                f"Error inserting subscription with params: {e} {email} {subscription_id} {payment_source} {facilitator_access_token} {order_id}"
+            )
             return None
         return True
 

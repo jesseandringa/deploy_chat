@@ -5,75 +5,129 @@ import TopBar from './TopBar';
 import BottomButtons from './BottomButtons';
 import ChatContainer from './ChatContainer';
 import PlansModal from './PlansModal';
-import {sendUserData} from './BotClient';
 import axios from 'axios';
+import { useAuth0 } from '@auth0/auth0-react';
+import {UpsertUser, UpdateUserSubscription, GetUser} from './BotClient';
+import PayPal from './PayPal';
 
 const HomePage = () => {
   const [showModal, setShowModal] = useState(false);
   const [IP, setIP] = useState('');
   const [gotIP, setGotIP] = useState(false);
+  const { isAuthenticated, isLoading, user } = useAuth0();
+  const [userInfo, setUserInfo] = useState({});
+  const [dbUser, setDbUser] = useState({});
+  const [dbUserGot, setDbUserGot] = useState(false);
+  const [isUpserted, setIsUpserted] = useState(false);
 
+  const onSubscriptionComplete = (data) => {
+    console.log('Subscription complete!', data);
+    setTimeout(async () => {
+      try {
+          const resposne = await UpdateUserSubscription(data,userInfo);
+          if (resposne){
+              setShowModal(false);
+              var temp = userInfo;
+              temp['is_paying'] = true;
+              setUserInfo(temp);
+          }
+        }
+      catch(error){
+          console.log('error upserting user', error);
+      }
+    }, 500);
+
+  }
   const handlePlansClicked = () => {
+      if(!isAuthenticated && !isLoading){
+        return alert('Please Sign Up or Log In before subscribing.');
+      }
       setShowModal(true);
     };
-    
-    const getData = async () => {
+  const getIpAddressAndUpserUser = async () => {
       const res = await axios.get("https://api.ipify.org/?format=json");
-      console.log('res: ');
-      console.log(res.data);
+
       setIP(res.data['ip']);
-      setGotIP(true);
-      console.log('IP: ', IP);
-
-      setTimeout(async () => {
-        try {
-          setGotIP(true);
-          const response = await sendUserData(res.data['ip']);
-          try{
-              console.log( 'response: ', response);
-              setGotIP(false);
-          }
-          catch(error){
-              console.log('error response printing', error);
-          }
-
-        } catch (error) {
-          console.error('There was an error getting the bot response:', error);
-        }
+      if (isAuthenticated && !isLoading && user.email) {
+          console.log("user: ", user);
+          console.log("user.email: ", user.email);
+          setUserInfo({"ip": res.data['ip'], 
+                      "email": user.email,
+                      "name": user.name,
+                      "given_name": user.given_name,
+                      "family_name": user.family_name});
+          if (userInfo.email){
+            setTimeout(async () => {
+                try {
+                    setGotIP(true);
+                    console.log('userInfo: ', userInfo);
+                    const user = await UpsertUser(userInfo);
+                    if (user){
+                        setIsUpserted(true);
+                    }
+                }
+                catch(error){
+                    console.log('error upserting user', error);
+                }
             }, 500);
-    };
-
-    useEffect(() => {
-      console.log('inside useEffect')
-      if (!gotIP) {
-        getData();
+          }
+          
       }
-  }, []);
-  
+      
+  }
+    
+  const getDBUser = async () => {
+    setTimeout(async () => {
+      try {
+          const userResponse = await GetUser(userInfo.email);
+          if (userResponse){
+              console.log('userResponse: ', userResponse);
+              setDbUser(userResponse);
+              setDbUserGot(true);
+              console.log('dbUser: ', dbUser);
+          }
+      }
+      catch(error){
+          console.log('error upserting user', error);
+      }
+    }, 500);
+  }
+    
+
+  useEffect(() => {
+    if (isAuthenticated && !isLoading && !dbUserGot && !gotIP){
+        getIpAddressAndUpserUser();
+    }
+    if (isAuthenticated && !isLoading && !dbUserGot && gotIP){
+        getDBUser();
+    }
+  }, [dbUser,isAuthenticated, isLoading, userInfo, isUpserted, user]);
 
   return (
     <>
-    <div className = "container">
-      
-      {/* {!showModal && ( */}
-      <div>
-        <TopBar />
-      <ChatContainer />
-      <div className ="example-questions">
-        <h2>Example Questions</h2>
-        <ul>
-          <li>How do I get a permit to build an ADU? </li>
-          <li>Am I allowed to collect rain water?</li>
-          <li>What are the building requirements for a new garage?</li>
-        </ul>
-      </div>
-      <BottomButtons onPlansClicked={handlePlansClicked}/>
-      </div>
-      {/* )} */}
-     
+      <div className = "container">
+        
+        {/* {!showModal && ( */}
+        <div>
+          <TopBar />
+        <ChatContainer userInfo={dbUser}/>
+        <div className ="example-questions">
+          <h2>Example Questions</h2>
+          <ul>
+            <li>How do I get a permit to build an ADU? </li>
+            <li>Am I allowed to collect rain water?</li>
+            <li>What are the building requirements for a new garage?</li>
+          </ul>
+        </div>
+        <BottomButtons onPlansClicked={handlePlansClicked}/>
+        </div>
 
-    </div>
-    {showModal && <PlansModal className ="plans-modal" onClose={() => setShowModal(false)} />}
+      </div>
+      {showModal && 
+          <>
+              <PayPal className="plans-modal" onClose={() => setShowModal(false) } onSubscriptionComplete={onSubscriptionComplete}></PayPal>
+          </>
+      }
     </>
   );
 };

@@ -7,10 +7,10 @@ import openpyxl
 from docx import Document
 
 
-def chunk_file_into_paragraphs(file_path):
+def chunk_file_into_paragraphs(file_path, chunk_size=500):
     """Chunks a file into paragraphs."""
     if file_path.endswith(".pdf"):
-        return chunk_pdf_into_paragraphs(file_path)
+        return chunk_pdf_into_paragraphs(file_path, chunk_size)
     elif (
         file_path.endswith(".xlsx")
         or file_path.endswith(".xls")
@@ -19,9 +19,76 @@ def chunk_file_into_paragraphs(file_path):
     ):
         return chunk_xlsx_into_paragraphs(file_path)
     elif file_path.endswith(".docx") or file_path.endswith(".doc"):
-        return chunk_docx_into_paragraphs(file_path)
+        return chunk_docx_into_paragraphs(file_path, chunk_size)
     else:
         return []
+
+
+def get_text_from_file(file_path):
+    """Get text from a file."""
+    if file_path.endswith(".pdf"):
+        return get_text_from_pdf(file_path)
+    elif (
+        file_path.endswith(".xlsx")
+        or file_path.endswith(".xls")
+        or file_path.endswith(".xlsm")
+        or file_path.endswith(".csv")
+    ):
+        return get_text_from_xlsx(file_path)
+    elif file_path.endswith(".docx") or file_path.endswith(".doc"):
+        return get_text_from_docx(file_path)
+    else:
+        return [file_path, ""]
+
+
+def get_text_from_pdf(pdf_path):
+    """Get text from a PDF."""
+    try:
+        # Open the PDF file
+        pdf_document = fitz.open(pdf_path)
+
+        # Extract text from each page
+        text = ""
+        for page_num in range(len(pdf_document)):
+            page = pdf_document.load_page(page_num)
+            text += page.get_text("text")
+
+        return [pdf_path, text]
+    except Exception:
+        return [pdf_path, ""]
+
+
+def get_text_from_xlsx(xlsx_path):
+    """Get text from an XLSX file."""
+    try:
+        text = ""
+
+        # Open the XLSX file
+        xlsx_document = openpyxl.load_workbook(xlsx_path)
+        sheet = xlsx_document.active
+
+        for row in sheet.iter_rows(
+            min_row=1, max_row=sheet.max_row, max_col=sheet.max_column
+        ):
+            for cell in row:
+                if cell.value:
+                    text += str(cell.value) + " "
+
+        return [xlsx_path, text]
+    except Exception:
+        return [xlsx_path, ""]
+
+
+def get_text_from_docx(docx_path):
+    """Get text from a DOCX file."""
+    try:
+        doc = Document(docx_path)
+        text = ""
+        for para in doc.paragraphs:
+            text += para.text + "\n"
+        return [docx_path, text]
+    except Exception:
+        return [docx_path, "text"]
 
 
 def chunk_xlsx_into_paragraphs(xlsx_path):
@@ -45,7 +112,7 @@ def chunk_xlsx_into_paragraphs(xlsx_path):
                 elif cell.value:
                     paragraph += str(labels[i]) + ": " + str(cell.value) + ", "
             if paragraph_number > 0:
-                chunk = [xlsx_path, 1, paragraph_number, paragraph]
+                chunk = [xlsx_path, paragraph]
                 chunks.append(chunk)
             paragraph_number += 1
         return chunks
@@ -53,7 +120,7 @@ def chunk_xlsx_into_paragraphs(xlsx_path):
         return []
 
 
-def chunk_pdf_into_paragraphs(pdf_path):
+def chunk_pdf_into_paragraphs(pdf_path, chunk_size=500):
     """Chunks a PDF into paragraphs."""
     chunks = []
 
@@ -64,26 +131,18 @@ def chunk_pdf_into_paragraphs(pdf_path):
         return []
 
     paragraph_number = 0
-
+    all_text = ""
     for page_num in range(len(pdf_document)):
         page = pdf_document.load_page(page_num)
         text = page.get_text("text")
-        # text_length = len(text)
-        paragraphs = re.split(r"(?<=[.!?])\s*\n", text)
-        # if len(paragraphs) < text_length / 500:
-        #     extra_splitted = []
-        #     for paragraph in paragraphs:
-        #         # split paragraph by single newline but keep paragraphs one list
-        #         extra_splitted.extend(paragraph.split("\n"))
-        #     paragraphs = extra_splitted
-
-        for paragraph in paragraphs:
-            if paragraph.strip():  # Only process non-empty paragraphs
-                paragraph_number += 1
-                chunk = [pdf_path, page_num, paragraph_number, paragraph.strip()]
-                chunks.append(chunk)
-                # print("paragraph:", paragraph.strip())
-        # print("paragraph_number:", paragraph_number)
+        all_text += text
+    text_chunks = [
+        all_text[i : i + chunk_size] for i in range(0, len(all_text), chunk_size)
+    ]
+    for p in text_chunks:
+        cleaned_lines = p.replace("\xa0", " ")
+        chunk = [pdf_path, cleaned_lines]
+        chunks.append(chunk)
     return chunks
 
 
@@ -137,7 +196,7 @@ def get_all_docs(folder_path):
     return doc_files
 
 
-def chunk_docx_into_paragraphs(docx_path):
+def chunk_docx_into_paragraphs(docx_path, chunk_size=500):
     """Chunks a DOCX file into paragraphs."""
     chunks = []
 
@@ -146,17 +205,15 @@ def chunk_docx_into_paragraphs(docx_path):
         doc = Document(docx_path)
     except Exception:
         return []
-
-    paragraph_number = 0
-
+    text = ""
     for para in doc.paragraphs:
-        paragraphs = para.text.split("\n")
-        for p in paragraphs:
-            paragraph_number += 1
-            if p.strip():
-                cleaned_lines = p.replace("\xa0", " ")
-                chunk = [docx_path, 1, paragraph_number, cleaned_lines]
-                chunks.append(chunk)
+        text += para.text + "\n"
+    text = remove_initial_all_caps(text)
+    text_chunks = [text[i : i + chunk_size] for i in range(0, len(text), chunk_size)]
+    for p in text_chunks:
+        cleaned_lines = p.replace("\xa0", " ")
+        chunk = [docx_path, cleaned_lines]
+        chunks.append(chunk)
     # print("chunks", chunks)
     return chunks
 
@@ -171,8 +228,9 @@ def check_validity_of_file(file_path, chunks=None):
             chunks = chunk_docx_into_paragraphs(file_path)
 
     total_text = ""
+
     for chunk in chunks:
-        total_text += chunk[3]
+        total_text += chunk[1]
 
     if is_mostly_binary(total_text):
         return 0
@@ -200,17 +258,54 @@ def is_mostly_binary(text, threshold=0.5):
     return binary_ratio > threshold
 
 
+def remove_initial_all_caps(text):
+    """Removes the initial all-caps section from the given text.
+
+    Args:
+      text: The input text.
+
+    Returns:
+      The text without the initial all-caps section.
+    """
+
+    # Your string to search in
+
+    # Regular expression pattern
+    pattern = r"[A-Z0-9 :,-]+"
+
+    # Finding all matches
+    matches = re.findall(pattern, text)
+
+    if matches:
+        # Getting the longest match
+        longest_match = max(matches, key=len)
+
+        # Finding the position of the longest match
+        match_start = text.find(longest_match)
+
+        # Deleting everything before and including the longest match
+        result = text[match_start + len(longest_match) :]
+    else:
+        result = text
+    return result
+
+
 # Example usage
 
 if __name__ == "__main__":
-    pdf_path = "chat_server/chat/file_resources/murray-muni-resources/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$murray_ut$$$0-0-0-14#codecontent.pdf"
-    pdf_path = "asdfasdf/test.pdf"
-    pdf_path = "pathpath/https:$$$$$$www.murray.utah.gov$$$ArchiveCenter$$$ViewFile$$$Item$$$87.pdf"
-    pdf_path = "pathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$murray_ut$$$0-0-0-4630.pdf"
-    pdf_path = "pathpathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$murray_ut$$$0-0-0-4630.pdf"
-    # Extract text from PDF
-    # extracted_text = chunk_docx_into_paragraphs(pdf_path)
-    validity = check_validity_of_file(pdf_path)
+    path = "chat_server/chat/file_resources/summit-ut-resources/https:$$$$$$codelibrary.amlegal.com$$$codes$$$summitcountyut$$$latest$$$summitcounty_ut$$$0-0-0-293.docx"
+
+    chuns = chunk_docx_into_paragraphs(path, 3000)
+    print(chuns)
+    print(len(chuns))
+    # pdf_path = "chat_server/chat/file_resources/murray-muni-resources/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$murray_ut$$$0-0-0-14#codecontent.pdf"
+    # pdf_path = "asdfasdf/test.pdf"
+    # pdf_path = "pathpath/https:$$$$$$www.murray.utah.gov$$$ArchiveCenter$$$ViewFile$$$Item$$$87.pdf"
+    # pdf_path = "pathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$murray_ut$$$0-0-0-4630.pdf"
+    # pdf_path = "pathpathpath/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$murray_ut$$$0-0-0-4630.pdf"
+    # # Extract text from PDF
+    # # extracted_text = chunk_docx_into_paragraphs(pdf_path)
+    # validity = check_validity_of_file(pdf_path)
     # print(validity)
 # main()
 # chunk_docx_into_paragraphs("test.docx")

@@ -4,65 +4,61 @@ import './style/ChatContainer.css';
 import { useState, useEffect } from 'react';
 import background_image from './assets/chat-image-background.png'; // Import the image file
 import {getBotResponse} from './BotClient';
-// import iconUrl from './assets/paper-plane.png';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faPaperPlane, faUser} from '@fortawesome/free-solid-svg-icons';
 import { FcSportsMode } from "react-icons/fc";
 import { FcBusinesswoman } from "react-icons/fc";
 import DropdownMenu from './DropdownMenu';
 import axios from 'axios';
-import { useContext } from 'react';
-import LoginContext from './LoginContext';
+import { useAuth0 } from '@auth0/auth0-react';
 
-const ChatContainer = () => {
+
+const ChatContainer = ({userInfo}) => {
     // const [messages, setMessages] = useState([]);
     const [userMessage, setUserMessage] = useState('');
     const [botMessages, setBotMessages] = useState('');
     const [botSources, setBotSources] = useState([]);
     const [input, setInput] = useState('');
-    const [chatClicked, setChatClicked] = useState(false);
+    // const [chatClicked, setChatClicked] = useState(false);
     const [areMessages, setAreMessages] = useState(false);
     const [botResponded, setBotResponded] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
     const [totalMessageCount, setTotalMessageCount] = useState(0);
-    const [IP, setIP] = useState('');
-    const [gotIP, setGotIP] = useState(false);
     const [questionsAsked, setQuestionsAsked] = useState(0);
-    const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
-    const [isHomePageUpdated, setIsHomePageUpdated] = useState(false);
+    const { isAuthenticated, isLoading, user } = useAuth0();
+    const [isPayingUser, setIsPayingUser] = useState(false);
 
     useEffect(() => {
-        // Update flag when login state changes
-        console.log("isLoggedIn: ", isLoggedIn);
-        setIsHomePageUpdated(isLoggedIn);
-      }, [isLoggedIn]);
-    const getIpAddress = async () => {
-       
-        const res = await axios.get("https://api.ipify.org/?format=json");
-        console.log('res: ');
-        console.log(res.data);
-        setIP(res.data['ip']);
-        setGotIP(true);
-    }
+        //update isPayingUser when userInfo changes
+        console.log('chatcontainer userInfo:: ', userInfo);
+        if (userInfo.is_paying){
+            setIsPayingUser(true);
+            console.log('isPayingUser: ', isPayingUser);
+        }
+        else{
+            setIsPayingUser(false);
+            console.log('isPayingUser: ', isPayingUser);
+        }
+        if (userInfo.questions_asked){
+            console.log('userInfo.questions_asked: ', userInfo.questions_asked);
+            setQuestionsAsked(parseInt(userInfo.questions_asked));
+            console.log('questionsAsked: ', questionsAsked);
+        }
+    }, [userInfo, isPayingUser, questionsAsked]);
+    
 
     const handleOptionChange = (selectedValue) => {
         setSelectedOption(selectedValue);
     };
 
-    useEffect(() => {
-        console.log('inside useEffect')
-        if (!gotIP) {
-          getIpAddress();
-        }
-    }, []);
 
     const sendMessage = (e) => {
-        if (questionsAsked > 3){
-            return alert('You have reached the maximum number of questions. Please sign up to ask more questions.');
+        if(!isAuthenticated && !isLoading){
+            return alert('Please Sign Up or Log In to ask questions. You\'ll be able to ask 4 questions for free.');
         }
+        // if (questionsAsked > 3){
+        //     return alert('You have reached the maximum number of questions. Please sign up to ask more questions.');
+        // }
         e.preventDefault();
         if (!input.trim()) return;
-        console.log("user message: ", input);
         setUserMessage(input);
         setAreMessages(true);
         setBotMessages('');
@@ -72,8 +68,13 @@ const ChatContainer = () => {
         
         // Simulate bot response
         setTimeout(async () => {
+         console.log('db user: ', userInfo);
+         if (questionsAsked > 3 && !isPayingUser){
+            setAreMessages(false);
+            return alert('You have reached the maximum number of questions. Please sign up and subscribe to ask more questions.');
+        }
           try {
-            const botResponse = await getBotResponse(input, selectedOption, IP);
+            const botResponse = await getBotResponse(input, selectedOption, userInfo);
             try{
                 let sources = botResponse.sources.split(',');
                 for (let i = 0; i < sources.length; i++) {
@@ -81,17 +82,22 @@ const ChatContainer = () => {
                 }
             }
             catch(error){
-                console.log('error in splitting sources')
+                setAreMessages(false);
+                return alert('Looks like something went wrong. Please try again or contact support.');
             }
 
             setBotMessages(botResponse.response);
-            console.log('bot response sources: ', botResponse.sources);
-            console.log('messages',botMessages)
+            // console.log('bot response sources: ', botResponse.sources);
+            // console.log('messages',botMessages)
             setBotResponded(true);
-            console.log('questions asked: ', botResponse.questions_asked)
+            // console.log('questions asked: ', botResponse.questions_asked)
             setQuestionsAsked(parseInt(botResponse.questions_asked))
+            userInfo.questions_asked = botResponse.questions_asked;
+            setIsPayingUser(botResponse.is_paying_user);
           } catch (error) {
-            console.error('There was an error getting the bot response:', error);
+            setAreMessages(false);
+            return alert('Looks like something went wrong. Please try again or contact support.');
+
           }
         }, 500);
     
@@ -103,15 +109,9 @@ const ChatContainer = () => {
     <div className="chat-selector">
     {/* Render the DropdownMenu component and pass props */}
     <DropdownMenu selectedOption={selectedOption} onOptionChange={handleOptionChange} />
-    {isLoggedIn && isHomePageUpdated &&(
-        
-    <p> HELLLO LOGGED in user</p>)
-    }
     </div>
     <div className="image-container">
-      {/* <img src={background_image} alt="Placeholder" /> */}
 
-       
        <div className="overlay-no-messages">
             <form className="chat-input" onSubmit={sendMessage}>
                 <input

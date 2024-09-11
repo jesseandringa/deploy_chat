@@ -1,15 +1,6 @@
 # version: '3'
 
 services:
-  # postgres:
-  #   image: 'postgres-latest'
-  #   build:
-  #     context: ./postgres
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     POSTGRES_PASSWORD: 'password'
-  #   ports:
-  #     - "5432:5432" 
   api:
     build:
       context: ./chat_server/chat  # Path to your Python server Dockerfile
@@ -26,23 +17,22 @@ services:
       - PGDATABASE=munidb
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/postgres
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-    # volumes:
-      # - v /data:ro 
-        # - ./chat_server/chat/storage_resources:/app/storage_resources
   
   nginx:
     depends_on:
       - api
       - react-webapp
     restart: always
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./nginx
+    image: nginx:latest
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/nginx.conf
     ports:
-      - "3050:80"
-
-
+      - "443:443"
+      - "80:80"
+    
+  
   react-webapp:
+    container_name: react-webapp
     build:
       context: ./chat_site  # Path to your React web app Dockerfile
     ports:

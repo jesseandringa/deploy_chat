@@ -260,7 +260,7 @@ class WebScraper:
         if len(self.url_ulist) - index > 20:
             range_end = 20
         else:
-            range_end = 1
+            range_end = len(self.url_ulist) - index
 
         chrome_options = ChromeOptions()
         chrome_options.add_argument("--headless")
@@ -642,9 +642,9 @@ def cut_out_duplicate_urls(url_list):
 
 def main():
     ############ CASEY change these ##################
-    url = "https://kingcounty.gov/"
-    saved_urls_path = "chat_server/chat/king_wa.json"
-    resource_path = "chat_server/chat/file_resources/king-wa-resources"
+    url = "https://codelibrary.amlegal.com/codes/summitcountyut/latest"
+    saved_urls_path = "chat_server/chat/summit-ut.json"
+    resource_path = "chat_server/chat/file_resources/summit-ut-resources"
     index_path = "chat_server/chat/muni_index.json"
     isMuniCode = True
     ##################################################
