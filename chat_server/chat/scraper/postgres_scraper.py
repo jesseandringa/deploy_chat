@@ -415,6 +415,7 @@ def write_index_to_json(index, file_path="index.json"):
 
 def chunk_text_and_insert(pdf_files, i, db, table_name):
     try:
+        # test
         chunks = file_reader.chunk_file_into_paragraphs(pdf_files[i], chunk_size=10000)
         valid = file_reader.check_validity_of_file(file_path=None, chunks=chunks)
         if valid == 0:
