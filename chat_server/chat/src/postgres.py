@@ -272,7 +272,7 @@ class PGDB:
     def get_user_by_email(self, email):
         cursor = self.conn.cursor()
         user_query = f"""
-        SELECT email,ip_addr,user_name,questions_asked,is_paying
+        SELECT email,ip_addr,first_name, last_name ,questions_asked,is_paying
         FROM basic_user_info WHERE email = '{email}';
         """
         try:
@@ -283,13 +283,15 @@ class PGDB:
             user = None
             logging.error(f"Error searching data: {e}")
         cursor.close()
-
+        if user_resp[2] and user_resp[3]:
+            name = user_resp[2] + " " + user_resp[3]
+        name = user_resp[2] + " " + user_resp[3]
         user = {
             "email": user_resp[0],
             "ip": user_resp[1],
-            "name": user_resp[2],
-            "questions_asked": user_resp[3],
-            "is_paying": user_resp[4],
+            "name": name,
+            "questions_asked": user_resp[4],
+            "is_paying": user_resp[5],
         }
 
         return user

@@ -38,7 +38,7 @@ const getBotResponse = (message, selectedCounty, userInfo) => {
 export {getBotResponse};
 
 const GetUser = (email) => {
-  console.log('email: ', email);
+  console.log('email in getUser: ', email);
   const baseURL = 'https://munihelp.com/api/'; // Base URL
   const endpoint = 'get_user'; // Endpoint
   const url = new URL(endpoint, baseURL);
@@ -68,7 +68,7 @@ const UpsertUser = (userInfo) => {
 
   // Convert the user input to lowercase for easier keyword matching
 // run locally
-    console.log('userInfo: ', userInfo);
+    console.log('UpsertUser userInfo: ', userInfo);
     const baseURL = 'https://munihelp.com/api/'; // Base URL
     const endpoint = 'upsert_user'; // Endpoint
     const url = new URL(endpoint, baseURL);
@@ -79,7 +79,7 @@ const UpsertUser = (userInfo) => {
     const given_name = userInfo.given_name;
     const family_name = userInfo.family_name;
 
-    console.log('email: ', email);  
+    console.log('email in upsertUser: ', email);  
     url.searchParams.append('ip', ip);
     url.searchParams.append('email', email);
     url.searchParams.append('name', username);
@@ -114,7 +114,7 @@ const UpdateUserSubscription = (data, userInfo) => {
 
   // Convert the user input to lowercase for easier keyword matching
 // run locally
-    console.log('userInfo: ', userInfo);
+    console.log('userInfo UpdateUserSubscription: ', userInfo);
     const baseURL = 'https://munihelp.com/api/'; // Base URL
     const endpoint = 'subscribe'; // Endpoint
     const url = new URL(endpoint, baseURL);

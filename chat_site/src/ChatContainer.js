@@ -28,7 +28,7 @@ const ChatContainer = ({userInfo}) => {
 
     useEffect(() => {
         //update isPayingUser when userInfo changes
-        console.log('userInfo:: ', userInfo);
+        console.log('chatcontainer userInfo:: ', userInfo);
         if (userInfo.is_paying){
             setIsPayingUser(true);
             console.log('isPayingUser: ', isPayingUser);

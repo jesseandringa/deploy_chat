@@ -35,7 +35,7 @@ const HomePage = () => {
       catch(error){
           console.log('error upserting user', error);
       }
-  }, 500);
+    }, 500);
 
   }
   const handlePlansClicked = () => {
@@ -45,26 +45,30 @@ const HomePage = () => {
       const res = await axios.get("https://api.ipify.org/?format=json");
 
       setIP(res.data['ip']);
-      setGotIP(true);
-      if (isAuthenticated && !isLoading) {
+      if (isAuthenticated && !isLoading && user.email) {
           console.log("user: ", user);
+          console.log("user.email: ", user.email);
           setUserInfo({"ip": res.data['ip'], 
                       "email": user.email,
                       "name": user.name,
                       "given_name": user.given_name,
                       "family_name": user.family_name});
-          setTimeout(async () => {
-              try {
-                  setGotIP(true);
-                  const user = await UpsertUser(userInfo);
-                  if (user){
-                      setIsUpserted(true);
-                  }
-              }
-              catch(error){
-                  console.log('error upserting user', error);
-              }
-          }, 500);
+          if (userInfo.email){
+            setTimeout(async () => {
+                try {
+                    setGotIP(true);
+                    console.log('userInfo: ', userInfo);
+                    const user = await UpsertUser(userInfo);
+                    if (user){
+                        setIsUpserted(true);
+                    }
+                }
+                catch(error){
+                    console.log('error upserting user', error);
+                }
+            }, 500);
+          }
+          
       }
       
   }
@@ -94,35 +98,32 @@ const HomePage = () => {
     if (isAuthenticated && !isLoading && !dbUserGot && gotIP){
         getDBUser();
     }
-  }, [dbUser,isAuthenticated, isLoading, userInfo, isUpserted]);
+  }, [dbUser,isAuthenticated, isLoading, userInfo, isUpserted, user]);
 
   return (
     <>
-    <div className = "container">
-      
-      {/* {!showModal && ( */}
-      <div>
-        <TopBar />
-      <ChatContainer userInfo={dbUser}/>
-      <div className ="example-questions">
-        <h2>Example Questions</h2>
-        <ul>
-          <li>How do I get a permit to build an ADU? </li>
-          <li>Am I allowed to collect rain water?</li>
-          <li>What are the building requirements for a new garage?</li>
-        </ul>
-      </div>
-      <BottomButtons onPlansClicked={handlePlansClicked}/>
-      </div>
-      {/* )} */}
-     
+      <div className = "container">
+        
+        {/* {!showModal && ( */}
+        <div>
+          <TopBar />
+        <ChatContainer userInfo={dbUser}/>
+        <div className ="example-questions">
+          <h2>Example Questions</h2>
+          <ul>
+            <li>How do I get a permit to build an ADU? </li>
+            <li>Am I allowed to collect rain water?</li>
+            <li>What are the building requirements for a new garage?</li>
+          </ul>
+        </div>
+        <BottomButtons onPlansClicked={handlePlansClicked}/>
+        </div>
 
-    </div>
-    {showModal && 
-    <>
-    {/* <PlansModal className ="plans-modal" onClose={() => setShowModal(false)} /> */}
-      <PayPal className="plans-modal" onClose={() => setShowModal(false) } onSubscriptionComplete={onSubscriptionComplete}></PayPal>
-      </>
+      </div>
+      {showModal && 
+          <>
+              <PayPal className="plans-modal" onClose={() => setShowModal(false) } onSubscriptionComplete={onSubscriptionComplete}></PayPal>
+          </>
       }
     </>
   );
