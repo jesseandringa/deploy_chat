@@ -51,6 +51,9 @@ const ChatContainer = ({userInfo}) => {
 
 
     const sendMessage = (e) => {
+        if(!isAuthenticated && !isLoading){
+            return alert('Please Sign Up or Log In to ask questions. You\'ll be able to ask 4 questions for free.');
+        }
         // if (questionsAsked > 3){
         //     return alert('You have reached the maximum number of questions. Please sign up to ask more questions.');
         // }

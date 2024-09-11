@@ -41,9 +41,7 @@ const HomePage = () => {
   const handlePlansClicked = () => {
       setShowModal(true);
     };
-  const getIpAddress = async () => {
-       
-      console.log('inside getIpAddress')
+  const getIpAddressAndUpserUser = async () => {
       const res = await axios.get("https://api.ipify.org/?format=json");
 
       setIP(res.data['ip']);
@@ -55,34 +53,25 @@ const HomePage = () => {
                       "name": user.name,
                       "given_name": user.given_name,
                       "family_name": user.family_name});
-      }
-      else{
-          setUserInfo({"ip": res.data['ip']});
-      }
-      setTimeout(async () => {
-          try {
-              setGotIP(true);
-              const user = await UpsertUser(userInfo);
-              if (user){
-                  setIsUpserted(true);
+          setTimeout(async () => {
+              try {
+                  setGotIP(true);
+                  const user = await UpsertUser(userInfo);
+                  if (user){
+                      setIsUpserted(true);
+                  }
               }
-          }
-          catch(error){
-              console.log('error upserting user', error);
-          }
-      }, 500);
+              catch(error){
+                  console.log('error upserting user', error);
+              }
+          }, 500);
+      }
       
   }
-  useEffect(() => {
-      if (!isLoading && !gotIP){
-        getIpAddress();
-      }
-  }, [isAuthenticated, isLoading, user, gotIP]);
     
   const getDBUser = async () => {
     setTimeout(async () => {
       try {
-          setGotIP(true);
           const userResponse = await GetUser(userInfo.email);
           if (userResponse){
               console.log('userResponse: ', userResponse);
@@ -99,8 +88,11 @@ const HomePage = () => {
     
 
   useEffect(() => {
-    if (isAuthenticated && !isLoading && isUpserted && !dbUserGot){
-      getDBUser();
+    if (isAuthenticated && !isLoading && !dbUserGot && !gotIP){
+        getIpAddressAndUpserUser();
+    }
+    if (isAuthenticated && !isLoading && !dbUserGot && gotIP){
+        getDBUser();
     }
   }, [dbUser,isAuthenticated, isLoading, userInfo, isUpserted]);
 

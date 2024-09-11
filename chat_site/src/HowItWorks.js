@@ -1,11 +1,8 @@
-// import logo from './logo.svg';
 import './style/HowItWorks.css';
 import React, { useState } from 'react';
 import TopBar from './TopBar';
 import BottomButtons from './BottomButtons';
-// import ChatContainer from './ChatContainer';
-import PlansModal from './PlansModal';
-// import ChatContainer from './ChatContainer';
+import PayPal from './PayPal';
 
 const HowItWorks = () => {
   const [showModal, setShowModal] = useState(false);
@@ -19,7 +16,6 @@ const HowItWorks = () => {
     <>
     <div className = "container">
       
-      {/* {!showModal && ( */}
       <div>
         <TopBar />
         <div className="how-it-works">
@@ -34,13 +30,17 @@ const HowItWorks = () => {
             </div>
             <button id ="chat-button" onClick={() => window.location.href = '/'}>Chat</button>
         </div>
-      <BottomButtons onPlansClicked={handlePlansClicked}/>
+      {/* <BottomButtons onPlansClicked={handlePlansClicked}/> */}
       </div>
       {/* )} */}
      
 
     </div>
-    {showModal && <PlansModal className ="plans-modal" onClose={() => setShowModal(false)} />}
+    {/* {showModal && 
+          <>
+              <PayPal className="plans-modal" onClose={() => setShowModal(false) } onSubscriptionComplete={onSubscriptionComplete}></PayPal>
+          </>
+      } */}
     </>
   );
 };
