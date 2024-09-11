@@ -14,6 +14,12 @@ chat_server/chat/scraper/__pycache__/
 chat_server/chat/src/__pycache__/
 chat_server/chat/myenv/
 *cpython*
+.DS_Store
+*.DS_Store*
+chat_server/chat/muni_index.json
+chat_server/chat/summit-ut.json
+chat_server/chat/scraper/database_index.json
+*.pyc
 # testing
 /coverage
 
