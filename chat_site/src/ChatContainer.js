@@ -56,7 +56,6 @@ const ChatContainer = ({userInfo}) => {
         // }
         e.preventDefault();
         if (!input.trim()) return;
-        // console.log("user message: ", input);
         setUserMessage(input);
         setAreMessages(true);
         setBotMessages('');
@@ -68,6 +67,7 @@ const ChatContainer = ({userInfo}) => {
         setTimeout(async () => {
          console.log('db user: ', userInfo);
          if (questionsAsked > 3 && !isPayingUser){
+            setAreMessages(false);
             return alert('You have reached the maximum number of questions. Please sign up and subscribe to ask more questions.');
         }
           try {
@@ -79,7 +79,8 @@ const ChatContainer = ({userInfo}) => {
                 }
             }
             catch(error){
-                console.log('error in splitting sources')
+                setAreMessages(false);
+                return alert('Looks like something went wrong. Please try again or contact support.');
             }
 
             setBotMessages(botResponse.response);
@@ -91,7 +92,9 @@ const ChatContainer = ({userInfo}) => {
             userInfo.questions_asked = botResponse.questions_asked;
             setIsPayingUser(botResponse.is_paying_user);
           } catch (error) {
-            console.error('There was an error getting the bot response:', error);
+            setAreMessages(false);
+            return alert('Looks like something went wrong. Please try again or contact support.');
+
           }
         }, 500);
     
@@ -103,15 +106,9 @@ const ChatContainer = ({userInfo}) => {
     <div className="chat-selector">
     {/* Render the DropdownMenu component and pass props */}
     <DropdownMenu selectedOption={selectedOption} onOptionChange={handleOptionChange} />
-    {/* {isLoggedIn && isHomePageUpdated &&(
-        
-    <p> HELLLO LOGGED in user</p>)
-    } */}
     </div>
     <div className="image-container">
-      {/* <img src={background_image} alt="Placeholder" /> */}
 
-       
        <div className="overlay-no-messages">
             <form className="chat-input" onSubmit={sendMessage}>
                 <input
