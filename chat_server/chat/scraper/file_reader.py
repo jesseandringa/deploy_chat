@@ -167,11 +167,11 @@ def get_all_files_with_full_path(folder_path):
     items = os.listdir(folder_path)
 
     # Filter out the PDFs
-    files = [
+    files = sorted(
         os.path.join(folder_path, item)
         for item in items
         if os.path.isfile(os.path.join(folder_path, item))
-    ]
+    )
 
     return files
 

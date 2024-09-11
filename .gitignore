@@ -23,6 +23,15 @@ chat_server/chat/scraper/database_index.json
 # testing
 /coverage
 
+#dumb
+*crdownload
+*.pyc
+*jpg
+*.xlsx
+*pdf
+*pptx
+
+
 # production
 # /build
 *.pyc
