@@ -5,6 +5,7 @@
     padding: 50px;  
     text-align: center; 
     backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.2);
 }
   .container {
     max-width: 90%; /* Changed to 90% of the viewport width */
