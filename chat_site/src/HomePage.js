@@ -39,6 +39,9 @@ const HomePage = () => {
 
   }
   const handlePlansClicked = () => {
+      if(!isAuthenticated && !isLoading){
+        return alert('Please Sign Up or Log In before subscribing.');
+      }
       setShowModal(true);
     };
   const getIpAddressAndUpserUser = async () => {
