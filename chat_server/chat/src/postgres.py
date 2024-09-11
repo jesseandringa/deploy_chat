@@ -296,19 +296,24 @@ class PGDB:
 
     def upsert_user(self, email, ip, given_name, family_name):
         current_timestamp = datetime.now()
+        logging.info(
+            f"upserting user with params: {email} {ip} {given_name} {family_name}"
+        )
         if not email:
-            query = f""" SELECT * FROM basic_user_info WHERE ip_addr = '{ip}'; """
+            query = f""" 
+            SELECT * FROM basic_user_info WHERE ip_addr = '{ip}' LIMIT 1; 
+            """
         else:
             query = f"""
-            SELECT * FROM basic_user_info WHERE email = '{email}';
+            SELECT * FROM basic_user_info WHERE email = '{email}' LIMIT 1;
             """
+        logging.info(f"query: {query}")
         try:
             result = self.execute(query)
         except Exception as e:
             logging.error(f"Error searching data: {e}")
             result = None
         logging.info(f"User found: {result}")
-
         if not result:
             questions_asked = 0
             if not email:
@@ -337,6 +342,7 @@ class PGDB:
                 last_name = '{family_name}'
                 WHERE email = '{email}';
                 """
+                logging.info(f"update_query: {update_query}")
                 try:
                     self.conn.cursor().execute(update_query)
                     self.conn.commit()
