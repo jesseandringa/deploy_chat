@@ -3,23 +3,24 @@ import re
 
 # import fitz
 import fitz
+import mistral
 import openpyxl
 from docx import Document
 
 
-def chunk_file_into_paragraphs(file_path, chunk_size=500):
+def chunk_file_into_paragraphs(file_path, chunk_size=500, use_llm=False):
     """Chunks a file into paragraphs."""
     if file_path.endswith(".pdf"):
-        return chunk_pdf_into_paragraphs(file_path, chunk_size)
+        return chunk_pdf_into_paragraphs(file_path, chunk_size, use_llm)
     elif (
         file_path.endswith(".xlsx")
         or file_path.endswith(".xls")
         or file_path.endswith(".xlsm")
         or file_path.endswith(".csv")
     ):
-        return chunk_xlsx_into_paragraphs(file_path)
+        return chunk_xlsx_into_paragraphs(file_path, use_llm)
     elif file_path.endswith(".docx") or file_path.endswith(".doc"):
-        return chunk_docx_into_paragraphs(file_path, chunk_size)
+        return chunk_docx_into_paragraphs(file_path, chunk_size, use_llm)
     else:
         return []
 
@@ -120,7 +121,7 @@ def chunk_xlsx_into_paragraphs(xlsx_path):
         return []
 
 
-def chunk_pdf_into_paragraphs(pdf_path, chunk_size=500):
+def chunk_pdf_into_paragraphs(pdf_path, chunk_size=500, use_llm=False):
     """Chunks a PDF into paragraphs."""
     chunks = []
 
@@ -140,8 +141,16 @@ def chunk_pdf_into_paragraphs(pdf_path, chunk_size=500):
         all_text[i : i + chunk_size] for i in range(0, len(all_text), chunk_size)
     ]
     for p in text_chunks:
-        cleaned_lines = p.replace("\xa0", " ")
-        chunk = [pdf_path, cleaned_lines]
+        if use_llm:
+            is_usable = mistral.check_if_text_is_helpful(p)
+            if is_usable:
+                cleaned_chunk = mistral.trim_text_using_mistral(p)
+            print(f"\n\n\nis usable text: {is_usable}")
+            print(cleaned_chunk)
+        else:
+            cleaned_chunk = p.replace("\ax0", "")
+
+        chunk = [pdf_path, cleaned_chunk]
         chunks.append(chunk)
     return chunks
 
@@ -196,7 +205,7 @@ def get_all_docs(folder_path):
     return doc_files
 
 
-def chunk_docx_into_paragraphs(docx_path, chunk_size=500):
+def chunk_docx_into_paragraphs(docx_path, chunk_size=500, use_llm=False):
     """Chunks a DOCX file into paragraphs."""
     chunks = []
 
@@ -211,8 +220,15 @@ def chunk_docx_into_paragraphs(docx_path, chunk_size=500):
     text = remove_initial_all_caps(text)
     text_chunks = [text[i : i + chunk_size] for i in range(0, len(text), chunk_size)]
     for p in text_chunks:
-        cleaned_lines = p.replace("\xa0", " ")
-        chunk = [docx_path, cleaned_lines]
+        if use_llm:
+            is_usable = mistral.check_if_text_is_helpful_using_ollama(p)
+            if is_usable:
+                cleaned_chunk = mistral.trim_text_using_ollama(p)
+            print(f"\n\n\nis usable text: {is_usable}")
+            print(cleaned_chunk)
+        else:
+            cleaned_chunk = p.replace("\ax0", "")
+        chunk = [docx_path, cleaned_chunk]
         chunks.append(chunk)
     # print("chunks", chunks)
     return chunks

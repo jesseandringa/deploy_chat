@@ -90,7 +90,7 @@ class WebScraper:
                 print("\nProgram interrupted with Control-C")
                 sys.exit(1)
             except Exception as e:
-                print("exception getting input links", e)
+                print(f"exception getting input links{type(e).__name__}")
 
         # Filter links ending with .pdf
         try:
@@ -105,7 +105,7 @@ class WebScraper:
             sys.exit(1)
         except Exception as e:
             pdf_links = []
-            print("exception getting pdf links", e)
+            print(f"exception getting pdf links{type(e).__name__}")
         try:
             pdf_links.extend(
                 [
@@ -118,8 +118,8 @@ class WebScraper:
         except KeyboardInterrupt:
             print("\nProgram interrupted with Control-C")
             sys.exit(1)
-        except Exception:
-            print("exception getting pdf links")
+        except Exception as e:
+            print(f"exception getting pdf links {type(e).__name__}")
 
         try:
             pdf_links.extend(
@@ -133,8 +133,8 @@ class WebScraper:
         except KeyboardInterrupt:
             print("\nProgram interrupted with Control-C")
             sys.exit(1)
-        except Exception:
-            print("exception getting pdf links")
+        except Exception as e:
+            print(f"exception getting pdf links {type(e).__name__}")
 
         try:
             pdf_links.extend(
@@ -148,8 +148,8 @@ class WebScraper:
         except KeyboardInterrupt:
             print("\nProgram interrupted with Control-C")
             sys.exit(1)
-        except Exception:
-            print("exception getting pdf links")
+        except Exception as e:
+            print(f"exception getting pdf links {type(e).__name__}")
 
         try:
             pdf_links.extend(
@@ -163,8 +163,8 @@ class WebScraper:
         except KeyboardInterrupt:
             print("\nProgram interrupted with Control-C")
             sys.exit(1)
-        except Exception:
-            print("exception getting pdf links")
+        except Exception as e:
+            print(f"exception getting pdf links {type(e).__name__}")
         try:
             pdf_links.extend(
                 [
@@ -177,8 +177,8 @@ class WebScraper:
         except KeyboardInterrupt:
             print("\nProgram interrupted with Control-C")
             sys.exit(1)
-        except Exception:
-            print("exception getting pdf links")
+        except Exception as e:
+            print(f"exception getting pdf links {type(e).__name__}")
         try:
             other_links = [
                 link.get_attribute("href")
@@ -190,9 +190,9 @@ class WebScraper:
         except KeyboardInterrupt:
             print("\nProgram interrupted with Control-C")
             sys.exit(1)
-        except Exception:
+        except Exception as e:
             other_links = []
-            print("exception getting other links")
+            print(f"exception getting other links {type(e).__name__}")
         other_links.extend(input_links)
 
         return pdf_links, other_links
@@ -642,9 +642,9 @@ def cut_out_duplicate_urls(url_list):
 
 def main():
     ############ CASEY change these ##################
-    url = "https://codelibrary.amlegal.com/codes/summitcountyut/latest"
-    saved_urls_path = "chat_server/chat/summit-ut.json"
-    resource_path = "chat_server/chat/file_resources/summit-ut-resources"
+    url = "https://library.municode.com/al/cullman/codes/code_of_ordinances"
+    saved_urls_path = "chat_server/chat/cullman-al.json"
+    resource_path = "chat_server/chat/file_resources/cullman-al-resources"
     index_path = "chat_server/chat/muni_index.json"
     isMuniCode = True
     ##################################################
