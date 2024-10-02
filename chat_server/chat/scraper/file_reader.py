@@ -8,8 +8,196 @@ import openpyxl
 from docx import Document
 
 
+class DocumentTracker:
+    def __init__(self):
+        self.chapter = None
+        self.article = None
+        self.section = None
+        self.division = None
+        self.chapter_name = None
+        self.article_name = None
+        self.section_title = None
+        self.division_name = None
+
+    def update_chapter(self, chapter, chapter_name=None):
+        self.chapter = chapter
+        self.chapter_name = chapter_name
+        self.article = None  # Reset article, section, and division when chapter changes
+        self.section = None
+        self.division = None
+
+    def update_article(self, article, article_name=None):
+        self.article = article
+        self.article_name = article_name
+        self.section = None  # Reset section and division when article changes
+        self.division = None
+
+    def update_division(self, division, division_name=None):
+        self.division = division
+        self.division_name = division_name
+        self.section = None  # Reset section when division changes
+
+    def update_section(self, section, section_title=None):
+        self.section = section
+        self.section_title = section_title
+
+    def _abbreviate(self, phrase, max_length=4):
+        """
+        Abbreviate the given phrase by taking the first two letters of each word,
+        skipping common words like 'and', 'or', 'the', until the max_length is reached.
+        """
+        if not phrase:
+            return ""
+        common_words = {
+            "and",
+            "or",
+            "the",
+            "of",
+            "in",
+            "on",
+            "to",
+            "for",
+            "with",
+            "at",
+            "by",
+        }
+        words = re.split(r"\W+", phrase)  # Split on non-alphanumeric characters
+        abbreviation = "".join(
+            word[:2].upper()
+            for word in words
+            if word and word.lower() not in common_words
+        )
+        return abbreviation  # [:max_length]  # Limit to max_length characters
+
+    def _format_section(self, section):
+        """
+        Formats section numbers like '2-1' to 'S2-1'
+        """
+        if not section:
+            return ""
+        return f"S{section.replace('Sec', '').replace(' ', '').replace('.', '')}"
+
+    def parse_input(self, input_string):
+        """
+        Parses a string like 'Chapter 2 ADMINISTRATION', 'DIVISION 1. GENERALLY' and updates the chapter, article, or division.
+        """
+        # Match 'Chapter X NAME'
+        chapter_match = re.match(r"Chapter\s+(\d+)\s+(.+)", input_string, re.IGNORECASE)
+        if chapter_match:
+            chapter_num = chapter_match.group(1)
+            chapter_name = chapter_match.group(2)
+            self.update_chapter(chapter_num, chapter_name)
+            return
+
+        # Match 'Article X NAME'
+        article_match = re.match(
+            r"Article\s+(\w+)\.\s+(.+)", input_string, re.IGNORECASE
+        )
+        if article_match:
+            article_num = article_match.group(1)
+            article_name = article_match.group(2)
+            self.update_article(article_num, article_name)
+            return
+
+        # Match 'Sec X-X TITLE'
+        section_match = re.match(
+            r"Sec\.\s+([\d\-]+)\.\s+(.+)", input_string, re.IGNORECASE
+        )
+        if section_match:
+            section_num = section_match.group(1)
+            section_title = section_match.group(2)
+            self.update_section(section_num, section_title)
+            return
+
+        # Match 'Division X NAME'
+        division_match = re.match(
+            r"DIVISION\s+(\d+)\.\s+(.+)", input_string, re.IGNORECASE
+        )
+        if division_match:
+            division_num = division_match.group(1)
+            division_name = division_match.group(2)
+            self.update_division(division_num, division_name)
+
+    def generate_url_route(self):
+        """
+        Generate a custom URL route from the current chapter, division, article, and section details.
+        For example: CH2AD_ARTI_DIV1GE_S2-1INFOGOCL (only include division if it exists).
+        """
+        if not self.chapter:
+            return ""
+
+        chapter_abbr = self._abbreviate(self.chapter_name) if self.chapter_name else ""
+        article_abbr = self._abbreviate(self.article_name) if self.article_name else ""
+        section_abbr = (
+            self._abbreviate(self.section_title, max_length=8)
+            if self.section_title
+            else ""
+        )
+        section_code = self._format_section(self.section)
+        division_abbr = (
+            self._abbreviate(self.division_name) if self.division_name else ""
+        )
+        division_code = f"_DIV{self.division}{division_abbr}" if self.division else ""
+
+        # Construct the encoded URL route
+        return f"CH{self.chapter}{chapter_abbr}_ART{self.article}{article_abbr}{division_code}_{section_code}{section_abbr}"
+
+    def current_location(self):
+        return f"Chapter {self.chapter}, Division {self.division}, Article {self.article}, Section {self.section}"
+
+
+def chunk_municode_doc_into_paragraphs(doc_path, chunk_size=500):
+    """Chunks a Municode DOC file into paragraphs."""
+    doc_tracker = DocumentTracker()
+    chunks = []
+
+    # Open the DOCX file
+    try:
+        doc = Document(doc_path)
+    except Exception:
+        return []
+
+    paragraphs_and_sources = []
+    for para in doc.paragraphs:
+        if para.text.lower().startswith("chapter "):
+            doc_tracker.parse_input(para.text)
+        if para.text.lower().startswith("article "):
+            doc_tracker.parse_input(para.text)
+        if para.text.lower().startswith("division "):
+            doc_tracker.parse_input(para.text)
+        if para.text.lower().startswith("sec. "):
+            doc_tracker.parse_input(para.text)
+        url = doc_tracker.generate_url_route()
+        paragraphs_and_sources.append([para.text, url])
+
+        # print(doc.paragraphs[i].text)
+        # print("::::\n")
+
+    # url = doc_tracker.generate_url_route()
+    # print(url)
+    # print(doc_tracker.current_location())
+
+    # text_chunks = [text[i : i + chunk_size] for i in range(0, len(text), chunk_size)]
+    text = ""
+    sources = []
+    for ps in paragraphs_and_sources:
+        if text == "":
+            text = ps[0]
+        else:
+            text = text + " " + ps[0]
+        sources.append(ps[1])
+        if len(text) > chunk_size:
+            chunks.append([sources, text])
+            text = ""
+
+    return chunks
+
+
 def chunk_file_into_paragraphs(file_path, chunk_size=500, use_llm=False):
     """Chunks a file into paragraphs."""
+    # print out converted filename
+    converted_file_path = file_path.replace("$$$", "/")
+    print(f"converted file path: {converted_file_path}")
     if file_path.endswith(".pdf"):
         return chunk_pdf_into_paragraphs(file_path, chunk_size, use_llm)
     elif (
@@ -142,9 +330,9 @@ def chunk_pdf_into_paragraphs(pdf_path, chunk_size=500, use_llm=False):
     ]
     for p in text_chunks:
         if use_llm:
-            is_usable = mistral.check_if_text_is_helpful(p)
+            is_usable = mistral.check_if_text_is_helpful_using_ollama(p)
             if is_usable:
-                cleaned_chunk = mistral.trim_text_using_mistral(p)
+                cleaned_chunk = mistral.trim_text_using_ollama(p)
             print(f"\n\n\nis usable text: {is_usable}")
             print(cleaned_chunk)
         else:
@@ -224,13 +412,14 @@ def chunk_docx_into_paragraphs(docx_path, chunk_size=500, use_llm=False):
             is_usable = mistral.check_if_text_is_helpful_using_ollama(p)
             if is_usable:
                 cleaned_chunk = mistral.trim_text_using_ollama(p)
-            print(f"\n\n\nis usable text: {is_usable}")
-            print(cleaned_chunk)
-        else:
-            cleaned_chunk = p.replace("\ax0", "")
-        chunk = [docx_path, cleaned_chunk]
-        chunks.append(chunk)
-    # print("chunks", chunks)
+                chunk = [docx_path, cleaned_chunk]
+                chunks.append(chunk)
+                print("usable")
+                print(cleaned_chunk)
+            else:
+                print("not usable")
+                print(p)
+
     return chunks
 
 
@@ -309,11 +498,15 @@ def remove_initial_all_caps(text):
 # Example usage
 
 if __name__ == "__main__":
-    path = "chat_server/chat/file_resources/summit-ut-resources/https:$$$$$$codelibrary.amlegal.com$$$codes$$$summitcountyut$$$latest$$$summitcounty_ut$$$0-0-0-293.docx"
-
-    chuns = chunk_docx_into_paragraphs(path, 3000)
-    print(chuns)
-    print(len(chuns))
+    path = "chat_server/chat/file_resources/cullman-municode/CODE_OF_ORDINANCES_CITY_OF_CULLMAN__ALABAMA.docx"
+    chunk_municode_doc_into_paragraphs(path)
+    # asdf = "DIVISION 1. GENERALLY"
+    # doctracker = DocumentTracker()
+    # doctracker.parse_input(asdf)
+    # print(doctracker.current_location())
+    # chuns = chunk_docx_into_paragraphs(path, 3000)
+    # print(chuns)
+    # print(len(chuns))
     # pdf_path = "chat_server/chat/file_resources/murray-muni-resources/https:$$$$$$codelibrary.amlegal.com$$$codes$$$murrayut$$$latest$$$murray_ut$$$0-0-0-14#codecontent.pdf"
     # pdf_path = "asdfasdf/test.pdf"
     # pdf_path = "pathpath/https:$$$$$$www.murray.utah.gov$$$ArchiveCenter$$$ViewFile$$$Item$$$87.pdf"

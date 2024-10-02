@@ -4,6 +4,7 @@ import os
 import threading
 
 import gmailer
+import paypalrestsdk
 
 # import llama_helper
 # import llama_helper
@@ -19,6 +20,14 @@ from postgres import PGDB
 app = Flask(__name__)
 logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
+DB = PGDB(
+    os.getenv("PGHOST"),
+    os.getenv("PGUSER"),
+    os.getenv("PGPASSWORD"),
+    os.getenv("PGDATABASE"),
+    "",
 )
 
 
@@ -51,6 +60,44 @@ def send_email():
         json_response = json.dumps({"Success": "false"})
 
     return json_response
+
+
+# Configure the PayPal SDK
+paypalrestsdk.configure(
+    {
+        "mode": "live",  # Use "live" for production
+        "client_id": os.getenv("PAYPAL_CLIENT_ID"),
+        "client_secret": os.getenv("PAYPAL_CLIENT_SECRET"),
+    }
+)
+
+
+@app.route("/unsubscribe", methods=["POST"])
+def unsubscribe():
+    # Get the subscription ID from the request body
+    data = request.get_json()
+    email = data.get("email")
+    subscription = DB.get_subscription(email)
+    subscription_id = subscription.get("subscription_id")
+
+    if not subscription_id:
+        return jsonify({"error": "Subscription ID is required"}), 400
+
+    # Retrieve the subscription to confirm it exists
+    subscription = paypalrestsdk.BillingAgreement.find(subscription_id)
+
+    if not subscription:
+        return jsonify({"error": "Subscription not found"}), 404
+
+    # Cancel the subscription
+    cancellation = subscription.cancel({"note": "Unsubscribing from service"})
+
+    if cancellation.success():
+        DB.update_user_to_paying(email, False)
+
+        return jsonify({"message": "Successfully unsubscribed"}), 200
+    else:
+        return jsonify({"error": "Failed to unsubscribe", "details": cancellation}), 500
 
 
 @app.route("/upsert_user", methods=["GET"])

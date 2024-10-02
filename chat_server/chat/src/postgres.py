@@ -272,7 +272,7 @@ class PGDB:
     def get_user_by_email(self, email):
         cursor = self.conn.cursor()
         user_query = f"""
-        SELECT email,ip_addr,first_name, last_name ,questions_asked,is_paying
+        SELECT email,ip_addr,first_name, last_name ,questions_asked,is_paying, subscription_id
         FROM basic_user_info WHERE email = '{email}';
         """
         try:
@@ -297,6 +297,7 @@ class PGDB:
             "name": name,
             "questions_asked": user_resp[4],
             "is_paying": user_resp[5],
+            "subscription_id": user_resp[6],
         }
 
         return user
@@ -373,12 +374,19 @@ class PGDB:
             return None
         return True
 
-    def update_user_to_paying(self, email):
-        insert_query = f"""
-        UPDATE basic_user_info
-        SET is_paying = TRUE
-        WHERE email = '{email}';
-        """
+    def update_user_to_paying(self, email, unsubscribe=False):
+        if unsubscribe:
+            insert_query = f"""
+            UPDATE basic_user_info
+            SET is_paying = FALSE
+            WHERE email = '{email}';
+            """
+        else:
+            insert_query = f"""
+            UPDATE basic_user_info
+            SET is_paying = TRUE
+            WHERE email = '{email}';
+            """
         try:
             self.conn.cursor().execute(insert_query)
             self.conn.commit()
@@ -403,6 +411,24 @@ class PGDB:
             )
             return None
         return True
+
+    def get_subscription(self, email):
+        query = f"""
+        SELECT * FROM subscriptions WHERE email = '{email}';
+        """
+        try:
+            result = self.execute(query)
+            subscription = {
+                "email": result[0][0],
+                "subscription_id": result[0][1],
+                "payment_source": result[0][2],
+                "facilitator_access_token": result[0][3],
+                "order_id": result[0][4],
+            }
+        except Exception as e:
+            logging.error(f"Error searching data: {e}")
+            subscription = None
+        return subscription
 
     def execute(self, query):
         with self.conn.cursor() as cursor:

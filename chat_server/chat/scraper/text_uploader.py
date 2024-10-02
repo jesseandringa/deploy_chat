@@ -372,7 +372,9 @@ def write_index_to_json(index, file_path="index.json"):
 
 def chunk_text_and_insert(pdf_files, i, db, table_name):
     try:
-        chunks = file_reader.chunk_file_into_paragraphs(pdf_files[i], chunk_size=10000)
+        chunks = file_reader.chunk_file_into_paragraphs(
+            pdf_files[i], chunk_size=10000, use_llm=True
+        )
         # valid = file_reader.check_validity_of_file(file_path=None, chunks=chunks)
         # if valid == 0:
         #     return 1
@@ -403,6 +405,27 @@ def chunk_text_and_insert(pdf_files, i, db, table_name):
             print("failed to insert chunk" + str(e))
 
 
+def insert_single_file_chunks_to_table(chunks, db, table_name):
+    i = 0
+    for chunk in chunks:
+        print(f"inserting chunk {i} of {len(chunks)}")
+        i += 1
+        text = chunk[1]
+        # loop thorugh sources and make string of commna separated sources
+        sources = ""
+        for source in chunk[0]:
+            sources += (
+                "https://library.municode.com/al/cullman/codes/code_of_ordinances?nodeId=COOR_"
+                + source
+                + ", "
+            )
+
+        try:
+            db.insert_data_into_pdf_text_table(table_name, sources, 0, str(text))
+        except Exception as e:
+            print("failed to insert chunk" + str(e))
+
+
 def create_table_and_insert_all_data(db, table_name, folder_path):
     db.create_pdf_text_table(table_name)
     pdf_files = file_reader.get_all_files_with_full_path(folder_path)
@@ -411,10 +434,17 @@ def create_table_and_insert_all_data(db, table_name, folder_path):
     i = read_index_from_json(index_path)
     # if i == 0:
     #     db.remove_all_data_from_table(table_name)
+    if len(pdf_files) == 1:
+        print("inserting muni code ordinances")
+        chunks = file_reader.chunk_municode_doc_into_paragraphs(pdf_files[0])
+        insert_single_file_chunks_to_table(chunks, db, table_name)
+        print("finished")
+        return
+
     while i < len(pdf_files):
         threads = []
         results = []
-        for j in range(6):  # Example: Perform actions in {range_end} threads
+        for j in range(1):  # Example: Perform actions in {range_end} threads
             thread = threading.Thread(
                 target=lambda: results.append(
                     chunk_text_and_insert(pdf_files, i + j, db, table_name)
@@ -459,7 +489,7 @@ if __name__ == "__main__":
     # folder path to the pdfs you want to upsert (control click folder copy and paste 'relatitve path')
     # ex.      chat_server/chat/file_resources/murray-muni-resources
     table_name = "cullman_al_pdf_data"
-    folder_path = "chat_server/chat/file_resources/cullman-al-resources"
+    folder_path = "chat_server/chat/file_resources/cullman-municode"
     ##################################################################################################
     create_table_and_insert_all_data(db, table_name, folder_path)
     # user

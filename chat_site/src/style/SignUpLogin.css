@@ -45,12 +45,73 @@ input {
   border: 2px solid #ffa4a4;
 }
 
-button {
+/* button {
   background: #2581d7;
   color: white;
   cursor: pointer;
+} */
+
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: auto;
+  height: auto;
+  /* background-color: rgba(0, 0, 0, 0.5);  */
+  z-index: 1000;
+  padding: 20px;
 }
 
-button:disabled {
-  cursor: default;
+.modal-content {
+  background-color: #f2f2f2; /* Light gray background */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  width: 400px;
+  max-width: 90%;
+  text-align: center;
+}
+
+.modal-content img {
+  border-radius: 50%; /* Circular profile picture */
+  margin-bottom: 15px;
+}
+
+.modal-content h2, .modal-content p {
+  margin: 10px 0;
+}
+
+
+.ok-buttons button {
+  background-color: #4285d2;  /* Button background color */
+  color: white;               /* Text color */
+  padding: 5px 10px;         /* Consistent padding */
+  border-radius: 5px;         /* Rounded corners */
+  cursor: pointer;            /* Pointer cursor */
+  display: inline-block;      /* Make it behave like a block with padding */
+  text-align: center; 
+  margin-left: 5px;
+  margin-right: 5px; 
+  margin-top:20px;
+}
+
+.logout-button:hover{
+  background-color: #4f75a1;        /* Center text in the button */
+}
+
+.close-button:hover {
+  background-color: #4f75a1; /* Darker shade for hover */
+}
+
+.unsubscribe-text {
+  color: blue; /* Make it look like a link */
+  text-decoration: underline;
+  cursor: pointer; /* Makes the mouse cursor change to indicate it's clickable */
+}
+
+.unsubscribe-text:hover {
+  color: darkblue; /* Change color when hovered over */
+  text-decoration: none; /* Remove underline on hover if desired */
 }
