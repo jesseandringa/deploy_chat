@@ -221,7 +221,7 @@ class PGDB:
             """
             cursor.execute(update_query)
             questions_asked = cursor.fetchone()
-            logging.info("User updated successfully.", str(questions_asked))
+            logging.info(f"User updated successfully. {questions_asked}")
 
             self.conn.commit()
             return questions_asked[0]

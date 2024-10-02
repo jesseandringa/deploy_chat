@@ -13,6 +13,7 @@ const ProfileModal = ({ show, setShow, myUser }) => {
     const response = await UnsubscribeUser(user.email);
     if (response) {
       setUnsubscribed(true);
+      myUser.is_paying = false;
     }
   };
 
