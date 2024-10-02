@@ -19,3 +19,4 @@ psycopg2-binary == 2.9.9
 openpyxl == 3.1.2
 PyMuPDF == 1.23.26
 gevent == 24.2.1
+paypalrestsdk == 1.13.3

@@ -5,7 +5,7 @@ import { FaUserCircle } from "react-icons/fa";
 import "./style/SignUpLogin.css";
 import { UnsubscribeUser } from "./BotClient";
 
-const ProfileModal = ({ show, setShow }) => {
+const ProfileModal = ({ show, setShow, myUser }) => {
   const { user, isAuthenticated, logout } = useAuth0();
   const [unsubscribed, setUnsubscribed] = useState(false);
 
@@ -74,13 +74,13 @@ const LoginButtonOrProfileIcon = ({ show, setShow }) => {
   );
 };
 
-const LoginProfileComponent = () => {
+const LoginProfileComponent = ({ myUser }) => {
   const [show, setShow] = useState(false);
 
   return (
     <div>
       <LoginButtonOrProfileIcon show={show} setShow={setShow} />
-      <ProfileModal show={show} setShow={setShow} />
+      <ProfileModal show={show} setShow={setShow} myUser={myUser} />
     </div>
   );
 };

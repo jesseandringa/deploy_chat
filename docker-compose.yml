@@ -17,6 +17,8 @@ services:
       - PGDATABASE=munidb
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/postgres
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PAYPAL_CLIENT_ID=${PAYPAL_CLIENT_ID}
+      - PAYPAL_CLIENT_SECRET=${PAYPAL_CLIENT_SECRET}
   
   nginx:
     depends_on:
