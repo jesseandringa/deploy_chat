@@ -47,8 +47,8 @@ const HomePage = () => {
 
     setIP(res.data["ip"]);
     if (isAuthenticated && !isLoading && user.email) {
-      console.log("user: ", user);
-      console.log("user.email: ", user.email);
+      // console.log("user: ", user);
+      // console.log("user.email: ", user.email);
       setUserInfo({
         ip: res.data["ip"],
         email: user.email,
@@ -60,7 +60,7 @@ const HomePage = () => {
         setTimeout(async () => {
           try {
             setGotIP(true);
-            console.log("userInfo: ", userInfo);
+            // console.log("userInfo: ", userInfo);
             const user = await UpsertUser(userInfo);
             if (user) {
               setIsUpserted(true);
@@ -78,10 +78,10 @@ const HomePage = () => {
       try {
         const userResponse = await GetUser(userInfo.email);
         if (userResponse) {
-          console.log("userResponse: ", userResponse);
+          // console.log("userResponse: ", userResponse);
           setDbUser(userResponse);
           setDbUserGot(true);
-          console.log("dbUser: ", dbUser);
+          // console.log("dbUser: ", dbUser);
         }
       } catch (error) {
         console.log("error upserting user", error);

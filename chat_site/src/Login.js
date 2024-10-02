@@ -31,10 +31,20 @@ const ProfileModal = ({ show, setShow, myUser }) => {
         <img src={user.picture} alt={user.name} width="100" height="100" />
         <h2>{user.name}</h2>
         <p>{user.email}</p>
-        {unsubscribed ? <p>Unsubscribed!</p> : null}
-        <button className="unsubscribe-text" onClick={() => unsubscribeUser()}>
-          Unsubscribe
-        </button>
+        {myUser.is_paying && (
+          <div>
+            {unsubscribed && <p>Unsubscribed!</p>}
+            {!unsubscribed && (
+              <button
+                className="unsubscribe-text"
+                onClick={() => unsubscribeUser()}
+              >
+                Unsubscribe
+              </button>
+            )}
+          </div>
+        )}
+
         <br></br>
         <div className="ok-buttons">
           <button className="logout-button" onClick={() => logoutUser()}>
@@ -86,66 +96,3 @@ const LoginProfileComponent = ({ myUser }) => {
 };
 
 export default LoginProfileComponent;
-
-// import React from "react";
-// import { useAuth0 } from "@auth0/auth0-react";
-
-// const ProfileModal = ({ show, setShow }) => {
-//   const { user, isAuthenticated, isLoading } = useAuth0();
-
-//   if (!show) {
-//     return null;
-//   }
-
-//   return (
-//     <div>
-//       <h1>Profile</h1>
-//       <img src={user.picture} alt={user.name} />
-//       <h2>{user.name}</h2>
-//       <p>{user.email}</p>
-//       <button onClick={() => setShow(false)}>Close</button>
-//     </div>
-//   );
-// };
-// const LoginButton = () => {
-//   const { loginWithRedirect, logout, isAuthenticated, isLoading } = useAuth0();
-//   const [loggedIn, setLoggedIn] = React.useState(false);
-
-//   React.useEffect(() => {
-//     console.log(isAuthenticated, isLoading);
-//     if (isAuthenticated && !isLoading) {
-//       setLoggedIn(true);
-//     }
-//   }, [isAuthenticated, isLoading, loggedIn]);
-
-//   const handleLogin = () => {
-//     loginWithRedirect();
-//     setLoggedIn(true);
-//   };
-
-//   const handleLogout = () => {
-//     logout({ returnTo: window.location.origin });
-//     setLoggedIn(false);
-//   };
-
-//   return (
-//     <button onClick={() => (loggedIn ? handleLogout() : handleLogin())}>
-//       {loggedIn ? "Logout" : "Sign Up/Log In"}
-//     </button>
-//   );
-// };
-
-// // export default LoginButton;
-
-// const LoginProfileComponent = () => {
-//   const [show, setShow] = React.useState(false);
-
-//   return (
-//     <div>
-//       <LoginButton show={show} setShow={setShow} />
-//       <ProfileModal show={show} setShow={setShow} />
-//     </div>
-//   );
-// };
-
-// export default LoginProfileComponent;

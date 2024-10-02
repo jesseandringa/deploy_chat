@@ -13,7 +13,6 @@ const getBotResponse = (message, selectedCounty, userInfo) => {
   if (email) {
     url.searchParams.append("email", email);
   }
-  // console.log('url: ', url);
 
   // Use the fetch API to send a GET request
   return fetch(url)
@@ -40,7 +39,6 @@ const getBotResponse = (message, selectedCounty, userInfo) => {
 export { getBotResponse };
 
 const UnsubscribeUser = (email) => {
-  console.log("email in getUser: ", email);
   const baseURL = "https://munihelp.com/api/"; // Base URL
   const endpoint = "unsubscribe"; // Endpoint
   const url = new URL(endpoint, baseURL);
@@ -54,7 +52,7 @@ const UnsubscribeUser = (email) => {
       return response.json(); // Parse the JSON response body
     })
     .then((data) => {
-      console.log("data: ", data);
+      // console.log("data: ", data);
       return data; // Make sure to return the data here so it can be used by the caller
     })
     .catch((error) => {
@@ -70,7 +68,7 @@ const UnsubscribeUser = (email) => {
 export { UnsubscribeUser };
 
 const GetUser = (email) => {
-  console.log("email in getUser: ", email);
+  // console.log("email in getUser: ", email);
   const baseURL = "https://munihelp.com/api/"; // Base URL
   const endpoint = "get_user"; // Endpoint
   const url = new URL(endpoint, baseURL);
@@ -84,7 +82,7 @@ const GetUser = (email) => {
       return response.json(); // Parse the JSON response body
     })
     .then((data) => {
-      console.log("data: ", data);
+      // console.log("data: ", data);
       return data; // Make sure to return the data here so it can be used by the caller
     })
     .catch((error) => {
@@ -102,7 +100,7 @@ export { GetUser };
 const UpsertUser = (userInfo) => {
   // Convert the user input to lowercase for easier keyword matching
   // run locally
-  console.log("UpsertUser userInfo: ", userInfo);
+  // console.log("UpsertUser userInfo: ", userInfo);
   const baseURL = "https://munihelp.com/api/"; // Base URL
   const endpoint = "upsert_user"; // Endpoint
   const url = new URL(endpoint, baseURL);
@@ -113,7 +111,7 @@ const UpsertUser = (userInfo) => {
   const given_name = userInfo.given_name;
   const family_name = userInfo.family_name;
 
-  console.log("email in upsertUser: ", email);
+  // console.log("email in upsertUser: ", email);
   url.searchParams.append("ip", ip);
   url.searchParams.append("email", email);
   url.searchParams.append("name", username);
@@ -147,7 +145,7 @@ export { UpsertUser };
 const UpdateUserSubscription = (data, userInfo) => {
   // Convert the user input to lowercase for easier keyword matching
   // run locally
-  console.log("userInfo UpdateUserSubscription: ", userInfo);
+  // console.log("userInfo UpdateUserSubscription: ", userInfo);
   const baseURL = "https://munihelp.com/api/"; // Base URL
   const endpoint = "subscribe"; // Endpoint
   const url = new URL(endpoint, baseURL);
@@ -158,8 +156,8 @@ const UpdateUserSubscription = (data, userInfo) => {
   const facilitatorAccessToken = data.facilitatorAccessToken;
   const orderId = data.orderID;
 
-  console.log("email: ", email);
-  console.log("subscriptionId: ", subscriptionId);
+  // console.log("email: ", email);
+  // console.log("subscriptionId: ", subscriptionId);
   url.searchParams.append("email", email);
   url.searchParams.append("subscription_id", subscriptionId);
   url.searchParams.append("payment_source", paymentSource);

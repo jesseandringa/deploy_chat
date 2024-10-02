@@ -2,12 +2,6 @@ import React from "react";
 import "./style/TopBar.css";
 import LoginButton from "./Login";
 const TopBar = ({ myUser }) => {
-  // Define a function to handle button clicks
-  // const handleButtonClick = (buttonName) => {
-  //   // Handle button click logic here
-  //   console.log(`Clicked ${buttonName} button`);
-  // };
-
   return (
     <div className="top-container">
       <div className="sign-in-up">
