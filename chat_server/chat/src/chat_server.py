@@ -263,19 +263,26 @@ def get_data():
     for thread in threads:
         thread.join()
     context = "No matching data found."
-    source = ""
+
+    source_set = set()
     logging.info("results: " + str(results))
     for i in range(thread_count):
         try:
             if results[i] != "No matching data found.":
                 if context == "No matching data found.":
                     context = results[i][2]
-                    source = convert_file_name_to_url(results[i][0])
+                    source_set.add(convert_file_name_to_url(results[i][0]))
                 else:
                     context += results[i][2]
-                source += "," + convert_file_name_to_url(results[i][0])
+                    source_set.add(convert_file_name_to_url(results[i][0]))
+
         except Exception as e:
             logging.info("results[i] failed", e)
+
+    source = ""
+    for s in source_set:
+        source += s + " "
+
     response = llm.create_response_message(request.args.get("message"), context)
 
     # TODO: figure out how to add many sources

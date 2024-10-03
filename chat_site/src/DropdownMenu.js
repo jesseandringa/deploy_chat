@@ -35,7 +35,7 @@ const DropdownMenu = ({ selectedOption, onOptionChange }) => {
         <option value="elko-nv">Elko, NV</option>
         <option value="king-wa">King, WA</option>
         <option value="cumberland-nc">Cumberland, NC</option>
-        <option value="cullman-al">Cullmaan, AL</option>
+        <option value="cullman-al">Cullman, AL</option>
       </select>
 
       {/* Add more options as needed */}

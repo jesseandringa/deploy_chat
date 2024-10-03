@@ -19,7 +19,7 @@ class openai_helper:
 
     def get_key_words_from_message(self, question):
         prompt = (
-            f'Given the user query "{question}", return a short list of specific, short, concise document search terms designed to find and expand on the most relevant documents for answering the user query to be given to a postgres database. Consider search queries in the form of potential answers to the question in order to increase the accuracy of results. Return up to 8 items. Each search query should have a MAX of 32 characters. Answer ONLY IN THE FOLLOWING JSON FORMAT:'
+            f'Given the user query "{question}", return a short list of specific, short, concise document search terms designed to find and expand on the most relevant documents for answering the user query to be given to a postgres database. Consider using terms the user query uses. Consider search queries in the form of potential answers to the question in order to increase the accuracy of results. Return up to 8 items. Each search query should have a MAX of 32 characters. Answer ONLY IN THE FOLLOWING JSON FORMAT:'
             + """[["short search query 1", "weight of search query in (0, 1)"],["short search query 2", "weight of search query in (0, 1)"]]"""
         )
         completion = self.client.chat.completions.create(

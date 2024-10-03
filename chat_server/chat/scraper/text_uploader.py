@@ -84,7 +84,9 @@ class PGDB:
     ):
         cursor = self.conn.cursor()
         text = self.clean_and_trim_text(chunk_text)
-        pdf_name = self.get_just_file_name(pdf_name)
+        # text = chunk_text
+        if not pdf_name.startswith("http"):
+            pdf_name = self.get_just_file_name(pdf_name)
 
         try:
             # Replace with your desired INSERT INTO statement
@@ -117,14 +119,14 @@ class PGDB:
         text = text.replace("\f", " ")
         text = text.replace("\v", " ")
         text = text.replace("\a", " ")
-        text = text.replace(" the ", " ")
-        text = text.replace(" The ", " ")
-        text = text.replace(" and ", " ")
-        text = text.replace(" And ", " ")
-        text = text.replace(" or ", " ")
-        text = text.replace(" Or ", " ")
-        text = text.replace(" a ", " ")
-        text = text.replace("\\", " ")
+        # text = text.replace(" the ", " ")
+        # text = text.replace(" The ", " ")
+        # text = text.replace(" and ", " ")
+        # text = text.replace(" And ", " ")
+        # text = text.replace(" or ", " ")
+        # text = text.replace(" Or ", " ")
+        # text = text.replace(" a ", " ")
+        # text = text.replace("\\", " ")
         return text
 
     def full_text_search_on_key_words(self, key_words, county, table_name=None):
@@ -410,6 +412,8 @@ def insert_single_file_chunks_to_table(chunks, db, table_name):
     for chunk in chunks:
         print(f"inserting chunk {i} of {len(chunks)}")
         i += 1
+        # if i < 100:
+        #     continue
         text = chunk[1]
         # loop thorugh sources and make string of commna separated sources
         sources = ""
@@ -419,8 +423,9 @@ def insert_single_file_chunks_to_table(chunks, db, table_name):
                 + source
                 + ", "
             )
-
+        sources = sources[:-2]
         try:
+            # continue
             db.insert_data_into_pdf_text_table(table_name, sources, 0, str(text))
         except Exception as e:
             print("failed to insert chunk" + str(e))
@@ -436,7 +441,7 @@ def create_table_and_insert_all_data(db, table_name, folder_path):
     #     db.remove_all_data_from_table(table_name)
     if len(pdf_files) == 1:
         print("inserting muni code ordinances")
-        chunks = file_reader.chunk_municode_doc_into_paragraphs(pdf_files[0])
+        chunks = file_reader.chunk_municode_doc_into_paragraphs(pdf_files[0], 5000)
         insert_single_file_chunks_to_table(chunks, db, table_name)
         print("finished")
         return

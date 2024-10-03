@@ -138,9 +138,9 @@ class DocumentTracker:
             self._abbreviate(self.division_name) if self.division_name else ""
         )
         division_code = f"_DIV{self.division}{division_abbr}" if self.division else ""
-
+        article_code = f"_ART{self.article}{article_abbr}" if self.article else ""
         # Construct the encoded URL route
-        return f"CH{self.chapter}{chapter_abbr}_ART{self.article}{article_abbr}{division_code}_{section_code}{section_abbr}"
+        return f"CH{self.chapter}{chapter_abbr}{article_code}{division_code}_{section_code}{section_abbr}"
 
     def current_location(self):
         return f"Chapter {self.chapter}, Division {self.division}, Article {self.article}, Section {self.section}"
@@ -179,14 +179,16 @@ def chunk_municode_doc_into_paragraphs(doc_path, chunk_size=500):
 
     # text_chunks = [text[i : i + chunk_size] for i in range(0, len(text), chunk_size)]
     text = ""
-    sources = []
     for ps in paragraphs_and_sources:
+        sources = set()
+
         if text == "":
             text = ps[0]
         else:
             text = text + " " + ps[0]
-        sources.append(ps[1])
+        sources.add(ps[1])
         if len(text) > chunk_size:
+            text = text.replace("\ax0", " ")
             chunks.append([sources, text])
             text = ""
 
