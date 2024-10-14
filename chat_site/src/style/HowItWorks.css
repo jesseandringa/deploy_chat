@@ -1,5 +1,6 @@
 
 .how-it-works{
+    
     margin: 0 auto;  
     width: 50%;
     padding: 50px;  
@@ -8,7 +9,7 @@
     background: rgba(255, 255, 255, 0.2);
 }
 #chat-button{
-    background-color: #e7cf80;
+    background-color: #90AEAD;
     margin-top: 5px;
     height: 70px;
     width: 200px;
@@ -17,7 +18,7 @@
     border-radius: 7px;
   }
   #chat-button:hover{
-    background-color: #e7cf80;
+    background-color: #90AEAD;
     cursor: pointer;
   }
 .how-it-works-steps{
@@ -25,13 +26,14 @@
     /* width: 50%; */
     padding-left: 30px;
     padding-right: 30px;
-    padding-top: 15px;
+    /* padding-top:15%; */
     padding-bottom: 15px;
 }
   .container {
     max-width: 90%; /* Changed to 90% of the viewport width */
     margin: 0 auto; /* Center the container */
-    padding: 20px;
+    /* padding: 20px; */
+    padding-top:15%;
     text-align: center; /* Center align text */
   }
   

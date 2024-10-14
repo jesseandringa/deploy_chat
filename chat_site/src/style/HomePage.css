@@ -13,11 +13,19 @@ body{
   padding: 20px;
   text-align: center; /* Center align text */
 }
-.example-questions{
-  z-index: 5;
+.bottom-buttons{
+  display: flex;
+  justify-content: center;
+  padding: 10px 20px;
+}
+.chat-container{
+  padding-top:0%
+}
+/* .example-questions{
+  z-index: 10;
   backdrop-filter: blur(10px);
   width: 15%;
-}
+} */
 
 .plans-modal{
   position: fixed;

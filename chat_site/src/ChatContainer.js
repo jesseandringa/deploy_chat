@@ -4,7 +4,7 @@ import "./style/ChatContainer.css";
 import { useState, useEffect } from "react";
 import background_image from "./assets/chat-image-background.png"; // Import the image file
 import { getBotResponse } from "./BotClient";
-import { FcSportsMode } from "react-icons/fc";
+import { FaArrowCircleUp, FaUserCircle } from "react-icons/fa";
 import { FcBusinesswoman } from "react-icons/fc";
 import DropdownMenu from "./DropdownMenu";
 import axios from "axios";
@@ -24,6 +24,7 @@ const ChatContainer = ({ userInfo }) => {
   const [questionsAsked, setQuestionsAsked] = useState(0);
   const { isAuthenticated, isLoading, user } = useAuth0();
   const [isPayingUser, setIsPayingUser] = useState(false);
+  const [wordList, setWordList] = useState([]);
 
   useEffect(() => {
     //update isPayingUser when userInfo changes
@@ -46,6 +47,25 @@ const ChatContainer = ({ userInfo }) => {
     setSelectedOption(selectedValue);
   };
 
+  useEffect(() => {
+    if (!wordList || wordList.length === 0) return;
+
+    let currentMessage = "";
+    let index = 0;
+
+    const interval = setInterval(() => {
+      currentMessage += (index > 0 ? " " : "") + wordList[index];
+      setBotMessages(currentMessage);
+      index++;
+
+      if (index === wordList.length) {
+        clearInterval(interval);
+      }
+    }, 30); // Adjust the interval time as needed
+
+    return () => clearInterval(interval);
+  }, [wordList]);
+
   const sendMessage = (e) => {
     if (!isAuthenticated && !isLoading) {
       return alert(
@@ -60,6 +80,7 @@ const ChatContainer = ({ userInfo }) => {
     setUserMessage(input);
     setAreMessages(true);
     setBotMessages("");
+    setWordList([]);
     setBotSources([]);
     setBotResponded(false);
     setTotalMessageCount(totalMessageCount + 1);
@@ -74,6 +95,11 @@ const ChatContainer = ({ userInfo }) => {
         );
       }
       try {
+        // const a =
+        //   "Looks like something went wrong. Please try again or contact support.";
+        // setBotResponded(true);
+        // displayWords(a);
+        // return;
         const botResponse = await getBotResponse(
           input,
           selectedOption,
@@ -81,6 +107,7 @@ const ChatContainer = ({ userInfo }) => {
         );
         try {
           let sources = botResponse.sources.split(",");
+
           for (let i = 0; i < sources.length; i++) {
             setBotSources((botSources) =>
               botSources.concat({ text: sources[i], sender: "source" })
@@ -92,8 +119,9 @@ const ChatContainer = ({ userInfo }) => {
             "Looks like something went wrong. Please try again or contact support."
           );
         }
-
-        setBotMessages(botResponse.response);
+        setWordList(botResponse.response.split(" "));
+        // displayWords(botResponse.response);
+        // setBotMessages(botResponse.response);
         // console.log('bot response sources: ', botResponse.sources);
         // console.log('messages',botMessages)
         setBotResponded(true);
@@ -112,6 +140,20 @@ const ChatContainer = ({ userInfo }) => {
     setInput("");
   };
 
+  const handleInput = (e) => {
+    setInput(e.target.value);
+    e.target.style.height = "auto"; // Reset height to auto
+
+    e.target.style.height = "auto";
+    // Set the height to scrollHeight minus the padding
+    const padding = 20; // Total padding (top + bottom)
+    e.target.style.height = `${e.target.scrollHeight - padding}px`;
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevent the default action (new line)
+      sendMessage(e); // Call the send message function
+    }
+  };
+
   return (
     <div className="chat-container">
       <div className="chat-selector">
@@ -120,31 +162,24 @@ const ChatContainer = ({ userInfo }) => {
           selectedOption={selectedOption}
           onOptionChange={handleOptionChange}
         />
+        {!areMessages && (
+          <div className="example-questions">
+            <h2>Example Questions</h2>
+            <ul>
+              <li>How do I get a permit to build an ADU? </li>
+              <li>Am I allowed to collect rain water?</li>
+              <li>What are the building requirements for a new garage?</li>
+            </ul>
+          </div>
+        )}
       </div>
-      <div className="image-container">
-        <div className="overlay-no-messages">
-          <form className="chat-input" onSubmit={sendMessage}>
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask a Question"
-            />
-            <button id="send-button" type="submit">
-              {/* <FontAwesomeIcon icon={faPaperPlane} /> */}
-              <FcSportsMode className="question-icon" />
-            </button>
-          </form>
-        </div>
-      </div>
-      <br></br>
       {areMessages && (
         <div className="chat-box-container">
           <div className="chat-box">
             <h2> Question: </h2>
             <hr className="content-separator" />
             <div className="question-container">
-              <FcSportsMode className="question-icon" />
+              <FaUserCircle className="question-icon" />
               <p className="question-text"> {userMessage}</p>
             </div>
             {!botResponded && (
@@ -185,6 +220,24 @@ const ChatContainer = ({ userInfo }) => {
           </div>
         </div>
       )}
+      {/* <div className="image-container"> */}
+      <div className="overlay-no-messages">
+        <form className="chat-input" onSubmit={sendMessage}>
+          <textarea
+            value={input}
+            onChange={handleInput}
+            onKeyDown={handleInput}
+            placeholder="Ask a Question"
+            rows={1} // Start with one row
+            className="chat-textarea"
+          />
+          <button id="send-button" type="submit">
+            <FaArrowCircleUp className="question-icon" />
+          </button>
+        </form>
+      </div>
+      {/* </div> */}
+      <br></br>
     </div>
   );
 };

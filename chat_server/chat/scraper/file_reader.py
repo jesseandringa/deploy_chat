@@ -10,14 +10,24 @@ from docx import Document
 
 class DocumentTracker:
     def __init__(self):
+        self.title = None
         self.chapter = None
         self.article = None
         self.section = None
         self.division = None
+        self.title_name = None
         self.chapter_name = None
         self.article_name = None
         self.section_title = None
         self.division_name = None
+
+    def update_title(self, title, title_name=None):
+        self.title = title
+        self.title_name = title_name
+        self.chapter = None
+        self.article = None
+        self.section = None
+        self.division = None
 
     def update_chapter(self, chapter, chapter_name=None):
         self.chapter = chapter
@@ -41,17 +51,17 @@ class DocumentTracker:
         self.section = section
         self.section_title = section_title
 
-    def _abbreviate(self, phrase, max_length=4):
+    def _abbreviate(self, phrase, max_length=4, is_title=False):
         """
         Abbreviate the given phrase by taking the first two letters of each word,
         skipping common words like 'and', 'or', 'the', until the max_length is reached.
         """
         if not phrase:
             return ""
+
         common_words = {
             "and",
             "or",
-            "the",
             "of",
             "in",
             "on",
@@ -61,6 +71,11 @@ class DocumentTracker:
             "at",
             "by",
         }
+        if not is_title:  # 'the' is used in titles
+            common_words.add("the")
+        else:
+            pass
+
         words = re.split(r"\W+", phrase)  # Split on non-alphanumeric characters
         abbreviation = "".join(
             word[:2].upper()
@@ -81,8 +96,25 @@ class DocumentTracker:
         """
         Parses a string like 'Chapter 2 ADMINISTRATION', 'DIVISION 1. GENERALLY' and updates the chapter, article, or division.
         """
+        input_string = input_string.replace("\xa0", " ")
+        # Match 'Title X - NAME'
+        title_match = re.match(
+            r"Title\s+(\d+)\s*(?:-\s*)?(.+)", input_string.strip(), re.IGNORECASE
+        )
+
+        # title_match = re.match(r"Title\s+(\d+)\s*-\s*(.+)", input_string, re.IGNORECASE)
+        if title_match:
+            title_num = title_match.group(1)
+            title_name = title_match.group(2)
+            self.update_title(title_num, title_name)
+            return
         # Match 'Chapter X NAME'
         chapter_match = re.match(r"Chapter\s+(\d+)\s+(.+)", input_string, re.IGNORECASE)
+        if chapter_match is None:
+            chapter_match = re.match(
+                r"CHAPTER\s+([0-9]+-[0-9]+)\.\s+(.+)", input_string, re.IGNORECASE
+            )
+
         if chapter_match:
             chapter_num = chapter_match.group(1)
             chapter_name = chapter_match.group(2)
@@ -123,9 +155,12 @@ class DocumentTracker:
         Generate a custom URL route from the current chapter, division, article, and section details.
         For example: CH2AD_ARTI_DIV1GE_S2-1INFOGOCL (only include division if it exists).
         """
-        if not self.chapter:
+        if not self.title and not self.chapter:
             return ""
 
+        title_abbr = (
+            self._abbreviate(self.title_name, is_title=True) if self.title_name else ""
+        )
         chapter_abbr = self._abbreviate(self.chapter_name) if self.chapter_name else ""
         article_abbr = self._abbreviate(self.article_name) if self.article_name else ""
         section_abbr = (
@@ -139,8 +174,12 @@ class DocumentTracker:
         )
         division_code = f"_DIV{self.division}{division_abbr}" if self.division else ""
         article_code = f"_ART{self.article}{article_abbr}" if self.article else ""
+        chapter_code = f"CH{self.chapter}{chapter_abbr}" if self.chapter else ""
+        title_code = f"TIT{self.title}{title_abbr}" if self.title else ""
+        if chapter_code != "" and title_code != "":
+            title_code += "_"
         # Construct the encoded URL route
-        return f"CH{self.chapter}{chapter_abbr}{article_code}{division_code}_{section_code}{section_abbr}"
+        return f"{title_code}{chapter_code}{article_code}{division_code}_{section_code}{section_abbr}"
 
     def current_location(self):
         return f"Chapter {self.chapter}, Division {self.division}, Article {self.article}, Section {self.section}"
@@ -167,6 +206,8 @@ def chunk_municode_doc_into_paragraphs(doc_path, chunk_size=500):
             doc_tracker.parse_input(para.text)
         if para.text.lower().startswith("sec. "):
             doc_tracker.parse_input(para.text)
+        if para.text.lower().startswith("title "):
+            doc_tracker.parse_input(para.text)
         url = doc_tracker.generate_url_route()
         paragraphs_and_sources.append([para.text, url])
 
@@ -179,9 +220,8 @@ def chunk_municode_doc_into_paragraphs(doc_path, chunk_size=500):
 
     # text_chunks = [text[i : i + chunk_size] for i in range(0, len(text), chunk_size)]
     text = ""
+    sources = set()
     for ps in paragraphs_and_sources:
-        sources = set()
-
         if text == "":
             text = ps[0]
         else:
@@ -191,6 +231,7 @@ def chunk_municode_doc_into_paragraphs(doc_path, chunk_size=500):
             text = text.replace("\ax0", " ")
             chunks.append([sources, text])
             text = ""
+            sources = set()
 
     return chunks
 

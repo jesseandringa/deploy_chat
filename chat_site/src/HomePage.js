@@ -104,16 +104,11 @@ const HomePage = () => {
         {/* {!showModal && ( */}
         <div>
           <TopBar myUser={dbUser} />
-          <ChatContainer userInfo={dbUser} />
-          <div className="example-questions">
-            <h2>Example Questions</h2>
-            <ul>
-              <li>How do I get a permit to build an ADU? </li>
-              <li>Am I allowed to collect rain water?</li>
-              <li>What are the building requirements for a new garage?</li>
-            </ul>
-          </div>
-          <BottomButtons onPlansClicked={handlePlansClicked} />
+          <ChatContainer className="chat-container" userInfo={dbUser} />
+          <BottomButtons
+            className="bottom-buttons"
+            onPlansClicked={handlePlansClicked}
+          />
         </div>
       </div>
       {showModal && (

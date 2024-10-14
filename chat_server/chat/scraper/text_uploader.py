@@ -408,21 +408,24 @@ def chunk_text_and_insert(pdf_files, i, db, table_name):
 
 
 def insert_single_file_chunks_to_table(chunks, db, table_name):
-    i = 0
-    for chunk in chunks:
+    # i = 0
+    for i, chunk in enumerate(chunks):
         print(f"inserting chunk {i} of {len(chunks)}")
-        i += 1
+        # i += 1
         # if i < 100:
         #     continue
-        text = chunk[1]
+        text = ""
+        if i > 0:
+            text += chunks[i - 1][1]
+        text += chunk[1]
+        if i < len(chunks) - 1:
+            text += chunks[i + 1][1]
+
+        # text = chunk[1]
         # loop thorugh sources and make string of commna separated sources
         sources = ""
         for source in chunk[0]:
-            sources += (
-                "https://library.municode.com/al/cullman/codes/code_of_ordinances?nodeId=COOR_"
-                + source
-                + ", "
-            )
+            sources += HTTP_START + source + ", "
         sources = sources[:-2]
         try:
             # continue
@@ -441,7 +444,7 @@ def create_table_and_insert_all_data(db, table_name, folder_path):
     #     db.remove_all_data_from_table(table_name)
     if len(pdf_files) == 1:
         print("inserting muni code ordinances")
-        chunks = file_reader.chunk_municode_doc_into_paragraphs(pdf_files[0], 5000)
+        chunks = file_reader.chunk_municode_doc_into_paragraphs(pdf_files[0], 1500)
         insert_single_file_chunks_to_table(chunks, db, table_name)
         print("finished")
         return
@@ -468,6 +471,7 @@ def create_table_and_insert_all_data(db, table_name, folder_path):
     print("finished inserting pdfs")
 
 
+HTTP_START = "https://library.municode.com/ut/sandy/codes/city_code?nodeId=COOR_"
 if __name__ == "__main__":
     dbvars = database_vars.get_db_vars()
     db = PGDB(
@@ -476,25 +480,14 @@ if __name__ == "__main__":
         dbvars["PGPASSWORD"],
         dbvars["PGDATABASE"],
     )
-    # # start timer:
-    # import time
-
-    # start_time = time.time()
-    # text = db.full_text_search_on_key_words(
-    #     ["governing", "annual", "delegates"], "g", "test_10000"
-    # )
-    # end_time = time.time()
-    # print("text: " + str(text))
-    # execution_time = end_time - start_time
-    # print(f"Execution time: {execution_time} seconds")
-
     ###########CASEY change table_name and folder_path to match your data#############################
     # table names follow the format: county_state_pdf_data
     # ex.      murray_ut_pdf_data
     # folder path to the pdfs you want to upsert (control click folder copy and paste 'relatitve path')
     # ex.      chat_server/chat/file_resources/murray-muni-resources
-    table_name = "cullman_al_pdf_data"
-    folder_path = "chat_server/chat/file_resources/cullman-municode"
+    HTTP_START = HTTP_START
+    table_name = "sandy_ut_pdf_data"
+    folder_path = "chat_server/chat/file_resources/sandy-municode"
     ##################################################################################################
     create_table_and_insert_all_data(db, table_name, folder_path)
     # user

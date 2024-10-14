@@ -6,7 +6,7 @@
     display: flex;
     justify-content: center; /* Center the buttons horizontally */
   
-    padding: 10px 20px;
+    /* padding: 10px 20px; */
   }
   
   .bottom-bar button {
@@ -16,25 +16,29 @@
     height: 80px;
     width: 100px;
     border-radius: 7px;
-    background-color: #e7cf80;
-    color: rgb(0, 0, 0);
+    background-color: #333333; 
+    color: #ffffff; 
     font-size: 16px;
     cursor: pointer;
     border: 2px solid black;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
+
+  .bottom-bar button:hover {
+    background-color: #555555;
+    transform: scale(1.05);
+  }
+
   #plans-button{
-    background-color: #e8c553;
+    background-color: #90AEAD;
     margin-top: 5px;
     height: 100px;
     width: 120px;
     font-weight: bold;
   }
+
   #plans-button:hover{
-    background-color: #fddf7d;
+    background-color: #90AEAD;
   }
   
-  .bottom-bar button:hover {
-    background-color: #fddf7d;
-  }
   

@@ -1,10 +1,6 @@
 
 /* ImageWithOverlay.css */
-.image-container {
-    padding-top: 100px;
-    position: relative; /* Make the container position relative */
-    width: 100%; /* Ensure the image and overlay span the full width */
-  }
+
 
 /* .image-container img {
     width: 100%;
@@ -16,39 +12,35 @@
     width: 80%; /* Set the width of the separator line */
     margin: 0 auto;
 }
+.example-questions{
+    z-index: 10; /* Set the z-index to 10 */
+    backdrop-filter: blur(10px); /* Apply a blur filter */
+    width: 15%; /* Set the width to 15% of the viewport */
+}
+.dropdown-menu{
+  padding-bottom: 5%;
+}
+.chat-selector{
+  padding: 10px;
+}
 
 .chat-box-container{
     width: 75%; /* Set the container width to 75% of the viewport */
+    /* padding-top: 20%; */
     margin: 0 auto; /* Center the container horizontally */
-    /* Set the container height to full viewport height */
-    /* height: 100vh;  */
-    /* background-color: #e1f1ff; */
     backdrop-filter: blur(20px);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(135, 134, 134, 0.315);
     display: flex; /* Use flexbox for centering */
     justify-content: center; /* Center the content horizontally */
     border: 1px solid #6f6e6e;
-    border-radius: 7px;
+    border-radius: 10px;
     padding: 10px;
     box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
-    /* align-items: center; */
-    /* background-color: rgba(255, 255, 255, 0.9); */
 }
 .chat-box{
     text-align: center;
-    /* background-color: #333; */
 }
-.question-container{
-    display: flex;
-    align-items: center;
-    /* background-color: #9a9797; */
-}
-/* .question-text{
-    padding: 10px; 
-} */
-.question-icon{
-    font-size: 24px; 
-}
+
 .bot-icon{
     font-size: 24px;
     padding-right: 10px;
@@ -61,37 +53,26 @@
 
 }
 .bot-response{
-    /* background-color: rgba(255, 255, 255, 0.9);  */
-    /* align-items:center;
-    display: flex; */
     padding: 10px;
-    /* border-color: black; */
-    /* border: 1px solid #ccc;
-    border-radius: 5px; */
-    /* border-width: 1px; */
     
 }
 .bot-messages{
-    /* padding: 20px; 
-    border-radius: 10px; 
-    text-align: center;  */
     align-items:center;
     display: flex;
 }
 .bot-sources{
     padding: 10px;
-    display: flex; /* Use flexbox */
-    flex-direction: column; /* Stack items vertically */
+    display: flex; 
+    flex-direction: column; 
     align-items: center;
-    /* background-color: #333; */
 }
 .bot-message {
     padding: 10px;
 }
 .source-container{
     padding: 10px;
-    display: flex; /* Use flexbox */
-    flex-direction: column; /* Stack items vertically */
+    display: flex; 
+    flex-direction: column; 
     align-items: center; 
 }
 .source-name{
@@ -99,41 +80,59 @@
 }
 .source-item{
     margin-bottom: 10px;
-    /* align-items: center; */
-
 }
-  
 .overlay-no-messages {
-    position: absolute; /* Position the overlay absolutely */
-    top: 90%; /* Position the overlay vertically in the middle */
-    left: 50%; /* Position the overlay horizontally in the middle */
-    transform: translate(-50%, -50%); /* Adjust to center the overlay exactly */
-   
-     /* Semi-transparent black background */
-    /* background-color: rgba(0, 0, 0, 0.5); */
-    color: white; /* Text color */
-    padding: 20px; /* Padding for the text box */
-  }
-  
-  .overlay-no-messages input {
-    width: 300px;
-    height: 30px;
-    margin-top: 0; /* Remove default margin */
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  z-index: 10;
+}
 
+.chat-input {
+  display: flex;
+  align-items: flex-start; /* Align items to the start */
+  background-color: #2c2c2c; /* Dark background */
+  border-radius: 25px; /* Rounded corners */
+  padding: 5px; /* Reduced padding */
+  width: 100%; /* Full width */
+  max-width: 600px; /* Maximum width for the input */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+}
 
+.chat-input textarea {
+  flex-grow: 1; /* Allow the input to take available space */
+  border: none;
+  background: transparent; /* Transparent background */
+  color: #ffffff; /* White text */
+  padding: 10px;
+  border-radius: 25px 0 0 25px; /* Rounded left corners */
+  font-size: 16px;
+  outline: none; /* Remove focus outline */
+  resize: none; /* Disable resizing */
+  overflow: hidden; /* Hide overflow */
+}
 
-  .chat-input {
-    display: flex;
-    padding: 10px;
-    align-items: center;
-    /* background-color: #fff; */
-    /* border-top: 1px solid #ccc; */
-  }
+.chat-input textarea::placeholder {
+  color: #cccccc; /* Light gray placeholder text */
+}
 
-  .chat-input input[type="text"]::placeholder {
-    text-align: center;
-  }
+.chat-input button {
+  background: none; /* No background */
+  border: none; /* No border */
+  padding: 0; /* No padding */
+  cursor: pointer; /* Pointer cursor on hover */
+  border-radius: 0 25px 25px 0; /* Rounded right corners */
+}
+
+.question-icon {
+  color: #90AEAD; /* Icon color */
+  font-size: 36px; /* Icon size */
+}
+
+.question-icon:hover {
+  color: #d1e9e8; /* Icon color on hover */
+}
   .bot-thinking{
     display: flex;
     align-items: center;
@@ -155,23 +154,13 @@
     100% { opacity: 0; }
   }
 
-  .chat-input input[type="text"] {
-    flex: 1; /* Allow the input to grow and fill the available space */
-    padding: 3px; /* Add padding to the input */
-    border: 1px solid #ccc; /* Add a border */
-    border-radius: 7px; /* Round the corners of the input */
-    outline: none; /* Remove the default focus outline */
-  }
+  /* .chat-input input[type="text"] {
+    flex: 1; 
+    padding: 3px; 
+    border: 1px solid #ccc; 
+    
+    border-radius: 7px; 
+    outline: none; 
+  } */
 
-  #send-button{
-        /* Styles for the button */
-        background-color: #e7cf80; /* Adjust as needed */
-        color: white;
-        padding: 6px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        display: flex; /* Allow aligning icon and text */
-        align-items: center; /* Center icon and text vertically */
-      
-  }
+  
