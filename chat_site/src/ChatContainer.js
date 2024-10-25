@@ -1,47 +1,35 @@
 // ImageWithOverlay.js
 import React from "react";
 import "./style/ChatContainer.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import background_image from "./assets/chat-image-background.png"; // Import the image file
 import { getBotResponse } from "./BotClient";
 import { FaArrowCircleUp, FaUserCircle } from "react-icons/fa";
 import { FcBusinesswoman } from "react-icons/fc";
 import DropdownMenu from "./DropdownMenu";
-import axios from "axios";
-import { useAuth0 } from "@auth0/auth0-react";
+import { DBContext } from "./DBContext";
 
-const ChatContainer = ({ userInfo }) => {
-  // const [messages, setMessages] = useState([]);
-  const [userMessage, setUserMessage] = useState("");
-  const [botMessages, setBotMessages] = useState("");
-  const [botSources, setBotSources] = useState([]);
+const ChatContainer = ({ handleAreMessagesChange }) => {
   const [input, setInput] = useState("");
-  // const [chatClicked, setChatClicked] = useState(false);
-  const [areMessages, setAreMessages] = useState(false);
-  const [botResponded, setBotResponded] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("");
+
   const [totalMessageCount, setTotalMessageCount] = useState(0);
   const [questionsAsked, setQuestionsAsked] = useState(0);
-  const { isAuthenticated, isLoading, user } = useAuth0();
-  const [isPayingUser, setIsPayingUser] = useState(false);
   const [wordList, setWordList] = useState([]);
-
-  useEffect(() => {
-    //update isPayingUser when userInfo changes
-    // console.log('chatcontainer userInfo:: ', userInfo);
-    if (userInfo.is_paying) {
-      setIsPayingUser(true);
-      // console.log('isPayingUser: ', isPayingUser);
-    } else {
-      setIsPayingUser(false);
-      // console.log('isPayingUser: ', isPayingUser);
-    }
-    if (userInfo.questions_asked) {
-      // console.log('userInfo.questions_asked: ', userInfo.questions_asked);
-      setQuestionsAsked(parseInt(userInfo.questions_asked));
-      // console.log('questionsAsked: ', questionsAsked);
-    }
-  }, [userInfo, isPayingUser, questionsAsked]);
+  const {
+    currentUser,
+    areMessages,
+    setAreMessages,
+    botResponded,
+    setBotResponded,
+    userMessage,
+    setUserMessage,
+    botMessages,
+    setBotMessages,
+    botSources,
+    setBotSources,
+    selectedOption,
+    setSelectedOption,
+  } = useContext(DBContext);
 
   const handleOptionChange = (selectedValue) => {
     setSelectedOption(selectedValue);
@@ -67,7 +55,7 @@ const ChatContainer = ({ userInfo }) => {
   }, [wordList]);
 
   const sendMessage = (e) => {
-    if (!isAuthenticated && !isLoading) {
+    if (!currentUser) {
       return alert(
         "Please Sign Up or Log In to ask questions. You'll be able to ask 4 questions for free."
       );
@@ -79,6 +67,7 @@ const ChatContainer = ({ userInfo }) => {
     if (!input.trim()) return;
     setUserMessage(input);
     setAreMessages(true);
+    handleAreMessagesChange(true);
     setBotMessages("");
     setWordList([]);
     setBotSources([]);
@@ -87,23 +76,19 @@ const ChatContainer = ({ userInfo }) => {
 
     // Simulate bot response
     setTimeout(async () => {
-      //  console.log('db user: ', userInfo);
-      if (questionsAsked > 3 && !isPayingUser) {
+      if (questionsAsked > 3 && !currentUser.is_paying) {
         setAreMessages(false);
+        handleAreMessagesChange(false);
+
         return alert(
           "You have reached the maximum number of questions. Please sign up and subscribe to ask more questions."
         );
       }
       try {
-        // const a =
-        //   "Looks like something went wrong. Please try again or contact support.";
-        // setBotResponded(true);
-        // displayWords(a);
-        // return;
         const botResponse = await getBotResponse(
           input,
           selectedOption,
-          userInfo
+          currentUser
         );
         try {
           let sources = botResponse.sources.split(",");
@@ -115,22 +100,18 @@ const ChatContainer = ({ userInfo }) => {
           }
         } catch (error) {
           setAreMessages(false);
+          handleAreMessagesChange(false);
           return alert(
             "Looks like something went wrong. Please try again or contact support."
           );
         }
         setWordList(botResponse.response.split(" "));
-        // displayWords(botResponse.response);
-        // setBotMessages(botResponse.response);
-        // console.log('bot response sources: ', botResponse.sources);
-        // console.log('messages',botMessages)
         setBotResponded(true);
-        // console.log('questions asked: ', botResponse.questions_asked)
         setQuestionsAsked(parseInt(botResponse.questions_asked));
-        userInfo.questions_asked = botResponse.questions_asked;
-        setIsPayingUser(botResponse.is_paying_user);
       } catch (error) {
         setAreMessages(false);
+        handleAreMessagesChange(false);
+
         return alert(
           "Looks like something went wrong. Please try again or contact support."
         );
@@ -156,12 +137,14 @@ const ChatContainer = ({ userInfo }) => {
 
   return (
     <div className="chat-container">
+      <DropdownMenu
+        className="dropdown-menu"
+        selectedOption={selectedOption}
+        onOptionChange={handleOptionChange}
+      />
       <div className="chat-selector">
         {/* Render the DropdownMenu component and pass props */}
-        <DropdownMenu
-          selectedOption={selectedOption}
-          onOptionChange={handleOptionChange}
-        />
+
         {!areMessages && (
           <div className="example-questions">
             <h2>Example Questions</h2>
@@ -185,7 +168,7 @@ const ChatContainer = ({ userInfo }) => {
             {!botResponded && (
               <div className="bot-messages">
                 <div className="bot-thinking">
-                  <FcBusinesswoman className="bot-icon" />
+                  {/* <FcBusinesswoman className="bot-icon" /> */}
                   <div className="dot-container">
                     <div className="dot"></div>
                     <div className="dot"></div>
@@ -200,7 +183,7 @@ const ChatContainer = ({ userInfo }) => {
                 <h2 className="bot-name">Answer:</h2>
                 <hr className="content-separator" />
                 <div className="bot-messages">
-                  <FcBusinesswoman className="bot-icon-answered" />
+                  {/* <FcBusinesswoman className="bot-icon-answered" /> */}
                   <div className="bot-message">{botMessages}</div>
                 </div>
                 <h2 className="source-name">Sources:</h2>
@@ -220,7 +203,7 @@ const ChatContainer = ({ userInfo }) => {
           </div>
         </div>
       )}
-      {/* <div className="image-container"> */}
+
       <div className="overlay-no-messages">
         <form className="chat-input" onSubmit={sendMessage}>
           <textarea
@@ -236,7 +219,6 @@ const ChatContainer = ({ userInfo }) => {
           </button>
         </form>
       </div>
-      {/* </div> */}
       <br></br>
     </div>
   );

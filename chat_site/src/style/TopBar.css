@@ -2,7 +2,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #1a1a1a; /* Dark background */
+  /* background-color: #1a1a1a; */
+  background-color: #474544;
   padding: 10px 20px;
   color: #ffffff; 
   width: 100%; 
@@ -19,7 +20,7 @@
 }
 
 .name-and-description h1 {
-  color: #90aead9d;
+  color: #90AEAD;
   cursor: pointer;
   margin: 0;
   font-size: 24px;
@@ -33,7 +34,7 @@
 .name-and-description h2 {
   margin: 0;
   font-size: 14px;
-  color: #cccccc; /* Light gray for description */
+  color: #e2e1e1; /* Light gray for description */
 }
 
 .top-bar {

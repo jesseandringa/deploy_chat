@@ -1,7 +1,7 @@
 import React from "react";
 import "./style/TopBar.css";
 import LoginButton from "./Login";
-const TopBar = ({ myUser }) => {
+const TopBar = () => {
   return (
     <div className="top-container">
       <div className="name-and-description">
@@ -22,7 +22,7 @@ const TopBar = ({ myUser }) => {
         </button>
       </div>
       <div className="sign-in-up">
-        <LoginButton myUser={myUser}></LoginButton>
+        <LoginButton></LoginButton>
       </div>
     </div>
   );

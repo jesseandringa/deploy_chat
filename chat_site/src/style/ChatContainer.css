@@ -12,14 +12,19 @@
     width: 80%; /* Set the width of the separator line */
     margin: 0 auto;
 }
+
 .example-questions{
     z-index: 10; /* Set the z-index to 10 */
     backdrop-filter: blur(10px); /* Apply a blur filter */
     width: 15%; /* Set the width to 15% of the viewport */
 }
-.dropdown-menu{
-  padding-bottom: 5%;
-}
+/* .dropdown-menu {
+  position: sticky; 
+  top: 0; 
+  background-color: #2c2c2c;
+  z-index: 20; 
+  padding: 10px; 
+} */
 .chat-selector{
   padding: 10px;
 }
@@ -34,7 +39,7 @@
     justify-content: center; /* Center the content horizontally */
     border: 1px solid #6f6e6e;
     border-radius: 10px;
-    padding: 10px;
+    /* padding: 10px; */
     box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
 }
 .chat-box{
@@ -81,24 +86,45 @@
 .source-item{
     margin-bottom: 10px;
 }
-.overlay-no-messages {
+/* .overlay-no-messages {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10px;
   z-index: 10;
+} */
+ .dropdown-menu {
+  /* position: fixed;  */
+  /* z-index: 10; */
+  /* backdrop-filter: blur(10px); */
+  width: 15%;
+  top: 10px;
+   /* z-index: 20;  */
+  /* left: 10%; */
+  /* transform: translateX(-10%);  */
+ }
+
+.overlay-no-messages {
+  position: fixed; /* Fix the container to the viewport */
+  bottom: 20px; /* Distance from the bottom of the screen */
+  left: 50%; /* Center the container horizontally */
+  transform: translateX(-50%); /* Offset by 50% to center it */
+  width: 100%; /* Full width */
+  max-width: 600px; /* Limit the maximum width */
+  padding: 10px; /* Padding around the container */
+  z-index: 15; /* Ensure it's above other elements */
 }
 
 .chat-input {
   display: flex;
-  align-items: flex-start; /* Align items to the start */
-  background-color: #2c2c2c; /* Dark background */
-  border-radius: 25px; /* Rounded corners */
-  padding: 5px; /* Reduced padding */
-  width: 100%; /* Full width */
-  max-width: 600px; /* Maximum width for the input */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+  align-items: flex-start;
+  background-color: #2c2c2c;
+  border-radius: 25px;
+  padding: 5px;
+  width: 100%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
+
 
 .chat-input textarea {
   flex-grow: 1; /* Allow the input to take available space */

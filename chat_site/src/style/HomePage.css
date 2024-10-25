@@ -1,16 +1,15 @@
-body{
-  /* background-image: url('../assets/mas-seal-timeline.jpg'); */
-  background-image: url('../assets/dalle-logo.webp');
+body{ 
+  /* background-image: url('../assets/dalle-logo.webp');  */
+  background-color: #d4d9da;
+
   background-size: cover;
-  /* background-position: center; */
   background-position: -20px -180%;
-  /* overflow: hidden; */
   height: 80vh; 
 }
 .container {
-  max-width: 90%; /* Changed to 90% of the viewport width */
+  max-width: 100%; /* Changed to 90% of the viewport width */
   margin: 0 auto; /* Center the container */
-  padding: 20px;
+  /* padding: 20px; */
   text-align: center; /* Center align text */
 }
 .bottom-buttons{
