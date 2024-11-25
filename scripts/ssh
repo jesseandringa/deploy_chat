@@ -1,0 +1,1 @@
+ssh -i chatkeypair.pem ec2-user@3.147.107.119
