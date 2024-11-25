@@ -91,12 +91,15 @@ const ChatContainer = ({ handleAreMessagesChange }) => {
           currentUser
         );
         try {
-          let sources = botResponse.sources.split(",");
+          let sources = botResponse.sources.split(/,\s*|\s+/); 
 
           for (let i = 0; i < sources.length; i++) {
-            setBotSources((botSources) =>
-              botSources.concat({ text: sources[i], sender: "source" })
-            );
+            // Filter out any empty strings from the split
+            if (sources[i].trim() !== "") {
+              setBotSources((botSources) =>
+                botSources.concat({ text: sources[i].trim(), sender: "source" })
+              );
+            }
           }
         } catch (error) {
           setAreMessages(false);
