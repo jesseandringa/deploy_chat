@@ -29,15 +29,18 @@ const DBProvider = ({ children }) => {
   useEffect(() => {
     const checkUserSession = async () => {
       if (!isAuthenticated && !isLoading) {
-        try {
-          // Try silently getting the access token to check for a valid session
-          await getAccessTokenSilently();
-        } catch (error) {
-          // If there's an error, redirect to the login page
-          console.log("error", error);
-          loginWithRedirect({
-            appState: { targetUrl: window.location.pathname },
-          });
+        if(window.location.pathname === "/chat") {
+          console.log('checking user session')
+          try {
+            // Try silently getting the access token to check for a valid session
+            await getAccessTokenSilently();
+          } catch (error) {
+            // If there's an error, redirect to the login page
+            console.log("error", error);
+            loginWithRedirect({
+              appState: { targetUrl: window.location.pathname },
+            });
+          }
         }
       }
     };
@@ -53,6 +56,8 @@ const DBProvider = ({ children }) => {
   ]);
 
   useEffect(() => {
+    console.log('window.location.pathname', window.location.pathname);
+
     console.log("currentUser", currentUser);
     const fetchUser = async () => {
       if (isAuthenticated && user && !currentUser) {

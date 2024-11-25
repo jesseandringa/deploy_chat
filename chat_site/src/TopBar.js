@@ -14,7 +14,7 @@ const TopBar = () => {
         <button onClick={() => (window.location.href = "/how-it-works")}>
           How It Works
         </button>
-        <button id="center-button" onClick={() => (window.location.href = "/")}>
+        <button id="center-button" onClick={() => (window.location.href = "/chat")}>
           Chat
         </button>
         <button onClick={() => (window.location.href = "/about-us")}>

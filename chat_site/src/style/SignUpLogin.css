@@ -92,7 +92,7 @@
 }
 
 .login-button:hover {
-  background-color: #90AEAD;
+  background-color: hsl(210 50% 60%);
   /* background-color: #333333; */
 }
 

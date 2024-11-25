@@ -18,9 +18,9 @@
   }
 
   .default-option {
-    background-color: #90AEAD; 
+    background-color: hsl(0, 0%, 100%); 
   }
   
   .selected-option {
-    background-color: #d3efee;
+    background-color: hsl(210 50% 60%);
   }

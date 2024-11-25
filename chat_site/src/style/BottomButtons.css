@@ -30,7 +30,7 @@
   }
 
   #plans-button{
-    background-color: #90AEAD;
+    background-color: hsl(210 50% 60%);
     margin-top: 5px;
     height: 100px;
     width: 120px;
@@ -38,7 +38,7 @@
   }
 
   #plans-button:hover{
-    background-color: #90AEAD;
+    background-color: hsl(210 50% 50%);
   }
   
   

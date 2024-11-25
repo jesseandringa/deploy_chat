@@ -13,6 +13,7 @@ import Auth0ProviderWithNavigate from "./AuthProviderWithNavigate";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import DBProvider from "./DBContext";
+import ChatPage from "./ChatPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -26,6 +27,7 @@ root.render(
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/features" element={<Features />} />
+            <Route path="/chat" element={<ChatPage />} />
           </Routes>
         </DBProvider>
       </Auth0ProviderWithNavigate>

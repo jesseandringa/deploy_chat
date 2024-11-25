@@ -20,7 +20,8 @@
 }
 
 .name-and-description h1 {
-  color: #90AEAD;
+  /* color: #90AEAD; */
+  color: hsl(210 50% 60%);
   cursor: pointer;
   margin: 0;
   font-size: 24px;
@@ -28,7 +29,7 @@
 }
 
 .name-and-description h1:hover {
-  color: #90AEAD; /* Gold color on hover */
+  color: hsl(210 50% 50%); 
 }
 
 .name-and-description h2 {
@@ -73,11 +74,11 @@
 /* } */
 
 #center-button {
-  background-color: #90AEAD; /* Highlighted button color */
+  background-color: hsl(210 50% 50%); /* Highlighted button color */
 }
 
 #center-button:hover {
-  background-color: #90AEAD; /* Lighter orange on hover */
+  background-color: hsl(210 50% 60%); /* Lighter orange on hover */
 }
 
 

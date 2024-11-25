@@ -152,7 +152,7 @@
 }
 
 .question-icon {
-  color: #90AEAD; /* Icon color */
+  color: hsl(210 50% 60%); /* Icon color */
   font-size: 36px; /* Icon size */
 }
 
