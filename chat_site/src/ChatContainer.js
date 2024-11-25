@@ -101,6 +101,7 @@ const ChatContainer = ({ handleAreMessagesChange }) => {
               );
             }
           }
+          console.log("botSources: ", botSources);
         } catch (error) {
           setAreMessages(false);
           handleAreMessagesChange(false);
@@ -194,7 +195,7 @@ const ChatContainer = ({ handleAreMessagesChange }) => {
                 <div className="bot-sources">
                   {botSources.map((msg, index) => (
                     <div className="source-item">
-                      <a href={msg.text} target="_blank" rel="noreferrer">
+                      <a href={msg.text} id={index} target="_blank" rel="noreferrer">
                         {msg.text}
                       </a>
                       <br></br>

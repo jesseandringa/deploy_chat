@@ -46,3 +46,4 @@ chat_server/chat/scraper/database_index.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+scripts/api-keys.txt
